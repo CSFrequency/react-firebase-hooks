@@ -1,0 +1,13 @@
+[ignore]
+
+[include]
+
+[libs]
+
+[lints]
+
+[options]
+suppress_comment=\\(.\\|\n\\)*\\$FlowExpectedError
+
+[version]
+^0.78.0

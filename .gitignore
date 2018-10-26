@@ -1,0 +1,15 @@
+# NPM / Yarn
+node_modules
+npm-debug.log
+
+# Build output
+dist
+lib
+es
+
+# OS files
+.DS_Store
+
+# Testing output
+.nyc_output
+coverage
