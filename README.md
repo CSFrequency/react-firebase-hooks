@@ -26,7 +26,7 @@ React Hooks are not currently supported in React Native.  As soon as they are, s
 
 React Firebase Hooks provides a convenience listeners for Firebase Auth's current user. The hook wraps around the `firebase.auth().onAuthStateChange()` method to ensure that it is always up to date.
 
-`useCurrentUser returns CurrentUser`
+#### `useCurrentUser()`
 
 Returns:
 `CurrentUser` containing:
@@ -75,7 +75,7 @@ Firebase Realtime Database.  The hooks wrap around the `firebase.database().ref(
 In addition to returning the list or value, the hooks provide an `error` and `loading` property
 to give a complete lifecycle for loading and listening to the Realtime Database.
 
-`useDatabaseList(pathOrRef) returns DatabaseList`
+#### `useDatabaseList(pathOrRef)`
 
 Parameters:
 - `pathOrRef`: `string` | `firebase.database.Reference`
@@ -110,7 +110,7 @@ const DatabaseList = () => {
 };
 ```
 
-#### useDatabaseValue(pathOrRef) returns DatabaseValue
+#### `useDatabaseValue(pathOrRef)`
 
 Parameters:
 - `pathOrRef`: `string` | `firebase.database.Reference`
