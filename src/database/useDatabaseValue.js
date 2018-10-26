@@ -26,8 +26,8 @@ export default (pathOrRef: string | Reference): DatabaseValue => {
   };
 
   const onSnapshot = (snapshot: DataSnapshot) => {
-    setLoading(false);
     setValue(snapshot.val());
+    setLoading(false);
   };
 
   useEffect(

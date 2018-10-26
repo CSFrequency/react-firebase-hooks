@@ -8,8 +8,8 @@ import { isString } from '../util';
 
 export type DatabaseList = {
   error?: any,
+  list: any[],
   loading: boolean,
-  value: any[],
 };
 
 export default (pathOrRef: string | Reference): DatabaseList => {
@@ -100,8 +100,8 @@ export default (pathOrRef: string | Reference): DatabaseList => {
 
   return {
     error,
+    list: values,
     loading,
-    value: values,
   };
 };
 
