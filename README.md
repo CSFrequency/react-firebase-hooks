@@ -1,7 +1,5 @@
 # React Firebase Hooks
 
----
-
 [React Hooks](https://reactjs.org/docs/hooks-intro.html) for [Firebase](https://firebase.google.com/).
 
 **NOTE: Both React's support for hooks and React Firebase Hooks are a work in progress**
