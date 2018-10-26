@@ -10,7 +10,7 @@ import {
 import { isString } from '../util';
 
 export type FirestoreCollectionValue = {
-  error?: any,
+  error?: FirebaseError,
   loading: boolean,
   value?: QuerySnapshot,
 };

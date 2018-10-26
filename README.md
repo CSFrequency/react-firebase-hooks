@@ -65,6 +65,83 @@ const CurrentUser = () => {
 
 ```
 
+### Cloud Firestore
+
+React Firebase Hooks provides convenience listeners for Collections and Documents stored with
+Cloud Firestore.  The hooks wrap around the `firebase.firestore().collection().onSnapshot()`
+and `firebase.firestore().doc().onSnapshot()` methods.
+
+In addition to returning the snapshot value, the hooks provide an `error` and `loading` property
+to give a complete lifecycle for loading and listening to Cloud Firestore.
+
+#### `useFirestoreCollection(pathOrQuery)`
+
+Parameters:
+- `pathOrQuery`: `string` | `firebase.firestore.Query`
+
+Returns:
+`FirestoreCollectionValue` containing
+- `error`: An optional `firebase.FirebaseError` returned by Firebase
+- `loading`: A `boolean` to indicate if the listener is still being loaded
+- `value`: A `firebase.firestore.QuerySnapshot`
+
+Example:
+```js
+import { useFirestoreCollection } from 'react-firebase-hooks';
+
+const FirestoreCollection = () => {
+  const { error, loading, value } = useFirestoreCollection('hooks');
+  return (
+    <div>
+      <p>
+        {error && <strong>Error: {error}</strong>}
+        {loading && <span>Collection: Loading...</span>}
+        {value && (
+          <span>
+            Collection:{' '}
+            {value.docs.map(doc => (
+              <React.Fragment key={doc.id}>{JSON.stringify(doc.data())}, </React.Fragment>
+            ))}
+          </span>
+        )}
+      </p>
+    </div>
+  );
+}
+```
+
+#### `useFirestoreDocument(pathOrRef)`
+
+Parameters:
+- `pathOrRef`: `string` | `firebase.firestore.DocumentReference`
+
+Returns:
+`FirestoreDocumentValue` containing
+- `error`: An optional `firebase.FirebaseError` returned by Firebase
+- `loading`: A `boolean` to indicate if the listener is still being loaded
+- `value`: A `firebase.firestore.DocumentSnapshot`
+
+Example:
+```js
+const FirestoreDocument = () => {
+  const { error, loading, value } = useFirestoreDocument('hooks/nBShXiRGFAhuiPfBaGpt');
+  return (
+    <div>
+      <p>
+        {error && <strong>Error: {error}</strong>}
+        {loading && <span>Document: Loading...</span>}
+        {value && (
+          <span>
+            Document: {JSON.stringify(value.data())}
+          </span>
+        )}
+      </p>
+    </div>
+  );
+}
+```
+
+
 ### Realtime Database
 
 React Firebase Hooks provides convenience listeners for lists and values stored within the
@@ -95,11 +172,13 @@ const DatabaseList = () => {
     <div>
       <p>
         {error && <strong>Error: {error}</strong>}
-        {loading && <span>Loading List...</span>}
+        {loading && <span>List: Loading...</span>}
         {!loading && list && (
           <React.Fragment>
-            <p>List:</p>
-            {list.map(v => <React.Fragment>{v}, </React.Fragment>)}
+            <span>
+              List:{' '}
+              {list.map(v => <React.Fragment key={v.key}>{v.val()}, </React.Fragment>)}
+            </span>
           </React.Fragment>
         )}
       </p>
@@ -130,18 +209,14 @@ const DatabaseValue = () => {
     <div>
       <p>
         {error && <strong>Error: {error}</strong>}
-        {loading && <span>Loading Value...</span>}
-        {value && <span>Value: {value}</span>}
+        {loading && <span>Value: Loading...</span>}
+        {value && <span>Value: {value.val()}</span>}
       </p>
     </div>
   );
 };
 
 ```
-
-### Firestore
-
-Coming soon.
 
 ## License
 
