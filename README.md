@@ -80,9 +80,9 @@ Parameters:
 
 Returns:
 `DatabaseList` containing
-- `error`: Any error object returned by Firebase
-- `list`: The list of values stored at the supplied path or ref
-- `loading`: If the listener is still waiting for the list to be loaded
+- `error`: An optional error object returned by Firebase
+- `list`: A list of `firebase.database.DataSnapshot`
+- `loading`: A `boolean` to indicate if the listener is still being loaded
 
 Example:
 ```js
@@ -115,9 +115,9 @@ Parameters:
 
 Returns:
 `DatabaseValue` containing
-- `error`: Any error object returned by Firebase
-- `loading`: If the listener is still waiting for the list to be loaded
-- `value`: The value stored at the supplied path or ref
+- `error`: An optional error object returned by Firebase
+- `loading`: A `boolean` to indicate if the listener is still being loaded
+- `value`: A `firebase.database.DataSnapshot`
 
 Example:
 ```js

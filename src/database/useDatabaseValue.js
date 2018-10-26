@@ -7,7 +7,7 @@ import type { DataSnapshot, Reference } from 'firebase/database';
 import { isString } from '../util';
 
 export type DatabaseValue = {
-  error?: any,
+  error?: Object,
   loading: boolean,
   value?: DataSnapshot,
 };
@@ -20,7 +20,7 @@ export default (pathOrRef: string | Reference): DatabaseValue => {
   const [loading, setLoading] = useState(true);
   const [value, setValue] = useState(undefined);
 
-  const onError = (err: any) => {
+  const onError = (err: Object) => {
     setError(err);
     setLoading(false);
   };

@@ -7,7 +7,7 @@ import type { DataSnapshot, Reference } from 'firebase/database';
 import { isString } from '../util';
 
 export type DatabaseList = {
-  error?: any,
+  error?: Object,
   list: DataSnapshot[],
   loading: boolean,
 };
@@ -19,12 +19,7 @@ export default (pathOrRef: string | Reference): DatabaseList => {
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
   // Combine keys and values in a single state hook to allow them to be manipulated together
-  const [{ keys, values }, setKeysValues] = useState({ keys: [], values: [] });
-
-  const onError = (err: any) => {
-    setError(err);
-    setLoading(false);
-  };
+  const [{ values }, setKeysValues] = useState({ keys: [], values: [] });
 
   const onChildAdded = (snapshot: DataSnapshot, previousKey: ?string) => {
     setKeysValues(prevState => {
@@ -101,6 +96,7 @@ export default (pathOrRef: string | Reference): DatabaseList => {
         },
         err => {
           setError(err);
+          setLoading(false);
         }
       );
       ref.on('child_added', onChildAdded);
