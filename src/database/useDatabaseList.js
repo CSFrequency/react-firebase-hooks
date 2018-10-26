@@ -143,11 +143,15 @@ const addChild = (
   const index = keys.indexOf(previousKey);
   // Insert the item after the previous child
   return {
-    newKeys: [...keys.slice(0, index), snapshot.key, ...keys.slice(index)],
+    newKeys: [
+      ...keys.slice(0, index + 1),
+      snapshot.key,
+      ...keys.slice(index + 1),
+    ],
     newValues: [
-      ...values.slice(0, index),
+      ...values.slice(0, index + 1),
       snapshot.val(),
-      ...values.slice(index),
+      ...values.slice(index + 1),
     ],
   };
 };
