@@ -1,8 +1,11 @@
 # React Firebase Hooks
 
-[React Hooks](https://reactjs.org/docs/hooks-intro.html) for [Firebase](https://firebase.google.com/).
+A set of reusable React Hooks for [Firebase](https://firebase.google.com/).
 
-**NOTE: Both React's support for hooks and React Firebase Hooks are a work in progress**
+[![npm version](https://img.shields.io/npm/v/react-firebase-hooks.svg?style=flat-square)](https://www.npmjs.com/package/react-firebase-hooks)
+[![npm downloads](https://img.shields.io/npm/dm/react-firebase-hooks.svg?style=flat-square)](https://www.npmjs.com/package/react-firebase-hooks)
+
+> [Hooks](https://reactjs.org/docs/hooks-intro.html) are a new feature proposal that lets you use state and other React features without writing a class. They’re currently in React v16.7.0-alpha and being discussed in an open RFC.
 
 ## Installation
 
