@@ -9,7 +9,7 @@ import { isString } from '../util';
 export type DatabaseValue = {
   error?: any,
   loading: boolean,
-  value?: any,
+  value?: DataSnapshot,
 };
 
 export default (pathOrRef: string | Reference): DatabaseValue => {
@@ -26,7 +26,7 @@ export default (pathOrRef: string | Reference): DatabaseValue => {
   };
 
   const onSnapshot = (snapshot: DataSnapshot) => {
-    setValue(snapshot.val());
+    setValue(snapshot);
     setLoading(false);
   };
 

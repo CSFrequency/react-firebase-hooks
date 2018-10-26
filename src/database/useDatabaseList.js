@@ -8,7 +8,7 @@ import { isString } from '../util';
 
 export type DatabaseList = {
   error?: any,
-  list: any[],
+  list: DataSnapshot[],
   loading: boolean,
 };
 
@@ -48,7 +48,7 @@ export default (pathOrRef: string | Reference): DatabaseList => {
         ...prevState,
         values: [
           ...prevState.values.slice(0, index),
-          snapshot.val(),
+          snapshot,
           ...prevState.values.slice(index + 1),
         ],
       };
@@ -136,7 +136,7 @@ const addChild = (
     // The child has been added to the start of the list
     return {
       newKeys: [snapshot.key, ...keys],
-      newValues: [snapshot.val(), ...values],
+      newValues: [snapshot, ...values],
     };
   }
   // Establish the index for the previous child in the list
@@ -150,7 +150,7 @@ const addChild = (
     ],
     newValues: [
       ...values.slice(0, index + 1),
-      snapshot.val(),
+      snapshot,
       ...values.slice(index + 1),
     ],
   };
