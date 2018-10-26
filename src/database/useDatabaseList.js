@@ -18,8 +18,8 @@ export default (pathOrRef: string | Reference): DatabaseList => {
     : pathOrRef;
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [keys, setKeys] = useState([]);
-  const [values, setValues] = useState([]);
+  // Combine keys and values in a single state hook to allow them to be manipulated together
+  const [{ keys, values }, setKeysValues] = useState({ keys: [], values: [] });
 
   const onError = (err: any) => {
     setError(err);
@@ -27,47 +27,68 @@ export default (pathOrRef: string | Reference): DatabaseList => {
   };
 
   const onChildAdded = (snapshot: DataSnapshot, previousKey: ?string) => {
-    const { newKeys, newValues } = addChild(
-      keys,
-      values,
-      snapshot,
-      previousKey
-    );
-    setKeys(newKeys);
-    setValues(newValues);
+    setKeysValues(prevState => {
+      const { newKeys, newValues } = addChild(
+        prevState.keys,
+        prevState.values,
+        snapshot,
+        previousKey
+      );
+      return {
+        keys: newKeys,
+        values: newValues,
+      };
+    });
   };
 
   const onChildChanged = (snapshot: DataSnapshot) => {
-    const index = keys.indexOf(snapshot.key);
-    setValues([
-      ...values.slice(0, index),
-      snapshot.val(),
-      ...values.slice(index + 1),
-    ]);
+    setKeysValues(prevState => {
+      const index = prevState.keys.indexOf(snapshot.key);
+      return {
+        ...prevState,
+        values: [
+          ...prevState.values.slice(0, index),
+          snapshot.val(),
+          ...prevState.values.slice(index + 1),
+        ],
+      };
+    });
   };
 
   const onChildMoved = (snapshot: DataSnapshot, previousKey: ?string) => {
-    // Remove the child from it's previous location
-    const { newKeys: tempKeys, newValues: tempValues } = removeChild(
-      keys,
-      values,
-      snapshot
-    );
-    // Add the child into it's new location
-    const { newKeys, newValues } = addChild(
-      keys,
-      values,
-      snapshot,
-      previousKey
-    );
-    setKeys(newKeys);
-    setValues(newValues);
+    setKeysValues(prevState => {
+      // Remove the child from it's previous location
+      const { newKeys: tempKeys, newValues: tempValues } = removeChild(
+        prevState.keys,
+        prevState.values,
+        snapshot
+      );
+      // Add the child into it's new location
+      const { newKeys, newValues } = addChild(
+        tempKeys,
+        tempValues,
+        snapshot,
+        previousKey
+      );
+      return {
+        keys: newKeys,
+        values: newValues,
+      };
+    });
   };
 
   const onChildRemoved = (snapshot: DataSnapshot) => {
-    const { newKeys, newValues } = removeChild(keys, values, snapshot);
-    setKeys(newKeys);
-    setValues(newValues);
+    setKeysValues(prevState => {
+      const { newKeys, newValues } = removeChild(
+        prevState.keys,
+        prevState.values,
+        snapshot
+      );
+      return {
+        keys: newKeys,
+        values: newValues,
+      };
+    });
   };
 
   useEffect(
