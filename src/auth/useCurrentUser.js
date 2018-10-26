@@ -4,11 +4,18 @@ import { useEffect, useState } from 'react';
 import firebase, { type FirebaseUser } from 'firebase/app';
 import 'firebase/auth';
 
-export default (): ?FirebaseUser => {
-  const [currentUser, setCurrentUser] = useState(firebase.auth().currentUser);
+export type CurrentUser = {
+  user: ?FirebaseUser,
+  initialising: boolean,
+};
 
-  const onAuthStateChanged = (currentUser: ?FirebaseUser) => {
-    setCurrentUser(currentUser);
+export default (): CurrentUser => {
+  const [user, setUser] = useState(null);
+  const [initialising, setInitialising] = useState(true);
+
+  const onAuthStateChanged = (user: ?FirebaseUser) => {
+    setUser(user);
+    setInitialising(false);
   };
 
   useEffect(() => {
@@ -17,7 +24,10 @@ export default (): ?FirebaseUser => {
     return () => {
       listener();
     };
-  });
+  }, []);
 
-  return currentUser;
+  return {
+    initialising,
+    user,
+  };
 };
