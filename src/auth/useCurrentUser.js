@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import firebase, { type FirebaseUser } from 'firebase/app';
 import 'firebase/auth';
+import { useDataLoader } from '../util';
 
 export type CurrentUser = {
   user: ?FirebaseUser,
@@ -10,16 +11,10 @@ export type CurrentUser = {
 };
 
 export default (): CurrentUser => {
-  const [user, setUser] = useState(null);
-  const [initialising, setInitialising] = useState(true);
-
-  const onAuthStateChanged = (user: ?FirebaseUser) => {
-    setUser(user);
-    setInitialising(false);
-  };
+  const { loading, setValue, value } = useDataLoader<FirebaseUser>();
 
   useEffect(() => {
-    const listener = firebase.auth().onAuthStateChanged(onAuthStateChanged);
+    const listener = firebase.auth().onAuthStateChanged(setValue);
 
     return () => {
       listener();
@@ -27,7 +22,7 @@ export default (): CurrentUser => {
   }, []);
 
   return {
-    initialising,
-    user,
+    initialising: loading,
+    user: value,
   };
 };
