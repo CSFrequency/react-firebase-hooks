@@ -1,11 +1,11 @@
 # NPM / Yarn
+.rpt2_cache
 node_modules
 npm-debug.log
 
-# Build output
-dist
-lib
-es
+# Rollup build output
+**/dist
+**/*.d.ts
 
 # OS files
 .DS_Store

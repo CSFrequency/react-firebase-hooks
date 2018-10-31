@@ -1,0 +1,18 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "declaration": true,
+    "importHelpers": true,
+    "lib": ["es2017", "dom"],
+    "module": "es6",
+    "moduleResolution": "node",
+    "noImplicitAny": false,
+    "noUnusedLocals": true,
+    "outDir": "dist",
+    "sourceMap": true,
+    "strict": true,
+    "target": "es5",
+    "typeRoots": ["../node_modules/@types"]
+  },
+  "exclude": ["dist/**/*"]
+}

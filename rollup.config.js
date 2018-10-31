@@ -1,51 +1,62 @@
-import nodeResolve from 'rollup-plugin-node-resolve'
-import babel from 'rollup-plugin-babel'
-import replace from 'rollup-plugin-replace'
-import commonjs from 'rollup-plugin-commonjs'
-import {uglify} from 'rollup-plugin-uglify'
-import pkg from './package.json'
+import { resolve } from 'path';
+import commonjs from 'rollup-plugin-commonjs';
+import resolveModule from 'rollup-plugin-node-resolve';
+import typescript from 'rollup-plugin-typescript2';
+import uglify from 'rollup-plugin-uglify';
 
-const env = process.env.NODE_ENV
+import pkg from './package.json';
+import authPkg from './auth/package.json';
+import databasePkg from './database/package.json';
+import firestorePkg from './firestore/package.json';
+import storagePkg from './storage/package.json';
 
-const config = {
-  input: 'src/index.js',
-  external: Object.keys(pkg.peerDependencies || {}),
-  output: {
-    format: 'umd',
-    name: 'ReactRedux',
-    globals: {
-      react: 'React',
-      redux: 'Redux'
-    }
-  },
-  plugins: [
-    nodeResolve(),
-    babel({
-      exclude: '**/node_modules/**',
-      runtimeHelpers: true,
-    }),
-    replace({
-      'process.env.NODE_ENV': JSON.stringify(env)
-    }),
-    commonjs({
-      namedExports: {
-        'node_modules/react-is/index.js': ['isValidElementType'],
-      }
-    })
-  ]
-}
+const pkgsByName = {
+  auth: authPkg,
+  database: databasePkg,
+  firestore: firestorePkg,
+  storage: storagePkg,
+};
 
-if (env === 'production') {
-  config.plugins.push(
-    uglify({
-      compress: {
-        pure_getters: true,
-        unsafe: true,
-        unsafe_comps: true,
-        warnings: false
-      }
-    })
-  )
-}
+const plugins = [
+  resolveModule(),
+  typescript({
+    typescript: require('typescript'),
+  }),
+  commonjs(),
+];
 
-export default config
+const external = Object.keys(pkg.peerDependencies || {});
+
+const components = ['auth', 'database', 'firestore', 'storage'];
+
+export default components
+  .map(component => {
+    const pkg = pkgsByName[component];
+    return [
+      {
+        input: `${component}/index.ts`,
+        output: [
+          { file: resolve(component, pkg.main), format: 'cjs' },
+          { file: resolve(component, pkg.module), format: 'es' },
+        ],
+        plugins,
+        external,
+      },
+      {
+        input: `${component}/index.ts`,
+        output: {
+          file: `dist/react-firebase-hooks-${component}.js`,
+          format: 'iife',
+          sourcemap: true,
+          extend: true,
+          name: 'react-firebase-hooks',
+          globals: {
+            react: 'react',
+          },
+        },
+        plugins: [...plugins, uglify()],
+        external,
+      },
+    ];
+  })
+  .reduce((a, b) => a.concat(b), []);
