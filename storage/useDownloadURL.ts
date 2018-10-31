@@ -1,5 +1,5 @@
 import { storage } from 'firebase';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useDataLoader } from '../util';
 
 export type DownloadURLHook = {
@@ -9,17 +9,26 @@ export type DownloadURLHook = {
 };
 
 export default (ref: storage.Reference): DownloadURLHook => {
-  const { error, loading, setError, setValue, value } = useDataLoader<string>();
+  const { error, loading, reset, setError, setValue, value } = useDataLoader<
+    string
+  >();
+  // Set a ref for the query to make sure that `useEffect` doesn't run
+  // every time this renders
+  const refRef = useRef(ref);
+  // If the query has changed, then
+  if (ref.fullPath !== refRef.current.fullPath) {
+    refRef.current = ref;
+    reset();
+  }
 
   useEffect(
     () => {
-      ref
+      refRef.current
         .getDownloadURL()
         .then(setValue)
         .catch(setError);
     },
-    // TODO: Check if this works suitably for 'ref' parameters
-    [ref]
+    [refRef.current]
   );
 
   return {

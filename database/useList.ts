@@ -1,5 +1,5 @@
 import { database } from 'firebase';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export type ListHook = {
   error?: Object;
@@ -17,6 +17,16 @@ export default (query: database.Query): ListHook => {
   const [loading, setLoading] = useState(true);
   // Combine keys and values in a single state hook to allow them to be manipulated together
   const [{ values }, setKeysValues] = useState({ keys: [], values: [] });
+  // Set a ref for the query to make sure that `useEffect` doesn't run
+  // every time this renders
+  const queryRef = useRef(query);
+  // If the query has changed, then
+  if (!query.isEqual(queryRef.current)) {
+    queryRef.current = query;
+    setError(false);
+    setLoading(true);
+    setKeysValues({ keys: [], values: [] });
+  }
 
   const onChildAdded = (
     snapshot: database.DataSnapshot | null,
@@ -72,6 +82,7 @@ export default (query: database.Query): ListHook => {
 
   useEffect(
     () => {
+      const query: database.Query = queryRef.current;
       // This is here to indicate that all the data has been successfully received
       query.once(
         'value',
@@ -95,8 +106,7 @@ export default (query: database.Query): ListHook => {
         query.off('child_removed', onChildRemoved);
       };
     },
-    // TODO: Check if this works suitably for 'query' parameters
-    [query]
+    [queryRef.current]
   );
 
   return {

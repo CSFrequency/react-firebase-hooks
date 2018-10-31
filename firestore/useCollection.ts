@@ -1,5 +1,5 @@
 import { firestore } from 'firebase';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useDataLoader } from '../util';
 
 export type CollectionHook = {
@@ -12,22 +12,29 @@ export default (
   query: firestore.Query,
   options?: firestore.SnapshotListenOptions
 ): CollectionHook => {
-  const { error, loading, setError, setValue, value } = useDataLoader<
+  const { error, loading, reset, setError, setValue, value } = useDataLoader<
     firestore.QuerySnapshot
   >();
+  // Set a ref for the query to make sure that `useEffect` doesn't run
+  // every time this renders
+  const queryRef = useRef(query);
+  // If the query has changed, then
+  if (!query.isEqual(queryRef.current)) {
+    queryRef.current = query;
+    reset();
+  }
 
   useEffect(
     () => {
       const listener = options
-        ? query.onSnapshot(options, setValue, setError)
-        : query.onSnapshot(setValue, setError);
+        ? queryRef.current.onSnapshot(options, setValue, setError)
+        : queryRef.current.onSnapshot(setValue, setError);
 
       return () => {
         listener();
       };
     },
-    // TODO: Check if this works suitably for 'query' parameters
-    [query]
+    [queryRef.current]
   );
 
   return {

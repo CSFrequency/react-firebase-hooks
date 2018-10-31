@@ -1,5 +1,5 @@
 import { database } from 'firebase';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useDataLoader } from '../util';
 
 export type ObjectHook = {
@@ -9,20 +9,28 @@ export type ObjectHook = {
 };
 
 export default (query: database.Query): ObjectHook => {
-  const { error, loading, setError, setValue, value } = useDataLoader<
+  const { error, loading, reset, setError, setValue, value } = useDataLoader<
     database.DataSnapshot
   >();
+  // Set a ref for the query to make sure that `useEffect` doesn't run
+  // every time this renders
+  const queryRef = useRef(query);
+  // If the query has changed, then
+  if (!query.isEqual(queryRef.current)) {
+    queryRef.current = query;
+    reset();
+  }
 
   useEffect(
     () => {
+      const query: database.Query = queryRef.current;
       query.on('value', setValue, setError);
 
       return () => {
         query.off('value', setValue);
       };
     },
-    // TODO: Check if this works suitably for 'ref' parameters
-    [query]
+    [queryRef.current]
   );
 
   return {
