@@ -1,0 +1,16 @@
+// @flow
+import type { DataSnapshot, Query } from 'firebase/database';
+
+export type ListHook = {
+  error?: Object;
+  list: DataSnapshot[];
+  loading: boolean;
+};
+export type ObjectHook = {
+  error?: object;
+  loading: boolean;
+  value?: DataSnapshot;
+};
+
+declare export function useList(query: Query): ListHook;
+declare export function useObject(query: Query): ObjectHook;

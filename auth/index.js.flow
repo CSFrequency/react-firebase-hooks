@@ -1,0 +1,7 @@
+// @flow
+import type { Auth, User } from 'firebase';
+export type AuthStateHook = {
+  user?: User;
+  initialising: boolean;
+};
+declare export function useAuthState(auth: Auth): AuthStateHook;

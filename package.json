@@ -1,6 +1,6 @@
 {
   "name": "react-firebase-hooks",
-  "version": "0.3.0-alpha.1",
+  "version": "0.3.0-alpha.10",
   "description": "React Hooks for Firebase",
   "author": "CS Frequency Limited (https://csfrequency.com)",
   "license": "Apache-2.0",
@@ -14,17 +14,21 @@
   "files": [
     "auth/dist/*.js",
     "auth/dist/auth",
+    "auth/dist/*.js.flow",
     "auth/package.json",
     "database/dist/*.js",
     "database/dist/database",
+    "database/dist/*.js.flow",
     "database/package.json",
     "dist/*.js",
     "dist/*.js.map",
     "firestore/dist/*.js",
     "firestore/dist/firestore",
+    "firestore/dist/*.js.flow",
     "firestore/package.json",
     "storage/dist/*.js",
     "storage/dist/storage",
+    "storage/dist/*.js.flow",
     "storage/package.json"
   ],
   "repository": {
@@ -33,9 +37,9 @@
   },
   "scripts": {
     "build": "npm run clean && rollup -c",
-    "clean": "rimraf dist auth/dist auth/*.d.ts database/dist database/*.d.ts firestore/dist firestore/*.d.ts storage/dist storage/*.d.ts util/*.d.ts",
+    "clean": "rimraf ./dist ./auth/dist ./auth/*.d.ts ./database/dist ./database/*.d.ts ./firestore/dist ./firestore/*.d.ts ./storage/dist ./storage/*.d.ts ./util/*.d.ts",
     "dev": "npm run clean && rollup -c -w",
-    "prepare": "npm run build"
+    "prepublish": "npm run build"
   },
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
@@ -47,6 +51,7 @@
     "rimraf": "^2.6.2",
     "rollup": "0.57.1",
     "rollup-plugin-commonjs": "9.1.0",
+    "rollup-plugin-copy": "^0.2.3",
     "rollup-plugin-node-resolve": "3.3.0",
     "rollup-plugin-typescript2": "0.12.0",
     "rollup-plugin-uglify": "3.0.0",

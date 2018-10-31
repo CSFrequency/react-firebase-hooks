@@ -1,0 +1,9 @@
+// @flow
+import type { Reference } from 'firebase/storage';
+
+export type DownloadURLHook = {
+  error?: object;
+  loading: boolean;
+  url?: string;
+};
+declare export function useDownloadURL(ref: Reference): DownloadURLHook;
