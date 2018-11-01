@@ -39,7 +39,7 @@ type RemoveAction = {
   snapshot: database.DataSnapshot | null;
 };
 type ResetAction = { type: 'reset' };
-type ValueAction = { type: 'value'; value: any };
+type ValueAction = { type: 'value' };
 type ReducerAction =
   | AddAction
   | ChangeAction
@@ -103,7 +103,6 @@ const reducer = (state: ReducerState, action: ReducerAction): ReducerState => {
       return {
         ...state,
         loading: false,
-        value: action.value,
       };
     default:
       return state;
@@ -144,7 +143,7 @@ export default (query: database.Query): ListHook => {
       query.once(
         'value',
         () => {
-          dispatch({ type: 'loading ' });
+          dispatch({ type: 'value' });
         },
         (error: object) => {
           dispatch({ type: 'error', error });
