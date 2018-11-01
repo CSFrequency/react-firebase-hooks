@@ -3,8 +3,8 @@ import type { DataSnapshot, Query } from 'firebase/database';
 
 export type ListHook = {
   error?: Object;
-  list: DataSnapshot[];
   loading: boolean;
+  value: DataSnapshot[];
 };
 export type ObjectHook = {
   error?: object;
