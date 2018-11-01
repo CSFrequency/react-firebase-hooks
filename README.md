@@ -25,22 +25,25 @@ React Hooks are not currently supported in React Native.  As soon as they are, s
 
 ### Auth
 
-React Firebase Hooks provides a convenience listeners for Firebase Auth's current user. The hook wraps around the `firebase.auth().onAuthStateChange()` method to ensure that it is always up to date.
+React Firebase Hooks provides a convenience listener for Firebase Auth's auth state. The hook wraps around the `firebase.auth().onAuthStateChange()` method to ensure that it is always up to date.
 
-#### `useCurrentUser()`
+#### `useAuthState(auth)`
+
+Parameters:
+- `auth`: `firebase.auth.Auth`
 
 Returns:
-`CurrentUser` containing:
+`AuthState` containing:
 - `initialising`: If the listener is still waiting for the user to be loaded
 - `user`: The `firebase.User`, or `null`, if no user is logged in
 
 Example:
 
 ```js
-import { useCurrentUser } from 'react-firebase-hooks';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 const CurrentUser = () => {
-  const { initialising, user } = useCurrentUser();
+  const { initialising, user } = useAuthState(firebase.auth());
   const login = () => {
     firebase.auth().signInWithEmailAndPassword('test@test.com', 'password');
   };
@@ -71,29 +74,29 @@ const CurrentUser = () => {
 ### Cloud Firestore
 
 React Firebase Hooks provides convenience listeners for Collections and Documents stored with
-Cloud Firestore.  The hooks wrap around the `firebase.firestore().collection().onSnapshot()`
+Cloud Firestore.  The hooks wrap around the `firebase.firestore.collection().onSnapshot()`
 and `firebase.firestore().doc().onSnapshot()` methods.
 
 In addition to returning the snapshot value, the hooks provide an `error` and `loading` property
 to give a complete lifecycle for loading and listening to Cloud Firestore.
 
-#### `useFirestoreCollection(pathOrQuery)`
+#### `useCollection(query)`
 
 Parameters:
-- `pathOrQuery`: `string` | `firebase.firestore.Query`
+- `query`: `firebase.firestore.Query`
 
 Returns:
-`FirestoreCollectionValue` containing
+`CollectionValue` containing
 - `error`: An optional `firebase.FirebaseError` returned by Firebase
 - `loading`: A `boolean` to indicate if the listener is still being loaded
 - `value`: A `firebase.firestore.QuerySnapshot`
 
 Example:
 ```js
-import { useFirestoreCollection } from 'react-firebase-hooks';
+import { useCollection } from 'react-firebase-hooks/firestore';
 
 const FirestoreCollection = () => {
-  const { error, loading, value } = useFirestoreCollection('hooks');
+  const { error, loading, value } = useCollection(firebase.firestore().collection('hooks'));
   return (
     <div>
       <p>
@@ -113,21 +116,23 @@ const FirestoreCollection = () => {
 }
 ```
 
-#### `useFirestoreDocument(pathOrRef)`
+#### `useDocument(docRef)`
 
 Parameters:
-- `pathOrRef`: `string` | `firebase.firestore.DocumentReference`
+- `docRef`: `firebase.firestore.DocumentReference`
 
 Returns:
-`FirestoreDocumentValue` containing
+`DocumentValue` containing
 - `error`: An optional `firebase.FirebaseError` returned by Firebase
 - `loading`: A `boolean` to indicate if the listener is still being loaded
 - `value`: A `firebase.firestore.DocumentSnapshot`
 
 Example:
 ```js
+import { useDocument } from 'react-firebase-hooks/firestore';
+
 const FirestoreDocument = () => {
-  const { error, loading, value } = useFirestoreDocument('hooks/nBShXiRGFAhuiPfBaGpt');
+  const { error, loading, value } = useDocument(firebase.firestore().doc('hooks/nBShXiRGFAhuiPfBaGpt'));
   return (
     <div>
       <p>
@@ -153,23 +158,23 @@ Firebase Realtime Database.  The hooks wrap around the `firebase.database().ref(
 In addition to returning the list or value, the hooks provide an `error` and `loading` property
 to give a complete lifecycle for loading and listening to the Realtime Database.
 
-#### `useDatabaseList(pathOrRef)`
+#### `useList(ref)`
 
 Parameters:
-- `pathOrRef`: `string` | `firebase.database.Reference`
+- `ref`: `firebase.database.Reference`
 
 Returns:
-`DatabaseList` containing
+`ListValue` containing
 - `error`: An optional error object returned by Firebase
-- `list`: A list of `firebase.database.DataSnapshot`
 - `loading`: A `boolean` to indicate if the listener is still being loaded
+- `value`: A list of `firebase.database.DataSnapshot`
 
 Example:
 ```js
-import { useDatabaseList } from 'react-firebase-hooks';
+import { useList } from 'react-firebase-hooks/database';
 
 const DatabaseList = () => {
-  const { error, list, loading } = useDatabaseList('list');
+  const { error, list, loading } = useList(firebase.database().ref('list'));
 
   return (
     <div>
@@ -190,23 +195,23 @@ const DatabaseList = () => {
 };
 ```
 
-#### `useDatabaseValue(pathOrRef)`
+#### `useObject(ref)`
 
 Parameters:
-- `pathOrRef`: `string` | `firebase.database.Reference`
+- `ref`: `firebase.database.Reference`
 
 Returns:
-`DatabaseValue` containing
+`ObjectValue` containing
 - `error`: An optional error object returned by Firebase
 - `loading`: A `boolean` to indicate if the listener is still being loaded
 - `value`: A `firebase.database.DataSnapshot`
 
 Example:
 ```js
-import { useDatabaseValue } from 'react-firebase-hooks';
+import { useObject } from 'react-firebase-hooks/database';
 
 const DatabaseValue = () => {
-  const { error, loading, value } = useDatabaseValue('value');
+  const { error, loading, value } = useObject(firebase.database().ref('value'));
 
   return (
     <div>
