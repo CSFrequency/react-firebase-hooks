@@ -1,5 +1,5 @@
 import { database } from 'firebase';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useReducer, useRef, useState } from 'react';
 
 export type ListHook = {
   error?: Object;
@@ -12,7 +12,106 @@ type KeyValueState = {
   values: database.DataSnapshot[];
 };
 
+type ReducerState = {
+  error?: object;
+  loading: boolean;
+  value: KeyValueState;
+};
+
+type AddAction = {
+  type: 'add';
+  previousKey?: string | null;
+  snapshot: database.DataSnapshot | null;
+};
+type ChangeAction = {
+  type: 'change';
+  snapshot: database.DataSnapshot | null;
+};
+type ErrorAction = { type: 'error'; error: object };
+type MoveAction = {
+  type: 'move';
+  previousKey?: string | null;
+  snapshot: database.DataSnapshot | null;
+};
+type RemoveAction = {
+  type: 'remove';
+  snapshot: database.DataSnapshot | null;
+};
+type ResetAction = { type: 'reset' };
+type ValueAction = { type: 'value'; value: any };
+type ReducerAction =
+  | AddAction
+  | ChangeAction
+  | ErrorAction
+  | MoveAction
+  | RemoveAction
+  | ResetAction
+  | ValueAction;
+
+const initialState: ReducerState = {
+  loading: true,
+  value: {
+    keys: [],
+    values: [],
+  },
+};
+
+const reducer = (state: ReducerState, action: ReducerAction): ReducerState => {
+  switch (action.type) {
+    case 'add':
+      if (!action.snapshot) {
+        return state;
+      }
+      return {
+        ...state,
+        value: addChild(state.value, action.snapshot, action.previousKey),
+      };
+    case 'change':
+      if (!action.snapshot) {
+        return state;
+      }
+      return {
+        ...state,
+        value: changeChild(state.value, action.snapshot),
+      };
+    case 'error':
+      return {
+        ...state,
+        error: action.error,
+        loading: false,
+      };
+    case 'move':
+      if (!action.snapshot) {
+        return state;
+      }
+      return {
+        ...state,
+        value: moveChild(state.value, action.snapshot, action.previousKey),
+      };
+    case 'remove':
+      if (!action.snapshot) {
+        return state;
+      }
+      return {
+        ...state,
+        value: removeChild(state.value, action.snapshot),
+      };
+    case 'reset':
+      return initialState;
+    case 'value':
+      return {
+        ...state,
+        loading: false,
+        value: action.value,
+      };
+    default:
+      return state;
+  }
+};
+
 export default (query: database.Query): ListHook => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
   // Combine keys and values in a single state hook to allow them to be manipulated together
@@ -20,64 +119,32 @@ export default (query: database.Query): ListHook => {
   // Set a ref for the query to make sure that `useEffect` doesn't run
   // every time this renders
   const queryRef = useRef(query);
-  // If the query has changed, then
+  // If the query has changed, then reset the state
   if (!query.isEqual(queryRef.current)) {
     queryRef.current = query;
-    setError(false);
-    setLoading(true);
-    setKeysValues({ keys: [], values: [] });
+    dispatch({ type: 'reset' });
   }
 
   const onChildAdded = (
     snapshot: database.DataSnapshot | null,
     previousKey?: string | null
   ) => {
-    setKeysValues((prevKeyValueState: KeyValueState) => {
-      return snapshot
-        ? addChild(prevKeyValueState, snapshot, previousKey)
-        : prevKeyValueState;
-    });
+    dispatch({ type: 'add', previousKey, snapshot });
   };
 
   const onChildChanged = (snapshot: database.DataSnapshot | null) => {
-    setKeysValues((prevKeyValueState: KeyValueState) => {
-      if (!snapshot || !snapshot.key) {
-        return prevKeyValueState;
-      }
-
-      const index = prevKeyValueState.keys.indexOf(snapshot.key);
-      return {
-        ...prevKeyValueState,
-        values: [
-          ...prevKeyValueState.values.slice(0, index),
-          snapshot,
-          ...prevKeyValueState.values.slice(index + 1),
-        ],
-      };
-    });
+    dispatch({ type: 'change', snapshot });
   };
 
   const onChildMoved = (
     snapshot: database.DataSnapshot | null,
     previousKey?: string | null
   ) => {
-    setKeysValues((prevKeyValueState: KeyValueState) => {
-      if (!snapshot) {
-        return prevKeyValueState;
-      }
-      // Remove the child from it's previous location
-      const tempKeyValueState = removeChild(prevKeyValueState, snapshot);
-      // Add the child into it's new location
-      return addChild(tempKeyValueState, snapshot, previousKey);
-    });
+    dispatch({ type: 'move', previousKey, snapshot });
   };
 
   const onChildRemoved = (snapshot: database.DataSnapshot | null) => {
-    setKeysValues((prevKeyValueState: KeyValueState) => {
-      return snapshot
-        ? removeChild(prevKeyValueState, snapshot)
-        : prevKeyValueState;
-    });
+    dispatch({ type: 'remove', snapshot });
   };
 
   useEffect(
@@ -117,15 +184,15 @@ export default (query: database.Query): ListHook => {
 };
 
 const addChild = (
-  keyValueState: KeyValueState,
+  currentState: KeyValueState,
   snapshot: firebase.database.DataSnapshot,
   previousKey?: string | null
 ): KeyValueState => {
   if (!snapshot.key) {
-    return keyValueState;
+    return currentState;
   }
 
-  const { keys, values } = keyValueState;
+  const { keys, values } = currentState;
   if (!previousKey) {
     // The child has been added to the start of the list
     return {
@@ -146,18 +213,47 @@ const addChild = (
   };
 };
 
-const removeChild = (
-  keyValueState: KeyValueState,
+const changeChild = (
+  currentState: KeyValueState,
   snapshot: firebase.database.DataSnapshot
 ): KeyValueState => {
   if (!snapshot.key) {
-    return keyValueState;
+    return currentState;
+  }
+  const index = currentState.keys.indexOf(snapshot.key);
+  return {
+    ...currentState,
+    values: [
+      ...currentState.values.slice(0, index),
+      snapshot,
+      ...currentState.values.slice(index + 1),
+    ],
+  };
+};
+
+const removeChild = (
+  currentState: KeyValueState,
+  snapshot: firebase.database.DataSnapshot
+): KeyValueState => {
+  if (!snapshot.key) {
+    return currentState;
   }
 
-  const { keys, values } = keyValueState;
+  const { keys, values } = currentState;
   const index = keys.indexOf(snapshot.key);
   return {
     keys: [...keys.slice(0, index), ...keys.slice(index + 1)],
     values: [...values.slice(0, index), ...values.slice(index + 1)],
   };
+};
+
+const moveChild = (
+  currentState: KeyValueState,
+  snapshot: firebase.database.DataSnapshot,
+  previousKey?: string | null
+): KeyValueState => {
+  // Remove the child from it's previous location
+  const tempValue = removeChild(currentState, snapshot);
+  // Add the child into it's new location
+  return addChild(tempValue, snapshot, previousKey);
 };

@@ -1,2 +1,1 @@
-export * from './comparators';
-export { default as useDataLoader } from './useDataLoader';
+export { default as useLoadingValue } from './useLoadingValue';

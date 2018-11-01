@@ -1,6 +1,6 @@
 import { database } from 'firebase';
 import { useEffect, useRef } from 'react';
-import { useDataLoader } from '../util';
+import { useLoadingValue } from '../util';
 
 export type ObjectHook = {
   error?: object;
@@ -9,7 +9,7 @@ export type ObjectHook = {
 };
 
 export default (query: database.Query): ObjectHook => {
-  const { error, loading, reset, setError, setValue, value } = useDataLoader<
+  const { error, loading, reset, setError, setValue, value } = useLoadingValue<
     database.DataSnapshot
   >();
   // Set a ref for the query to make sure that `useEffect` doesn't run

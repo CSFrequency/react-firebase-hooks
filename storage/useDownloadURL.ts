@@ -1,6 +1,6 @@
 import { storage } from 'firebase';
 import { useEffect, useRef } from 'react';
-import { useDataLoader } from '../util';
+import { useLoadingValue } from '../util';
 
 export type DownloadURLHook = {
   error?: object;
@@ -9,7 +9,7 @@ export type DownloadURLHook = {
 };
 
 export default (ref: storage.Reference): DownloadURLHook => {
-  const { error, loading, reset, setError, setValue, value } = useDataLoader<
+  const { error, loading, reset, setError, setValue, value } = useLoadingValue<
     string
   >();
   // Set a ref for the query to make sure that `useEffect` doesn't run

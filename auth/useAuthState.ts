@@ -1,6 +1,6 @@
 import { auth, User } from 'firebase';
 import { useEffect } from 'react';
-import { useDataLoader } from '../util';
+import { useLoadingValue } from '../util';
 
 export type AuthStateHook = {
   user?: firebase.User;
@@ -8,15 +8,18 @@ export type AuthStateHook = {
 };
 
 export default (auth: auth.Auth): AuthStateHook => {
-  const { loading, setValue, value } = useDataLoader<User>();
+  const { loading, setValue, value } = useLoadingValue<User>();
 
-  useEffect(() => {
-    const listener = auth.onAuthStateChanged(setValue);
+  useEffect(
+    () => {
+      const listener = auth.onAuthStateChanged(setValue);
 
-    return () => {
-      listener();
-    };
-  }, []);
+      return () => {
+        listener();
+      };
+    },
+    [auth]
+  );
 
   return {
     initialising: loading,

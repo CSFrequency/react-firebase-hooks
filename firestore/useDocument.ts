@@ -1,6 +1,6 @@
 import { firestore } from 'firebase';
 import { useEffect, useRef } from 'react';
-import { useDataLoader } from '../util';
+import { useLoadingValue } from '../util';
 
 export type DocumentHook = {
   error?: object;
@@ -12,7 +12,7 @@ export default (
   doc: firestore.DocumentReference,
   options?: firestore.SnapshotListenOptions
 ): DocumentHook => {
-  const { error, loading, reset, setError, setValue, value } = useDataLoader<
+  const { error, loading, reset, setError, setValue, value } = useLoadingValue<
     firestore.DocumentSnapshot
   >();
   // Set a ref for the query to make sure that `useEffect` doesn't run
