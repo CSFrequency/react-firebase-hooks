@@ -230,6 +230,22 @@ const DatabaseValue = () => {
 
 ```
 
+#### `useObjectVal<T>(ref)`
+
+As above, but this hook returns the typed contents of `DataSnapshot.val()` rather than the
+`DataSnapshot` itself.
+
+Parameters:
+- `ref`: `firebase.database.Reference`
+
+Returns:
+`ObjectValue` containing
+- `error`: An optional error object returned by Firebase
+- `loading`: A `boolean` to indicate if the listener is still being loaded
+- `value`: A `firebase.database.DataSnapshot`
+
+```
+
 ## License
 
 * See [LICENSE](/LICENSE)

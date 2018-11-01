@@ -11,6 +11,12 @@ export type ObjectHook = {
   loading: boolean;
   value?: DataSnapshot;
 };
+export type ObjectValHook<T> = {
+  error?: Object;
+  loading: boolean;
+  value?: T;
+};
 
 declare export function useList(query: Query): ListHook;
 declare export function useObject(query: Query): ObjectHook;
+declare export function useObjectVal<T>(query: Query): ObjectValHook<T>;
