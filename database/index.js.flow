@@ -7,7 +7,7 @@ export type ListHook = {
   value: DataSnapshot[];
 };
 export type ObjectHook = {
-  error?: object;
+  error?: Object;
   loading: boolean;
   value?: DataSnapshot;
 };

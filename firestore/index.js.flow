@@ -8,12 +8,12 @@ import type {
 } from 'firebase/firestore';
 
 export type CollectionHook = {
-  error?: object;
+  error?: Object;
   loading: boolean;
   value?: firestore.QuerySnapshot;
 };
 export type DocumentHook = {
-  error?: object;
+  error?: Object;
   loading: boolean;
   value?: firestore.DocumentSnapshot;
 };
