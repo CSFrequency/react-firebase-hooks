@@ -1,10 +1,11 @@
 import { database } from 'firebase';
-import { useEffect, useReducer, useRef, useState } from 'react';
+import { useEffect, useReducer } from 'react';
+import { useIsEqualRef } from '../util';
 
 export type ListHook = {
   error?: Object;
-  list: database.DataSnapshot[];
   loading: boolean;
+  value: database.DataSnapshot[];
 };
 
 type KeyValueState = {
@@ -112,18 +113,7 @@ const reducer = (state: ReducerState, action: ReducerAction): ReducerState => {
 export default (query: database.Query): ListHook => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(true);
-  // Combine keys and values in a single state hook to allow them to be manipulated together
-  const [{ values }, setKeysValues] = useState({ keys: [], values: [] });
-  // Set a ref for the query to make sure that `useEffect` doesn't run
-  // every time this renders
-  const queryRef = useRef(query);
-  // If the query has changed, then reset the state
-  if (!query.isEqual(queryRef.current)) {
-    queryRef.current = query;
-    dispatch({ type: 'reset' });
-  }
+  const ref = useIsEqualRef(query, () => dispatch({ type: 'reset' }));
 
   const onChildAdded = (
     snapshot: database.DataSnapshot | null,
@@ -149,16 +139,15 @@ export default (query: database.Query): ListHook => {
 
   useEffect(
     () => {
-      const query: database.Query = queryRef.current;
+      const query: database.Query = ref.current;
       // This is here to indicate that all the data has been successfully received
       query.once(
         'value',
         () => {
-          setLoading(false);
+          dispatch({ type: 'loading ' });
         },
-        (err: object) => {
-          setError(err);
-          setLoading(false);
+        (error: object) => {
+          dispatch({ type: 'error', error });
         }
       );
       query.on('child_added', onChildAdded);
@@ -173,13 +162,13 @@ export default (query: database.Query): ListHook => {
         query.off('child_removed', onChildRemoved);
       };
     },
-    [queryRef.current]
+    [ref.current]
   );
 
   return {
-    error,
-    list: values,
-    loading,
+    error: state.error,
+    loading: state.loading,
+    value: state.value,
   };
 };
 

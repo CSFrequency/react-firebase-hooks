@@ -1,39 +1,36 @@
 import { storage } from 'firebase';
-import { useEffect, useRef } from 'react';
-import { useLoadingValue } from '../util';
+import { useEffect } from 'react';
+import { useComparatorRef, useLoadingValue } from '../util';
 
 export type DownloadURLHook = {
   error?: object;
   loading: boolean;
-  url?: string;
+  value?: string;
 };
 
-export default (ref: storage.Reference): DownloadURLHook => {
+export default (storageRef: storage.Reference): DownloadURLHook => {
   const { error, loading, reset, setError, setValue, value } = useLoadingValue<
     string
   >();
-  // Set a ref for the query to make sure that `useEffect` doesn't run
-  // every time this renders
-  const refRef = useRef(ref);
-  // If the query has changed, then
-  if (ref.fullPath !== refRef.current.fullPath) {
-    refRef.current = ref;
-    reset();
-  }
+  const ref = useComparatorRef(
+    storageRef,
+    (v1, v2) => v1.fullPath === v2.fullPath,
+    reset
+  );
 
   useEffect(
     () => {
-      refRef.current
+      ref.current
         .getDownloadURL()
         .then(setValue)
         .catch(setError);
     },
-    [refRef.current]
+    [ref.current]
   );
 
   return {
     error,
     loading,
-    url: value,
+    value,
   };
 };

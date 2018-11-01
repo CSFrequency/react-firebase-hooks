@@ -1,6 +1,6 @@
 import { firestore } from 'firebase';
-import { useEffect, useRef } from 'react';
-import { useLoadingValue } from '../util';
+import { useEffect } from 'react';
+import { useIsEqualRef, useLoadingValue } from '../util';
 
 export type DocumentHook = {
   error?: object;
@@ -9,33 +9,25 @@ export type DocumentHook = {
 };
 
 export default (
-  doc: firestore.DocumentReference,
+  docRef: firestore.DocumentReference,
   options?: firestore.SnapshotListenOptions
 ): DocumentHook => {
   const { error, loading, reset, setError, setValue, value } = useLoadingValue<
     firestore.DocumentSnapshot
   >();
-  // Set a ref for the query to make sure that `useEffect` doesn't run
-  // every time this renders
-  const docRef = useRef(doc);
-  // If the query has changed, then
-  if (!doc.isEqual(docRef.current)) {
-    docRef.current = doc;
-    reset();
-  }
+  const ref = useIsEqualRef(docRef, reset);
 
   useEffect(
     () => {
       const listener = options
-        ? docRef.current.onSnapshot(options, setValue, setError)
-        : docRef.current.onSnapshot(setValue, setError);
+        ? ref.current.onSnapshot(options, setValue, setError)
+        : ref.current.onSnapshot(setValue, setError);
 
       return () => {
         listener();
       };
     },
-    // TODO: Check if this works suitably for 'ref' parameters
-    [docRef.current]
+    [ref.current]
   );
 
   return {

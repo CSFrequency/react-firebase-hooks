@@ -1,6 +1,6 @@
 import { firestore } from 'firebase';
-import { useEffect, useRef } from 'react';
-import { useLoadingValue } from '../util';
+import { useEffect } from 'react';
+import { useIsEqualRef, useLoadingValue } from '../util';
 
 export type CollectionHook = {
   error?: object;
@@ -15,26 +15,19 @@ export default (
   const { error, loading, reset, setError, setValue, value } = useLoadingValue<
     firestore.QuerySnapshot
   >();
-  // Set a ref for the query to make sure that `useEffect` doesn't run
-  // every time this renders
-  const queryRef = useRef(query);
-  // If the query has changed, then
-  if (!query.isEqual(queryRef.current)) {
-    queryRef.current = query;
-    reset();
-  }
+  const ref = useIsEqualRef(query, reset);
 
   useEffect(
     () => {
       const listener = options
-        ? queryRef.current.onSnapshot(options, setValue, setError)
-        : queryRef.current.onSnapshot(setValue, setError);
+        ? ref.current.onSnapshot(options, setValue, setError)
+        : ref.current.onSnapshot(setValue, setError);
 
       return () => {
         listener();
       };
     },
-    [queryRef.current]
+    [ref.current]
   );
 
   return {
