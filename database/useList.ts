@@ -167,7 +167,7 @@ export default (query: database.Query): ListHook => {
   return {
     error: state.error,
     loading: state.loading,
-    value: state.value,
+    value: state.value.values,
   };
 };
 

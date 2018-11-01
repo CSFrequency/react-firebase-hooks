@@ -1,6 +1,6 @@
 import { auth, User } from 'firebase';
 import { useEffect } from 'react';
-import { useLoadingValue } from '../util';
+import useLoadingValue from '../util/useLoadingValue';
 
 export type AuthStateHook = {
   user?: firebase.User;
