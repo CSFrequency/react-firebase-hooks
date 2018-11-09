@@ -199,9 +199,25 @@ const DatabaseList = () => {
 };
 ```
 
-#### `useListVal<T>(ref, keyField)`
+#### `useListKeys<T>(ref)`
 
-As above, but this hook returns a typed list of the `DataSnapshot.val()` values, rather than the the
+As above, but this hook returns a list of the `DataSnapshot.key` values, rather than the the
+`DataSnapshot`s themselves.
+
+Parameters:
+- `ref`: `firebase.database.Reference`
+
+Returns:
+`ListKeysHook` containing
+- `error`: An optional error object returned by Firebase
+- `loading`: A `boolean` to indicate if the listener is still being loaded
+- `value`: A list of `firebase.database.DataSnapshot.key` values
+
+```
+
+#### `useListVals<T>(ref, keyField)`
+
+Similar to `useList`, but this hook returns a typed list of the `DataSnapshot.val()` values, rather than the the
 `DataSnapshot`s themselves.
 
 Parameters:
@@ -209,10 +225,10 @@ Parameters:
 - `keyField`: (Optional) Name of field that should be populated with the `DataSnapshot.key` property
 
 Returns:
-`ListValHook` containing
+`ListValsHook` containing
 - `error`: An optional error object returned by Firebase
 - `loading`: A `boolean` to indicate if the listener is still being loaded
-- `value`: A list of the contents of `firebase.database.DataSnapshot.val()` and optional key field
+- `value`: A list of `firebase.database.DataSnapshot.val()` values, combined with the optional key field
 
 ```
 

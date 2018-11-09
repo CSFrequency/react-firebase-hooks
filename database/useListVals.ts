@@ -1,7 +1,7 @@
 import { database } from 'firebase';
 import useList from './useList';
 
-export type ListValHook<T> = {
+export type ListValsHook<T> = {
   error?: Object;
   loading: boolean;
   value: T[];
@@ -10,7 +10,7 @@ export type ListValHook<T> = {
 export default <T>(
   query: database.Query,
   keyField?: string
-): ListValHook<T> => {
+): ListValsHook<T> => {
   const { error, loading, value } = useList(query);
   return {
     error,
