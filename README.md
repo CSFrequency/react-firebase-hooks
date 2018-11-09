@@ -37,7 +37,7 @@ Parameters:
 - `auth`: `firebase.auth.Auth`
 
 Returns:
-`AuthState` containing:
+`AuthStateHook` containing:
 - `initialising`: If the listener is still waiting for the user to be loaded
 - `user`: The `firebase.User`, or `null`, if no user is logged in
 
@@ -90,7 +90,7 @@ Parameters:
 - `query`: `firebase.firestore.Query`
 
 Returns:
-`CollectionValue` containing
+`CollectionHook` containing
 - `error`: An optional `firebase.FirebaseError` returned by Firebase
 - `loading`: A `boolean` to indicate if the listener is still being loaded
 - `value`: A `firebase.firestore.QuerySnapshot`
@@ -126,7 +126,7 @@ Parameters:
 - `docRef`: `firebase.firestore.DocumentReference`
 
 Returns:
-`DocumentValue` containing
+`DocumentHook` containing
 - `error`: An optional `firebase.FirebaseError` returned by Firebase
 - `loading`: A `boolean` to indicate if the listener is still being loaded
 - `value`: A `firebase.firestore.DocumentSnapshot`
@@ -168,7 +168,7 @@ Parameters:
 - `ref`: `firebase.database.Reference`
 
 Returns:
-`ListValue` containing
+`ListHook` containing
 - `error`: An optional error object returned by Firebase
 - `loading`: A `boolean` to indicate if the listener is still being loaded
 - `value`: A list of `firebase.database.DataSnapshot`
@@ -199,13 +199,30 @@ const DatabaseList = () => {
 };
 ```
 
+#### `useListVal<T>(ref, keyField)`
+
+As above, but this hook returns a typed list of the `DataSnapshot.val()` values, rather than the the
+`DataSnapshot`s themselves.
+
+Parameters:
+- `ref`: `firebase.database.Reference`
+- `keyField`: (Optional) Name of field that should be populated with the `DataSnapshot.key` property
+
+Returns:
+`ListValHook` containing
+- `error`: An optional error object returned by Firebase
+- `loading`: A `boolean` to indicate if the listener is still being loaded
+- `value`: A list of the contents of `firebase.database.DataSnapshot.val()` and optional key field
+
+```
+
 #### `useObject(ref)`
 
 Parameters:
 - `ref`: `firebase.database.Reference`
 
 Returns:
-`ObjectValue` containing
+`ObjectHook` containing
 - `error`: An optional error object returned by Firebase
 - `loading`: A `boolean` to indicate if the listener is still being loaded
 - `value`: A `firebase.database.DataSnapshot`
@@ -239,10 +256,10 @@ Parameters:
 - `ref`: `firebase.database.Reference`
 
 Returns:
-`ObjectValue` containing
+`ObjectValHook` containing
 - `error`: An optional error object returned by Firebase
 - `loading`: A `boolean` to indicate if the listener is still being loaded
-- `value`: A `firebase.database.DataSnapshot`
+- `value`: The contents of `firebase.database.DataSnapshot.val()`
 
 ```
 
