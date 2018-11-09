@@ -7,7 +7,7 @@ export type ListValHook<T> = {
   value: T[];
 };
 
-export const useListVal = <T>(
+export default <T>(
   query: database.Query,
   keyField?: string
 ): ListValHook<T> => {
