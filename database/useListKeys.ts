@@ -1,14 +1,15 @@
 import { database } from 'firebase';
 import useList from './useList';
 
-export type ListKeysHook<T> = {
+export type ListKeysHook = {
   error?: Object;
   loading: boolean;
   value: string[];
 };
 
-export default <T>(query: database.Query): ListKeysHook<T> => {
+export default (query: database.Query): ListKeysHook => {
   const { error, loading, value } = useList(query);
+  // @ts-ignore
   return {
     error,
     loading,

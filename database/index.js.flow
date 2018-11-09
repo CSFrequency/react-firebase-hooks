@@ -6,7 +6,7 @@ export type ListHook = {
   loading: boolean;
   value: DataSnapshot[];
 };
-export type ListKeysHook<T> = {
+export type ListKeysHook = {
   error?: Object;
   loading: boolean;
   value: string[];
@@ -28,7 +28,7 @@ export type ObjectValHook<T> = {
 };
 
 declare export function useList(query: Query): ListHook;
-declare export function useListKeys<T>(query: Query): ListKeysHook<T>;
+declare export function useListKeys(query: Query): ListKeysHook;
 declare export function useListVals<T>(query: Query, keyField?: string): ListValsHook<T>;
 declare export function useObject(query: Query): ObjectHook;
 declare export function useObjectVal<T>(query: Query): ObjectValHook<T>;
