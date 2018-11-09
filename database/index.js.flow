@@ -23,6 +23,6 @@ export type ObjectValHook<T> = {
 };
 
 declare export function useList(query: Query): ListHook;
-declare export function useListVal(query: Query, keyField?: string): ListHook;
+declare export function useListVal<T>(query: Query, keyField?: string): ListHook;
 declare export function useObject(query: Query): ObjectHook;
 declare export function useObjectVal<T>(query: Query): ObjectValHook<T>;
