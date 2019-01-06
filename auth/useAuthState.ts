@@ -7,8 +7,8 @@ export type AuthStateHook = {
   initialising: boolean;
 };
 
-export default (auth: auth.Auth): AuthStateHook => {
-  const { loading, setValue, value } = useLoadingValue<User>();
+export default (auth: auth.Auth, defaultUser?: User = undefined): AuthStateHook => {
+  const { loading, setValue, value } = useLoadingValue<User>(defaultUser);
 
   useEffect(
     () => {
