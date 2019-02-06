@@ -5,13 +5,13 @@ A set of reusable React Hooks for [Firebase](https://firebase.google.com/).
 [![npm version](https://img.shields.io/npm/v/react-firebase-hooks.svg?style=flat-square)](https://www.npmjs.com/package/react-firebase-hooks)
 [![npm downloads](https://img.shields.io/npm/dm/react-firebase-hooks.svg?style=flat-square)](https://www.npmjs.com/package/react-firebase-hooks)
 
-> [Hooks](https://reactjs.org/docs/hooks-intro.html) are a new feature proposal that lets you use state and other React features without writing a class. They were first added in the React v16.7.0-alpha and are being discussed in an open RFC. They did not make it into the released v16.7.0, but are currently available in the React v16.8.0-alpha stream.
+> [Hooks](https://reactjs.org/docs/hooks-intro.html) are a new feature that lets you use state and other React features without writing a class and are available in React v16.8.0 or later.
 
-> Hooks are not currently supported in React Native - as soon as they are, we'll make sure that React Firebase Hooks works with both the Firebase JS SDK and React Native Firebase.
+> Official support for Hooks will be added to React Native in [v0.59.0](https://github.com/react-native-community/react-native-releases/issues/79#issuecomment-457735214) - as soon as it's released, we'll make sure that React Firebase Hooks works with both the Firebase JS SDK and React Native Firebase.
 
 ## Installation
 
-React Firebase Hooks requires **React 16.7.0-alpha.0, React 16.8.0-alpha.0 or later** and **Firebase v5.0.0 or later**.
+React Firebase Hooks requires **React 16.8.0 or later** and **Firebase v5.0.0 or later**.
 
 ```
 npm install --save react-firebase-hooks
@@ -21,11 +21,16 @@ This assumes that you’re using the [npm](https://npmjs.com) package manager wi
 
 ## Why?
 
-It's clear that there is a **lot** of hype around React Hooks despite them still being in alpha, but this hype merely reflects that there are obvious real world benefits to React developers everywhere.
+There has been a **lot** of hype around React Hooks, but this hype merely reflects that there are obvious real world benefits of Hooks to React developers everywhere.
 
-This library explores how React Hooks can work to make integration with Firebase even more straightforward than it already is. It takes inspiration for naming from RxFire and is based on an internal library that we have used in a number of apps prior to the release of React Hooks. The implementation with hooks is 10x simpler than our previous implementation.
+This library explores how React Hooks can work to make integration with Firebase even more straightforward than it already is. It takes inspiration for naming from RxFire and is based on an internal library that we had been using in a number of apps prior to the release of React Hooks. The implementation with hooks is 10x simpler than our previous implementation.
 
 ## Documentation
+
+- [Auth Hooks](#Auth)
+- [Cloud Firestore Hooks](#cloud-firestore)
+- [Cloud Storage Hooks](#cloud-storage)
+- [Realtime Database Hooks](#realtime-database)
 
 ### Auth
 
@@ -162,6 +167,53 @@ const FirestoreDocument = () => {
 };
 ```
 
+### Cloud Storage
+
+React Firebase Hooks provides convenience listeners for files stored within
+Firebase Cloud Storage. The hooks wrap around the `firebase.storage().ref().getDownloadURL()` method.
+
+In addition to returning the download URL, the hooks provide an `error` and `loading` property
+to give a complete lifecycle for loading from Cloud Storage.
+
+#### `useDownloadURL(ref)`
+
+Parameters:
+
+- `ref`: `firebase.storage.Reference`
+
+Returns:
+`DownloadURLHook` containing
+
+- `error`: An optional error object returned by Firebase
+- `loading`: A `boolean` to indicate if the download URL is still being loaded
+- `value`: The download URL
+
+Example:
+
+```js
+import { useDownloadUrl } from 'react-firebase-hooks/storage';
+
+const DownloadURL = () => {
+  const { error, loading, value } = useDownloadURL(
+    firebase.storage().ref('path/to/file')
+  );
+
+  return (
+    <div>
+      <p>
+        {error && <strong>Error: {error}</strong>}
+        {loading && <span>Download URL: Loading...</span>}
+        {!loading && value && (
+          <React.Fragment>
+            <span>Download URL: {value}</span>
+          </React.Fragment>
+        )}
+      </p>
+    </div>
+  );
+};
+```
+
 ### Realtime Database
 
 React Firebase Hooks provides convenience listeners for lists and values stored within the
@@ -189,18 +241,18 @@ Example:
 import { useList } from 'react-firebase-hooks/database';
 
 const DatabaseList = () => {
-  const { error, list, loading } = useList(firebase.database().ref('list'));
+  const { error, loading, value } = useList(firebase.database().ref('list'));
 
   return (
     <div>
       <p>
         {error && <strong>Error: {error}</strong>}
         {loading && <span>List: Loading...</span>}
-        {!loading && list && (
+        {!loading && value && (
           <React.Fragment>
             <span>
               List:{' '}
-              {list.map(v => (
+              {value.map(v => (
                 <React.Fragment key={v.key}>{v.val()}, </React.Fragment>
               ))}
             </span>
@@ -228,24 +280,22 @@ Returns:
 - `loading`: A `boolean` to indicate if the listener is still being loaded
 - `value`: A list of `firebase.database.DataSnapshot.key` values
 
-```
-
 #### `useListVals<T>(ref, keyField)`
 
 Similar to `useList`, but this hook returns a typed list of the `DataSnapshot.val()` values, rather than the the
 `DataSnapshot`s themselves.
 
 Parameters:
+
 - `ref`: `firebase.database.Reference`
 - `keyField`: (Optional) Name of field that should be populated with the `DataSnapshot.key` property
 
 Returns:
 `ListValsHook` containing
+
 - `error`: An optional error object returned by Firebase
 - `loading`: A `boolean` to indicate if the listener is still being loaded
 - `value`: A list of `firebase.database.DataSnapshot.val()` values, combined with the optional key field
-
-```
 
 #### `useObject(ref)`
 
