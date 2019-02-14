@@ -20,6 +20,13 @@ type ResetAction = { type: 'reset'; defaultValue?: any };
 type ValueAction = { type: 'value'; value: any };
 type ReducerAction = ErrorAction | ResetAction | ValueAction;
 
+const defaultState = (defaultValue?: any) => {
+  return {
+    loading: defaultValue === undefined || defaultValue === null,
+    value: defaultValue,
+  };
+};
+
 const reducer = (state: ReducerState, action: ReducerAction): ReducerState => {
   switch (action.type) {
     case 'error':
@@ -29,10 +36,7 @@ const reducer = (state: ReducerState, action: ReducerAction): ReducerState => {
         loading: false,
       };
     case 'reset':
-      return {
-        ...state,
-        value: action.defaultValue,
-      };
+      return defaultState(action.defaultValue);
     case 'value':
       return {
         ...state,
@@ -44,13 +48,12 @@ const reducer = (state: ReducerState, action: ReducerAction): ReducerState => {
   }
 };
 
-export default <T>(defaultValue?: T | null): LoadingValue<T> => {
-  const [state, dispatch] = useReducer(reducer, {
-    loading: defaultValue === undefined || defaultValue === null,
-    value: defaultValue,
-  });
+export default <T>(getDefaultValue?: () => T | null): LoadingValue<T> => {
+  const defaultValue = getDefaultValue ? getDefaultValue() : undefined;
+  const [state, dispatch] = useReducer(reducer, defaultState(defaultValue));
 
   const reset = () => {
+    const defaultValue = getDefaultValue ? getDefaultValue() : undefined;
     dispatch({ type: 'reset', defaultValue });
   };
 
