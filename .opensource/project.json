@@ -3,6 +3,6 @@
   "platforms": ["Web"],
   "content": "README.md",
   "pages": [],
-  "related": [],
+  "related": ["firebase/firebase-js-sdk"],
   "tabs": []
 }
