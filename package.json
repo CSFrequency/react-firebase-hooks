@@ -59,7 +59,7 @@
     "typescript": "2.8.1"
   },
   "peerDependencies": {
-    "react": "16.8.0"
+    "react": "^16.8.0"
   },
   "typings": "index.d.ts"
 }
