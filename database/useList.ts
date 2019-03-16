@@ -139,7 +139,10 @@ export default (query: database.Query | null | undefined): ListHook => {
   useEffect(
     () => {
       const query: database.Query | null | undefined = ref.current;
-      if (!query) return;
+      if (!query) {
+        dispatch({ type: 'value' })
+        return;
+      }
       // This is here to indicate that all the data has been successfully received
       query.once(
         'value',

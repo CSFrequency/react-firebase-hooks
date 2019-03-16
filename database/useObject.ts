@@ -17,7 +17,10 @@ export default (query: database.Query | null | undefined): ObjectHook => {
   useEffect(
     () => {
       const query = ref.current;
-      if (!query) return;
+      if (!query) {
+        setValue(null);
+        return;
+      }
 
       query.on('value', setValue, setError);
 
