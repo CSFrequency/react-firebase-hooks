@@ -9,7 +9,7 @@ export type DocumentHook = {
 };
 
 export default (
-  docRef: firestore.DocumentReference,
+  docRef: firestore.DocumentReference | null | undefined,
   options?: firestore.SnapshotListenOptions
 ): DocumentHook => {
   const { error, loading, reset, setError, setValue, value } = useLoadingValue<
@@ -19,6 +19,7 @@ export default (
 
   useEffect(
     () => {
+      if (!ref.current) return;
       const listener = options
         ? ref.current.onSnapshot(options, setValue, setError)
         : ref.current.onSnapshot(setValue, setError);

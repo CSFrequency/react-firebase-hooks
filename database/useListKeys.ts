@@ -7,12 +7,11 @@ export type ListKeysHook = {
   value: string[];
 };
 
-export default (query: database.Query): ListKeysHook => {
+export default (query: database.Query | null | undefined): ListKeysHook => {
   const { error, loading, value } = useList(query);
-  // @ts-ignore
   return {
     error,
     loading,
-    value: value.map(snapshot => snapshot.key),
+    value: value.map(snapshot => snapshot.key as string),
   };
 };

@@ -8,7 +8,7 @@ export type ObjectHook = {
   value?: database.DataSnapshot;
 };
 
-export default (query: database.Query): ObjectHook => {
+export default (query: database.Query | null | undefined): ObjectHook => {
   const { error, loading, reset, setError, setValue, value } = useLoadingValue<
     database.DataSnapshot
   >();
@@ -17,6 +17,8 @@ export default (query: database.Query): ObjectHook => {
   useEffect(
     () => {
       const query = ref.current;
+      if (!query) return;
+
       query.on('value', setValue, setError);
 
       return () => {

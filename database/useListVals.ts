@@ -8,7 +8,7 @@ export type ListValsHook<T> = {
 };
 
 export default <T>(
-  query: database.Query,
+  query: database.Query | null | undefined,
   keyField?: string
 ): ListValsHook<T> => {
   const { error, loading, value } = useList(query);
