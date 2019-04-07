@@ -191,7 +191,7 @@ Returns:
 Example:
 
 ```js
-import { useDownloadUrl } from 'react-firebase-hooks/storage';
+import { useDownloadURL } from 'react-firebase-hooks/storage';
 
 const DownloadURL = () => {
   const { error, loading, value } = useDownloadURL(
