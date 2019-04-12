@@ -9,7 +9,7 @@ export type CollectionHook = {
 };
 
 export default (
-  query: firestore.Query,
+  query: firestore.Query | null | undefined,
   options?: firestore.SnapshotListenOptions
 ): CollectionHook => {
   const { error, loading, reset, setError, setValue, value } = useLoadingValue<
@@ -19,6 +19,7 @@ export default (
 
   useEffect(
     () => {
+      if (!ref.current) return;
       const listener = options
         ? ref.current.onSnapshot(options, setValue, setError)
         : ref.current.onSnapshot(setValue, setError);

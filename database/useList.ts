@@ -109,7 +109,7 @@ const reducer = (state: ReducerState, action: ReducerAction): ReducerState => {
   }
 };
 
-export default (query: database.Query): ListHook => {
+export default (query: database.Query | null | undefined): ListHook => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const ref = useIsEqualRef(query, () => dispatch({ type: 'reset' }));
@@ -138,7 +138,11 @@ export default (query: database.Query): ListHook => {
 
   useEffect(
     () => {
-      const query: database.Query = ref.current;
+      const query: database.Query | null | undefined = ref.current;
+      if (!query) {
+        dispatch({ type: 'value' })
+        return;
+      }
       // This is here to indicate that all the data has been successfully received
       query.once(
         'value',
