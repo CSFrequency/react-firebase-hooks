@@ -61,7 +61,7 @@ export default <T>(getDefaultValue?: () => T | null): LoadingValue<T> => {
     dispatch({ type: 'error', error });
   };
 
-  const setValue = (value: T | null) => {
+  const setValue = (value?: T | null) => {
     dispatch({ type: 'value', value });
   };
 
