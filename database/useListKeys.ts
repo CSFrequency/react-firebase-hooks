@@ -7,7 +7,7 @@ export type ListKeysHook = {
   value: string[];
 };
 
-export default (query: database.Query | null | undefined): ListKeysHook => {
+export default (query?: database.Query | null): ListKeysHook => {
   const { error, loading, value } = useList(query);
   return {
     error,

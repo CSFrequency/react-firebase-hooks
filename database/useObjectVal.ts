@@ -7,7 +7,7 @@ export type ObjectValHook<T> = {
   value?: T;
 };
 
-export default <T>(query: database.Query | null | undefined): ObjectValHook<T> => {
+export default <T>(query?: database.Query | null): ObjectValHook<T> => {
   const { error, loading, value } = useObject(query);
   return {
     error,

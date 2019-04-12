@@ -8,20 +8,18 @@ export type DownloadURLHook = {
   value?: string;
 };
 
-export default (storageRef: storage.Reference | null | undefined): DownloadURLHook => {
+export default (storageRef?: storage.Reference | null): DownloadURLHook => {
   const { error, loading, reset, setError, setValue, value } = useLoadingValue<
     string
   >();
-  function isEqual(v1: storage.Reference | null | undefined, v2: storage.Reference | null | undefined): boolean {
-    const bothNull: boolean = !v1 && !v2;
-    const equal: boolean = !!v1 && !!v2 && v1.fullPath === v2.fullPath;
-    return bothNull || equal;
-  }
   const ref = useComparatorRef(storageRef, isEqual, reset);
 
   useEffect(
     () => {
-      if (!ref.current) return;
+      if (!ref.current) {
+        setValue(undefined);
+        return;
+      }
       ref.current
         .getDownloadURL()
         .then(setValue)
@@ -35,4 +33,13 @@ export default (storageRef: storage.Reference | null | undefined): DownloadURLHo
     loading,
     value,
   };
+};
+
+const isEqual = (
+  v1: storage.Reference | null | undefined,
+  v2: storage.Reference | null | undefined
+): boolean => {
+  const bothNull: boolean = !v1 && !v2;
+  const equal: boolean = !!v1 && !!v2 && v1.fullPath === v2.fullPath;
+  return bothNull || equal;
 };

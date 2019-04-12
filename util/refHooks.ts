@@ -25,15 +25,19 @@ export interface HasIsEqual<T> {
   isEqual: (value: T) => boolean;
 }
 
+const isEqual = <T extends HasIsEqual<T>>(
+  v1: T | null | undefined,
+  v2: T | null | undefined
+): boolean => {
+  const bothNull: boolean = !v1 && !v2;
+  const equal: boolean = !!v1 && !!v2 && v1.isEqual(v2);
+  return bothNull || equal;
+};
+
 export const useIsEqualRef = <T extends HasIsEqual<T>>(
   value: T | null | undefined,
   onChange?: () => void
 ): RefHook<T | null | undefined> => {
-  function isEqual(v1: T | null | undefined, v2: T | null | undefined): boolean {
-    const bothNull: boolean = !v1 && !v2;
-    const equal: boolean = !!v1 && !!v2 && v1.isEqual(v2);
-    return bothNull || equal;
-  }
   return useComparatorRef(value, isEqual, onChange);
 };
 

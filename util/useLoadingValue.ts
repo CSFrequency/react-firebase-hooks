@@ -5,7 +5,7 @@ export type LoadingValue<T> = {
   loading: boolean;
   reset: () => void;
   setError: (error: object) => void;
-  setValue: (value: T | null) => void;
+  setValue: (value?: T | null) => void;
   value?: T;
 };
 
