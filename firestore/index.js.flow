@@ -8,15 +8,21 @@ import type {
 } from 'firebase/firestore';
 
 export type CollectionHook = {
-  error?: Object;
-  loading: boolean;
-  value?: firestore.QuerySnapshot;
+  error?: Object,
+  loading: boolean,
+  value?: firestore.QuerySnapshot,
 };
 export type DocumentHook = {
-  error?: Object;
-  loading: boolean;
-  value?: firestore.DocumentSnapshot;
+  error?: Object,
+  loading: boolean,
+  value?: firestore.DocumentSnapshot,
 };
 
-declare export function useCollection(query: Query, options?: SnapshotListenOptions): CollectionHook;
-declare export function useDocument(ref: firestore.DocumentReference, options?: SnapshotListenOptions): DocumentHook;
+declare export function useCollection(
+  query?: Query | null,
+  options?: SnapshotListenOptions
+): CollectionHook;
+declare export function useDocument(
+  ref?: DocumentReference | null,
+  options?: SnapshotListenOptions
+): DocumentHook;

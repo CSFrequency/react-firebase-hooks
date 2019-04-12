@@ -2,8 +2,8 @@
 import type { Reference } from 'firebase/storage';
 
 export type DownloadURLHook = {
-  error?: Object;
-  loading: boolean;
-  value?: string;
+  error?: Object,
+  loading: boolean,
+  value?: string,
 };
-declare export function useDownloadURL(ref: Reference): DownloadURLHook;
+declare export function useDownloadURL(ref?: Reference | null): DownloadURLHook;

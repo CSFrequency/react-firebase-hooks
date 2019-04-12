@@ -2,33 +2,36 @@
 import type { DataSnapshot, Query } from 'firebase/database';
 
 export type ListHook = {
-  error?: Object;
-  loading: boolean;
-  value: DataSnapshot[];
+  error?: Object,
+  loading: boolean,
+  value: DataSnapshot[],
 };
 export type ListKeysHook = {
-  error?: Object;
-  loading: boolean;
-  value: string[];
+  error?: Object,
+  loading: boolean,
+  value: string[],
 };
 export type ListValsHook<T> = {
-  error?: Object;
-  loading: boolean;
-  value: T[];
+  error?: Object,
+  loading: boolean,
+  value: T[],
 };
 export type ObjectHook = {
-  error?: Object;
-  loading: boolean;
-  value?: DataSnapshot;
+  error?: Object,
+  loading: boolean,
+  value?: DataSnapshot,
 };
 export type ObjectValHook<T> = {
-  error?: Object;
-  loading: boolean;
-  value?: T;
+  error?: Object,
+  loading: boolean,
+  value?: T,
 };
 
-declare export function useList(query: Query): ListHook;
-declare export function useListKeys(query: Query): ListKeysHook;
-declare export function useListVals<T>(query: Query, keyField?: string): ListValsHook<T>;
-declare export function useObject(query: Query): ObjectHook;
-declare export function useObjectVal<T>(query: Query): ObjectValHook<T>;
+declare export function useList(query?: Query | null): ListHook;
+declare export function useListKeys(query?: Query | null): ListKeysHook;
+declare export function useListVals<T>(
+  query?: Query | null,
+  keyField?: string
+): ListValsHook<T>;
+declare export function useObject(query?: Query | null): ObjectHook;
+declare export function useObjectVal<T>(query?: Query | null): ObjectValHook<T>;
