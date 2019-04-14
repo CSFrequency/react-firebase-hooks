@@ -4,7 +4,7 @@ import useList from './useList';
 export type ListValsHook<T> = {
   error?: Object;
   loading: boolean;
-  value: T[];
+  value?: T[];
 };
 
 export default <T>(
@@ -15,13 +15,15 @@ export default <T>(
   return {
     error,
     loading,
-    value: value.map(snapshot => {
-      return keyField
-        ? {
-            ...snapshot.val(),
-            [keyField]: snapshot.key,
-          }
-        : snapshot.val();
-    }),
+    value: value
+      ? value.map(snapshot => {
+          return keyField
+            ? {
+                ...snapshot.val(),
+                [keyField]: snapshot.key,
+              }
+            : snapshot.val();
+        })
+      : undefined,
   };
 };

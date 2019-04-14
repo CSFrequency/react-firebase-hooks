@@ -4,7 +4,7 @@ import useList from './useList';
 export type ListKeysHook = {
   error?: Object;
   loading: boolean;
-  value: string[];
+  value?: string[];
 };
 
 export default (query?: database.Query | null): ListKeysHook => {
@@ -12,6 +12,6 @@ export default (query?: database.Query | null): ListKeysHook => {
   return {
     error,
     loading,
-    value: value.map(snapshot => snapshot.key as string),
+    value: value ? value.map(snapshot => snapshot.key as string) : undefined,
   };
 };

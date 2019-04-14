@@ -5,12 +5,12 @@ import { useIsEqualRef } from '../util';
 export type ListHook = {
   error?: Object;
   loading: boolean;
-  value: database.DataSnapshot[];
+  value?: database.DataSnapshot[];
 };
 
 type KeyValueState = {
-  keys: string[];
-  values: database.DataSnapshot[];
+  keys?: string[];
+  values?: database.DataSnapshot[];
 };
 
 type ReducerState = {
@@ -28,6 +28,7 @@ type ChangeAction = {
   type: 'change';
   snapshot: database.DataSnapshot | null;
 };
+type EmptyAction = { type: 'empty' };
 type ErrorAction = { type: 'error'; error: object };
 type MoveAction = {
   type: 'move';
@@ -43,6 +44,7 @@ type ValueAction = { type: 'value' };
 type ReducerAction =
   | AddAction
   | ChangeAction
+  | EmptyAction
   | ErrorAction
   | MoveAction
   | RemoveAction
@@ -104,6 +106,15 @@ const reducer = (state: ReducerState, action: ReducerAction): ReducerState => {
         ...state,
         loading: false,
       };
+    case 'empty':
+      return {
+        ...state,
+        loading: false,
+        value: {
+          keys: undefined,
+          values: undefined,
+        },
+      };
     default:
       return state;
   }
@@ -140,7 +151,7 @@ export default (query?: database.Query | null): ListHook => {
     () => {
       const query: database.Query | null | undefined = ref.current;
       if (!query) {
-        dispatch({ type: 'value' });
+        dispatch({ type: 'empty' });
         return;
       }
       // This is here to indicate that all the data has been successfully received
@@ -188,20 +199,20 @@ const addChild = (
   if (!previousKey) {
     // The child has been added to the start of the list
     return {
-      keys: [snapshot.key, ...keys],
-      values: [snapshot, ...values],
+      keys: keys ? [snapshot.key, ...keys] : [snapshot.key],
+      values: values ? [snapshot, ...values] : [snapshot],
     };
   }
   // Establish the index for the previous child in the list
-  const index = keys.indexOf(previousKey);
+  const index = keys ? keys.indexOf(previousKey) : 0;
   // Insert the item after the previous child
   return {
-    keys: [...keys.slice(0, index + 1), snapshot.key, ...keys.slice(index + 1)],
-    values: [
-      ...values.slice(0, index + 1),
-      snapshot,
-      ...values.slice(index + 1),
-    ],
+    keys: keys
+      ? [...keys.slice(0, index + 1), snapshot.key, ...keys.slice(index + 1)]
+      : [snapshot.key],
+    values: values
+      ? [...values.slice(0, index + 1), snapshot, ...values.slice(index + 1)]
+      : [snapshot],
   };
 };
 
@@ -212,14 +223,13 @@ const changeChild = (
   if (!snapshot.key) {
     return currentState;
   }
-  const index = currentState.keys.indexOf(snapshot.key);
+  const { keys, values } = currentState;
+  const index = keys ? keys.indexOf(snapshot.key) : 0;
   return {
     ...currentState,
-    values: [
-      ...currentState.values.slice(0, index),
-      snapshot,
-      ...currentState.values.slice(index + 1),
-    ],
+    values: values
+      ? [...values.slice(0, index), snapshot, ...values.slice(index + 1)]
+      : [snapshot],
   };
 };
 
@@ -232,10 +242,12 @@ const removeChild = (
   }
 
   const { keys, values } = currentState;
-  const index = keys.indexOf(snapshot.key);
+  const index = keys ? keys.indexOf(snapshot.key) : 0;
   return {
-    keys: [...keys.slice(0, index), ...keys.slice(index + 1)],
-    values: [...values.slice(0, index), ...values.slice(index + 1)],
+    keys: keys ? [...keys.slice(0, index), ...keys.slice(index + 1)] : [],
+    values: values
+      ? [...values.slice(0, index), ...values.slice(index + 1)]
+      : [],
   };
 };
 
