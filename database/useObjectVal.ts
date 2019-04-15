@@ -1,5 +1,6 @@
 import { database } from 'firebase';
 import useObject from './useObject';
+import { snapshotToData } from './helpers';
 
 export type ObjectValHook<T> = {
   error?: object;
@@ -7,11 +8,14 @@ export type ObjectValHook<T> = {
   value?: T;
 };
 
-export default <T>(query?: database.Query | null): ObjectValHook<T> => {
+export default <T>(
+  query?: database.Query | null,
+  keyField?: string
+): ObjectValHook<T> => {
   const { error, loading, value } = useObject(query);
   return {
     error,
     loading,
-    value: value ? value.val() : undefined,
+    value: value ? snapshotToData(value, keyField) : undefined,
   };
 };

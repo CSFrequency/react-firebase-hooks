@@ -1,8 +1,9 @@
 import { database } from 'firebase';
 import useList from './useList';
+import { snapshotToData } from './helpers';
 
 export type ListValsHook<T> = {
-  error?: Object;
+  error?: object;
   loading: boolean;
   value?: T[];
 };
@@ -16,14 +17,7 @@ export default <T>(
     error,
     loading,
     value: value
-      ? value.map(snapshot => {
-          return keyField
-            ? {
-                ...snapshot.val(),
-                [keyField]: snapshot.key,
-              }
-            : snapshot.val();
-        })
+      ? value.map(snapshot => snapshotToData(snapshot, keyField))
       : undefined,
   };
 };
