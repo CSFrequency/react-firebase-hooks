@@ -10,12 +10,12 @@ import type {
 export type CollectionHook = {
   error?: Object,
   loading: boolean,
-  value?: firestore.QuerySnapshot,
+  value?: QuerySnapshot,
 };
 export type DocumentHook = {
   error?: Object,
   loading: boolean,
-  value?: firestore.DocumentSnapshot,
+  value?: DocumentSnapshot,
 };
 
 declare export function useCollection(
