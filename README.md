@@ -7,7 +7,7 @@ A set of reusable React Hooks for [Firebase](https://firebase.google.com/).
 
 > [Hooks](https://reactjs.org/docs/hooks-intro.html) are a new feature that lets you use state and other React features without writing a class and are available in React v16.8.0 or later.
 
-> Official support for Hooks will be added to React Native in [v0.59.0](https://github.com/react-native-community/react-native-releases/issues/79#issuecomment-457735214) - as soon as it's released, we'll make sure that React Firebase Hooks works with both the Firebase JS SDK and React Native Firebase.
+> Official support for Hooks was added to React Native in v0.59.0. React Firebase Hooks works with both the Firebase JS SDK and React Native Firebase, although some of the Flow and Typescript typings may be incorrect - we are investigating ways to improve this for React Native users.
 
 ## Installation
 
