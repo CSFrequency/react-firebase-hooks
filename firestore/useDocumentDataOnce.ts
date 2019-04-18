@@ -1,19 +1,13 @@
 import { firestore } from 'firebase';
-import useDocument from './useDocument';
+import useDocumentOnce from './useDocumentOnce';
 import { snapshotToData } from './helpers';
-
-export type DocumentDataHook<T> = {
-  error?: object;
-  loading: boolean;
-  value?: T;
-};
+import { DocumentDataHook } from './useDocumentData';
 
 export default <T>(
   docRef?: firestore.DocumentReference | null,
-  options?: firestore.SnapshotListenOptions,
   idField?: string
 ): DocumentDataHook<T> => {
-  const { error, loading, value } = useDocument(docRef, options);
+  const { error, loading, value } = useDocumentOnce(docRef);
   return {
     error,
     loading,

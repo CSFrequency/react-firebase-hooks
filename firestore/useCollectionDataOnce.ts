@@ -1,19 +1,14 @@
 import { firestore } from 'firebase';
-import useCollection from './useCollection';
+import useCollectionOnce from './useCollectionOnce';
 import { snapshotToData } from './helpers';
-
-export type CollectionDataHook<T> = {
-  error?: object;
-  loading: boolean;
-  value?: T[];
-};
+import { CollectionDataHook } from './useCollectionData';
 
 export default <T>(
   query?: firestore.Query | null,
-  options?: firestore.SnapshotListenOptions,
+  options?: firestore.GetOptions,
   idField?: string
 ): CollectionDataHook<T> => {
-  const { error, loading, value } = useCollection(query, options);
+  const { error, loading, value } = useCollectionOnce(query, options);
   return {
     error,
     loading,
