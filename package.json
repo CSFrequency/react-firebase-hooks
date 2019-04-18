@@ -43,7 +43,9 @@
   },
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
-  "dependencies": {},
+  "dependencies": {
+    "isobject": "^3.0.1"
+  },
   "devDependencies": {
     "@types/react": "^16.8.3",
     "firebase": "^5.5.6",
