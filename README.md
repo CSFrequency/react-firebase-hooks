@@ -90,11 +90,17 @@ and `firebase.firestore().doc().onSnapshot()` methods.
 In addition to returning the snapshot value, the hooks provide an `error` and `loading` property
 to give a complete lifecycle for loading and listening to Cloud Firestore.
 
-#### `useCollection(query)`
+There are 2 variants of each hook:
+
+- `useX` which subscribes to the underlying Collection or Document and listens for changes
+- `useXOnce` which reads the current value of the Collection or Document
+
+#### `useCollection(query, options)`
 
 Parameters:
 
 - `query`: `firebase.firestore.Query`
+- `options`: `firebase.firestore.SnapshotListenOptions`
 
 Returns:
 `CollectionHook` containing
@@ -133,11 +139,56 @@ const FirestoreCollection = () => {
 };
 ```
 
+#### `useCollectionOnce(query, options)`
+
+Parameters:
+
+- `query`: `firebase.firestore.Query`
+- `options`: `firebase.firestore.GetOptions`
+
+Returns:
+`CollectionHook` containing
+
+- `error`: An optional `firebase.FirebaseError` returned by Firebase
+- `loading`: A `boolean` to indicate if the listener is still being loaded
+- `value`: A `firebase.firestore.QuerySnapshot`
+
+Import:
+
+```js
+import { useCollectionOnce } from 'react-firebase-hooks/firestore';
+```
+
+#### `useCollectionData<T>(ref, idField)`
+
+As `useCollection`, but this hook returns a typed list of the
+`QuerySnapshot.docs` values, rather than the the `QuerySnapshot` itself.
+
+Parameters:
+
+- `query`: `firebase.firestore.Query`
+- `options`: (Optional) `firebase.firestore.GetOptions`
+- `idField`: (Optional) Name of field that should be populated with the `QuerySnapshot.id` property
+
+Returns:
+`CollectionDataHook` containing
+
+- `error`: An optional error object returned by Firebase
+- `loading`: A `boolean` to indicate if the listener is still being loaded
+- `value`: A list of `firebase.firestore.DocumentSnapshot.data()` values, combined with the optional id field
+
+Import:
+
+```js
+import { useCollectionData } from 'react-firebase-hooks/firestore';
+```
+
 #### `useDocument(docRef)`
 
 Parameters:
 
 - `docRef`: `firebase.firestore.DocumentReference`
+- `options`: (Optional) `firebase.firestore.SnapshotListenOptions`
 
 Returns:
 `DocumentHook` containing
@@ -165,6 +216,71 @@ const FirestoreDocument = () => {
     </div>
   );
 };
+```
+
+#### `useDocumentOnce(docRef)`
+
+Parameters:
+
+- `docRef`: `firebase.firestore.DocumentReference`
+- `options`: (Optional) `firebase.firestore.GetOptions`
+
+Returns:
+`DocumentHook` containing
+
+- `error`: An optional `firebase.FirebaseError` returned by Firebase
+- `loading`: A `boolean` to indicate if the listener is still being loaded
+- `value`: A `firebase.firestore.DocumentSnapshot`
+
+Import:
+
+```js
+import { useDocumentOnce } from 'react-firebase-hooks/firestore';
+```
+
+#### `useDocumentData<T>(ref)`
+
+As `useDocument`, but this hook returns the typed contents of
+`DocumentSnapshot.val()` rather than the `DocumentSnapshot` itself.
+
+Parameters:
+
+- `docRef`: `firebase.firestore.DocumentReference`
+- `options`: (Optional) `firebase.firestore.SnapshotListenOptions`
+- `idField`: (Optional) Name of field that should be populated with the `DocumentSnapshot.id` property
+
+Returns:
+`DocumentDataHook` containing
+
+- `error`: An optional error object returned by Firebase
+- `loading`: A `boolean` to indicate if the listener is still being loaded
+- `value`: The contents of `firebase.firestore.DocumentSnapshot.data()`, combined with the optional id field
+
+Import:
+
+```js
+import { useDocumentData } from 'react-firebase-hooks/firestore';
+```
+
+#### `useDocumentDataOnce<T>(ref)`
+
+Parameters:
+
+- `docRef`: `firebase.firestore.DocumentReference`
+- `options`: (Optional) `firebase.firestore.GetOptions`
+- `idField`: (Optional) Name of field that should be populated with the `DocumentSnapshot.id` property
+
+Returns:
+`DocumentDataHook` containing
+
+- `error`: An optional error object returned by Firebase
+- `loading`: A `boolean` to indicate if the listener is still being loaded
+- `value`: The contents of `firebase.firestore.DocumentSnapshot.data()`, combined with the optional id field
+
+Import:
+
+```js
+import { useDocumentDataOnce } from 'react-firebase-hooks/firestore';
 ```
 
 ### Cloud Storage
@@ -338,13 +454,14 @@ As above, but this hook returns the typed contents of `DataSnapshot.val()` rathe
 Parameters:
 
 - `ref`: `firebase.database.Reference`
+- `keyField`: (Optional) Name of field that should be populated with the `DataSnapshot.key` property
 
 Returns:
 `ObjectValHook` containing
 
 - `error`: An optional error object returned by Firebase
 - `loading`: A `boolean` to indicate if the listener is still being loaded
-- `value`: The contents of `firebase.database.DataSnapshot.val()`
+- `value`: The contents of `firebase.database.DataSnapshot.val()`, combined with the optional key field
 
 ## License
 
