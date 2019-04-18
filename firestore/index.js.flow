@@ -12,17 +12,35 @@ export type CollectionHook = {
   loading: boolean,
   value?: QuerySnapshot,
 };
+export type CollectionDataHook<T> = {
+  error?: Object,
+  loading: boolean,
+  value?: T,
+};
 export type DocumentHook = {
   error?: Object,
   loading: boolean,
   value?: DocumentSnapshot,
+};
+export type DocumentDataHook<T> = {
+  error?: Object,
+  loading: boolean,
+  value?: T,
 };
 
 declare export function useCollection(
   query?: Query | null,
   options?: SnapshotListenOptions
 ): CollectionHook;
+declare export function useCollectionData(
+  query?: Query | null,
+  idField?: string
+): CollectionDataHook;
 declare export function useDocument(
   ref?: DocumentReference | null,
   options?: SnapshotListenOptions
+): DocumentHook;
+declare export function useDocumentData(
+  ref?: DocumentReference | null,
+  idField?: string
 ): DocumentHook;
