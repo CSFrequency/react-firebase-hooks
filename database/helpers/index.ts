@@ -1,5 +1,7 @@
 import { database } from 'firebase';
-import * as isObject from 'isobject';
+
+const isObject = (val: any) =>
+  val != null && typeof val === 'object' && Array.isArray(val) === false;
 
 export const snapshotToData = (
   snapshot: database.DataSnapshot,
