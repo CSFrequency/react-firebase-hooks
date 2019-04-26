@@ -1,28 +1,29 @@
 // @flow
+import type { FirebaseError } from 'firebase';
 import type { DataSnapshot, Query } from 'firebase/database';
 
 export type ListHook = {
-  error?: Error,
+  error?: FirebaseError,
   loading: boolean,
   value: DataSnapshot[],
 };
 export type ListKeysHook = {
-  error?: Error,
+  error?: FirebaseError,
   loading: boolean,
   value: string[],
 };
 export type ListValsHook<T> = {
-  error?: Error,
+  error?: FirebaseError,
   loading: boolean,
   value: T[],
 };
 export type ObjectHook = {
-  error?: Error,
+  error?: FirebaseError,
   loading: boolean,
   value?: DataSnapshot,
 };
 export type ObjectValHook<T> = {
-  error?: Error,
+  error?: FirebaseError,
   loading: boolean,
   value?: T,
 };

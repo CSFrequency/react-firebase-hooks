@@ -1,8 +1,9 @@
 // @flow
+import type { FirebaseError } from 'firebase';
 import type { Reference } from 'firebase/storage';
 
 export type DownloadURLHook = {
-  error?: Error,
+  error?: FirebaseError,
   loading: boolean,
   value?: string,
 };

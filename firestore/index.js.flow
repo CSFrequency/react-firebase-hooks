@@ -1,4 +1,5 @@
 // @flow
+import type { FirebaseError } from 'firebase';
 import type {
   DocumentReference,
   DocumentSnapshot,
@@ -9,22 +10,22 @@ import type {
 } from 'firebase/firestore';
 
 export type CollectionHook = {
-  error?: Error,
+  error?: FirebaseError,
   loading: boolean,
   value?: QuerySnapshot,
 };
 export type CollectionDataHook<T> = {
-  error?: Error,
+  error?: FirebaseError,
   loading: boolean,
   value?: T,
 };
 export type DocumentHook = {
-  error?: Error,
+  error?: FirebaseError,
   loading: boolean,
   value?: DocumentSnapshot,
 };
 export type DocumentDataHook<T> = {
-  error?: Error,
+  error?: FirebaseError,
   loading: boolean,
   value?: T,
 };
