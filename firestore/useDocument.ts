@@ -26,7 +26,7 @@ export default (
       }
       const listener = options
         ? ref.current.onSnapshot(options, setValue, (error: Error) => setError(transformError(error)))
-        : ref.current.onSnapshot({}, setValue, (error: Error) => setError(transformError(error)));
+        : ref.current.onSnapshot(setValue, (error: Error) => setError(transformError(error)));
 
       return () => {
         listener();
