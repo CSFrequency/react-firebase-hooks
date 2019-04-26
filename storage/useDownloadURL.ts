@@ -14,17 +14,20 @@ export default (storageRef?: storage.Reference | null): DownloadURLHook => {
   >();
   const ref = useComparatorRef(storageRef, isEqual, reset);
 
-  useEffect(() => {
-    if (!ref.current) {
-      setValue(undefined);
-      return;
-    }
-    ref.current
-      .getDownloadURL()
-      .then(setValue)
-      .catch(setError);
-  }, [ref.current]);
-
+  useEffect(
+    () => {
+      if (!ref.current) {
+        setValue(undefined);
+        return;
+      }
+      ref.current
+        .getDownloadURL()
+        .then(setValue)
+        .catch(setError);
+    },
+    [ref.current]
+  );
+  
   return {
     error,
     loading,
