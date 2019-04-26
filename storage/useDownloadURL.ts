@@ -27,7 +27,7 @@ export default (storageRef?: storage.Reference | null): DownloadURLHook => {
     },
     [ref.current]
   );
-  
+
   return {
     error,
     loading,
