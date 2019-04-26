@@ -2,7 +2,7 @@
 import type { Reference } from 'firebase/storage';
 
 export type DownloadURLHook = {
-  error?: Object,
+  error?: Error,
   loading: boolean,
   value?: string,
 };

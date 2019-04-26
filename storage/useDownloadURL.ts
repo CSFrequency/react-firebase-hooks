@@ -1,9 +1,9 @@
-import { storage } from 'firebase';
+import { storage, FirebaseError } from 'firebase';
 import { useEffect } from 'react';
 import { useComparatorRef, useLoadingValue } from '../util';
 
 export type DownloadURLHook = {
-  error?: object;
+  error?: FirebaseError;
   loading: boolean;
   value?: string;
 };
@@ -14,19 +14,16 @@ export default (storageRef?: storage.Reference | null): DownloadURLHook => {
   >();
   const ref = useComparatorRef(storageRef, isEqual, reset);
 
-  useEffect(
-    () => {
-      if (!ref.current) {
-        setValue(undefined);
-        return;
-      }
-      ref.current
-        .getDownloadURL()
-        .then(setValue)
-        .catch(setError);
-    },
-    [ref.current]
-  );
+  useEffect(() => {
+    if (!ref.current) {
+      setValue(undefined);
+      return;
+    }
+    ref.current
+      .getDownloadURL()
+      .then(setValue)
+      .catch(setError);
+  }, [ref.current]);
 
   return {
     error,

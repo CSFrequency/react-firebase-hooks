@@ -1,9 +1,9 @@
-import { firestore } from 'firebase';
+import { firestore, FirebaseError } from 'firebase';
 import useDocument from './useDocument';
 import { snapshotToData } from './helpers';
 
 export type DocumentDataHook<T> = {
-  error?: object;
+  error?: FirebaseError;
   loading: boolean;
   value?: T;
 };

@@ -1,9 +1,9 @@
-import { database } from 'firebase';
+import { database, FirebaseError } from 'firebase';
 import useObject from './useObject';
 import { snapshotToData } from './helpers';
 
 export type ObjectValHook<T> = {
-  error?: object;
+  error?: FirebaseError;
   loading: boolean;
   value?: T;
 };
