@@ -2,6 +2,8 @@
 
 React Firebase Hooks provides a convenience listener for Firebase Auth's auth state. The hook wraps around the `firebase.auth().onAuthStateChange()` method to ensure that it is always up to date.
 
+- [useAuthState](#useauthstateauth)
+
 ## `useAuthState(auth)`
 
 Parameters:

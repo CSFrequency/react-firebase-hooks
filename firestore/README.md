@@ -12,6 +12,15 @@ There are 2 variants of each hook:
 - `useX` which subscribes to the underlying Collection or Document and listens for changes
 - `useXOnce` which reads the current value of the Collection or Document
 
+- [useCollection](#usecollectionquery-options)
+- [useCollectionOnce](#usecollectiononcequery-options)
+- [useCollectionData](#usecollectiondatatref-idfield)
+- [useCollectionDataOnce](#usecollectiondataoncetref-idfield)
+- [useDocument](#usedocumentdocref)
+- [useDocumentOnce](#usedocumentoncedocref)
+- [useDocumentData](#usedocumentdatatref)
+- [useDocumentDataOnce](#usedocumentdataoncetref)
+
 ## `useCollection(query, options)`
 
 Parameters:

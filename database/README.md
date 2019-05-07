@@ -6,6 +6,12 @@ Firebase Realtime Database. The hooks wrap around the `firebase.database().ref()
 In addition to returning the list or value, the hooks provide an `error` and `loading` property
 to give a complete lifecycle for loading and listening to the Realtime Database.
 
+- [useList](#uselistref)
+- [useListKeys](#uselistkeystref)
+- [useListVals](#uselistvalstref-keyfield)
+- [useObject](#useobjectref)
+- [useObjectVal](#useobjectvaltref)
+
 ## `useList(ref)`
 
 Parameters:

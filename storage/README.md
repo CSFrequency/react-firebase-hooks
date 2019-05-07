@@ -6,6 +6,8 @@ Firebase Cloud Storage. The hooks wrap around the `firebase.storage().ref().getD
 In addition to returning the download URL, the hooks provide an `error` and `loading` property
 to give a complete lifecycle for loading from Cloud Storage.
 
+- [useDownloadURL](#usedownloadurlref)
+
 ## `useDownloadURL(ref)`
 
 Parameters:
