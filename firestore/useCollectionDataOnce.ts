@@ -5,10 +5,14 @@ import { CollectionDataHook } from './useCollectionData';
 
 export default <T>(
   query?: firestore.Query | null,
-  options?: firestore.GetOptions,
-  idField?: string
+  options?: {
+    getOptions?: firestore.GetOptions;
+    idField?: string;
+  }
 ): CollectionDataHook<T> => {
-  const { error, loading, value } = useCollectionOnce(query, options);
+  const idField = options ? options.idField : undefined;
+  const getOptions = options ? options.getOptions : undefined;
+  const { error, loading, value } = useCollectionOnce(query, getOptions);
   return {
     error,
     loading,

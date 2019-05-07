@@ -10,10 +10,16 @@ export type CollectionDataHook<T> = {
 
 export default <T>(
   query?: firestore.Query | null,
-  options?: firestore.SnapshotListenOptions,
-  idField?: string
+  options?: {
+    idField?: string;
+    snapshotListenOptions?: firestore.SnapshotListenOptions;
+  }
 ): CollectionDataHook<T> => {
-  const { error, loading, value } = useCollection(query, options);
+  const idField = options ? options.idField : undefined;
+  const snapshotListenOptions = options
+    ? options.snapshotListenOptions
+    : undefined;
+  const { error, loading, value } = useCollection(query, snapshotListenOptions);
   return {
     error,
     loading,

@@ -5,9 +5,14 @@ import { DocumentDataHook } from './useDocumentData';
 
 export default <T>(
   docRef?: firestore.DocumentReference | null,
-  idField?: string
+  options?: {
+    getOptions?: firestore.GetOptions;
+    idField?: string;
+  }
 ): DocumentDataHook<T> => {
-  const { error, loading, value } = useDocumentOnce(docRef);
+  const idField = options ? options.idField : undefined;
+  const getOptions = options ? options.getOptions : undefined;
+  const { error, loading, value } = useDocumentOnce(docRef, getOptions);
   return {
     error,
     loading,

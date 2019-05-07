@@ -10,10 +10,16 @@ export type DocumentDataHook<T> = {
 
 export default <T>(
   docRef?: firestore.DocumentReference | null,
-  options?: firestore.SnapshotListenOptions,
-  idField?: string
+  options?: {
+    idField?: string;
+    snapshotListenOptions?: firestore.SnapshotListenOptions;
+  }
 ): DocumentDataHook<T> => {
-  const { error, loading, value } = useDocument(docRef, options);
+  const idField = options ? options.idField : undefined;
+  const snapshotListenOptions = options
+    ? options.snapshotListenOptions
+    : undefined;
+  const { error, loading, value } = useDocument(docRef, snapshotListenOptions);
   return {
     error,
     loading,
