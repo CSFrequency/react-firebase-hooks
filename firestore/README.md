@@ -12,6 +12,8 @@ There are 2 variants of each hook:
 - `useX` which subscribes to the underlying Collection or Document and listens for changes
 - `useXOnce` which reads the current value of the Collection or Document
 
+List of Cloud Firestore hooks:
+
 - [useCollection](#usecollectionquery-options)
 - [useCollectionOnce](#usecollectiononcequery-options)
 - [useCollectionData](#usecollectiondatatref-idfield)
