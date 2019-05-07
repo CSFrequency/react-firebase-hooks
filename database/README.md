@@ -12,7 +12,7 @@ to give a complete lifecycle for loading and listening to the Realtime Database.
 - [useObject](#useobjectref)
 - [useObjectVal](#useobjectvaltref)
 
-## `useList(ref)`
+### `useList(ref)`
 
 Parameters:
 
@@ -25,7 +25,7 @@ Returns:
 - `loading`: A `boolean` to indicate if the listener is still being loaded
 - `value`: A list of `firebase.database.DataSnapshot`
 
-### Example
+#### Example
 
 ```js
 import { useList } from 'react-firebase-hooks/database';
@@ -54,7 +54,7 @@ const DatabaseList = () => {
 };
 ```
 
-## `useListKeys<T>(ref)`
+### `useListKeys<T>(ref)`
 
 As above, but this hook returns a list of the `DataSnapshot.key` values, rather than the the
 `DataSnapshot`s themselves.
@@ -70,7 +70,7 @@ Returns:
 - `loading`: A `boolean` to indicate if the listener is still being loaded
 - `value`: A list of `firebase.database.DataSnapshot.key` values
 
-## `useListVals<T>(ref, keyField)`
+### `useListVals<T>(ref, keyField)`
 
 Similar to `useList`, but this hook returns a typed list of the `DataSnapshot.val()` values, rather than the the
 `DataSnapshot`s themselves.
@@ -87,7 +87,7 @@ Returns:
 - `loading`: A `boolean` to indicate if the listener is still being loaded
 - `value`: A list of `firebase.database.DataSnapshot.val()` values, combined with the optional key field
 
-## `useObject(ref)`
+### `useObject(ref)`
 
 Parameters:
 
@@ -100,7 +100,7 @@ Returns:
 - `loading`: A `boolean` to indicate if the listener is still being loaded
 - `value`: A `firebase.database.DataSnapshot`
 
-### Example
+#### Example
 
 ```js
 import { useObject } from 'react-firebase-hooks/database';
@@ -120,7 +120,7 @@ const DatabaseValue = () => {
 };
 ```
 
-## `useObjectVal<T>(ref)`
+### `useObjectVal<T>(ref)`
 
 As above, but this hook returns the typed contents of `DataSnapshot.val()` rather than the
 `DataSnapshot` itself.

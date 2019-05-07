@@ -8,7 +8,7 @@ to give a complete lifecycle for loading from Cloud Storage.
 
 - [useDownloadURL](#usedownloadurlref)
 
-## `useDownloadURL(ref)`
+### `useDownloadURL(ref)`
 
 Parameters:
 
@@ -21,7 +21,7 @@ Returns:
 - `loading`: A `boolean` to indicate if the download URL is still being loaded
 - `value`: The download URL
 
-### Example
+#### Example
 
 ```js
 import { useDownloadURL } from 'react-firebase-hooks/storage';

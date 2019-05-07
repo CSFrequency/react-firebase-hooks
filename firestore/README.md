@@ -21,7 +21,7 @@ There are 2 variants of each hook:
 - [useDocumentData](#usedocumentdatatref)
 - [useDocumentDataOnce](#usedocumentdataoncetref)
 
-## `useCollection(query, options)`
+### `useCollection(query, options)`
 
 Parameters:
 
@@ -35,7 +35,7 @@ Returns:
 - `loading`: A `boolean` to indicate if the listener is still being loaded
 - `value`: A `firebase.firestore.QuerySnapshot`
 
-### Example
+#### Example
 
 ```js
 import { useCollection } from 'react-firebase-hooks/firestore';
@@ -65,7 +65,7 @@ const FirestoreCollection = () => {
 };
 ```
 
-## `useCollectionOnce(query, options)`
+### `useCollectionOnce(query, options)`
 
 Parameters:
 
@@ -85,7 +85,7 @@ Import:
 import { useCollectionOnce } from 'react-firebase-hooks/firestore';
 ```
 
-## `useCollectionData<T>(ref, idField)`
+### `useCollectionData<T>(ref, idField)`
 
 As `useCollection`, but this hook returns a typed list of the
 `QuerySnapshot.docs` values, rather than the the `QuerySnapshot` itself.
@@ -110,7 +110,7 @@ Import:
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 ```
 
-## `useCollectionDataOnce<T>(ref, idField)`
+### `useCollectionDataOnce<T>(ref, idField)`
 
 Parameters:
 
@@ -132,7 +132,7 @@ Import:
 import { useCollectionDataOnce } from 'react-firebase-hooks/firestore';
 ```
 
-## `useDocument(docRef)`
+### `useDocument(docRef)`
 
 Parameters:
 
@@ -146,7 +146,7 @@ Returns:
 - `loading`: A `boolean` to indicate if the listener is still being loaded
 - `value`: A `firebase.firestore.DocumentSnapshot`
 
-### Example
+#### Example
 
 ```js
 import { useDocument } from 'react-firebase-hooks/firestore';
@@ -167,7 +167,7 @@ const FirestoreDocument = () => {
 };
 ```
 
-## `useDocumentOnce(docRef)`
+### `useDocumentOnce(docRef)`
 
 Parameters:
 
@@ -187,7 +187,7 @@ Import:
 import { useDocumentOnce } from 'react-firebase-hooks/firestore';
 ```
 
-## `useDocumentData<T>(ref)`
+### `useDocumentData<T>(ref)`
 
 As `useDocument`, but this hook returns the typed contents of
 `DocumentSnapshot.val()` rather than the `DocumentSnapshot` itself.
@@ -212,7 +212,7 @@ Import:
 import { useDocumentData } from 'react-firebase-hooks/firestore';
 ```
 
-## `useDocumentDataOnce<T>(ref)`
+### `useDocumentDataOnce<T>(ref)`
 
 Parameters:
 

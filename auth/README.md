@@ -4,7 +4,7 @@ React Firebase Hooks provides a convenience listener for Firebase Auth's auth st
 
 - [useAuthState](#useauthstateauth)
 
-## `useAuthState(auth)`
+### `useAuthState(auth)`
 
 Parameters:
 
@@ -16,7 +16,7 @@ Returns:
 - `initialising`: If the listener is still waiting for the user to be loaded
 - `user`: The `firebase.User`, or `null`, if no user is logged in
 
-### Example
+#### Example
 
 ```js
 import { useAuthState } from 'react-firebase-hooks/auth';
