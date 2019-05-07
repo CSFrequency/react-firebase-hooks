@@ -1,9 +1,10 @@
-import { firestore } from 'firebase';
+import { firestore, FirebaseError } from 'firebase';
 import { useEffect } from 'react';
 import { useIsEqualRef, useLoadingValue } from '../util';
+import { transformError } from '../util/transformError';
 
 export type CollectionHook = {
-  error?: object;
+  error?: FirebaseError;
   loading: boolean;
   value?: firestore.QuerySnapshot;
 };
@@ -24,8 +25,8 @@ export default (
         return;
       }
       const listener = options
-        ? ref.current.onSnapshot(options, setValue, setError)
-        : ref.current.onSnapshot(setValue, setError);
+        ? ref.current.onSnapshot(options, setValue, (error: Error) => setError(transformError(error)))
+        : ref.current.onSnapshot(setValue, (error: Error) => setError(transformError(error)));
 
       return () => {
         listener();

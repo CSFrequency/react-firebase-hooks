@@ -1,9 +1,9 @@
-import { database } from 'firebase';
+import { database, FirebaseError } from 'firebase';
 import { useEffect } from 'react';
 import { useIsEqualRef, useLoadingValue } from '../util';
 
 export type ObjectHook = {
-  error?: object;
+  error?: FirebaseError;
   loading: boolean;
   value?: database.DataSnapshot;
 };

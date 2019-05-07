@@ -1,9 +1,9 @@
-import { database } from 'firebase';
+import { database, FirebaseError } from 'firebase';
 import useList from './useList';
 import { snapshotToData } from './helpers';
 
 export type ListValsHook<T> = {
-  error?: object;
+  error?: FirebaseError;
   loading: boolean;
   value?: T[];
 };

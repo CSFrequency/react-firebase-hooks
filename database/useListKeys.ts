@@ -1,8 +1,8 @@
-import { database } from 'firebase';
+import { database, FirebaseError } from 'firebase';
 import useList from './useList';
 
 export type ListKeysHook = {
-  error?: Object;
+  error?: FirebaseError;
   loading: boolean;
   value?: string[];
 };

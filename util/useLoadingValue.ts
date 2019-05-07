@@ -1,21 +1,22 @@
 import { useReducer } from 'react';
+import { FirebaseError } from 'firebase';
 
 export type LoadingValue<T> = {
-  error?: object;
+  error?: FirebaseError;
   loading: boolean;
   reset: () => void;
-  setError: (error: object) => void;
+  setError: (error: FirebaseError) => void;
   setValue: (value?: T | null) => void;
   value?: T;
 };
 
 type ReducerState = {
-  error?: object;
+  error?: FirebaseError;
   loading: boolean;
   value?: any;
 };
 
-type ErrorAction = { type: 'error'; error: object };
+type ErrorAction = { type: 'error'; error: FirebaseError };
 type ResetAction = { type: 'reset'; defaultValue?: any };
 type ValueAction = { type: 'value'; value: any };
 type ReducerAction = ErrorAction | ResetAction | ValueAction;
@@ -57,7 +58,7 @@ export default <T>(getDefaultValue?: () => T | null): LoadingValue<T> => {
     dispatch({ type: 'reset', defaultValue });
   };
 
-  const setError = (error: Object) => {
+  const setError = (error: FirebaseError) => {
     dispatch({ type: 'error', error });
   };
 

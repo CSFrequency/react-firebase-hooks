@@ -1,9 +1,9 @@
-import { firestore } from 'firebase';
+import { firestore, FirebaseError } from 'firebase';
 import useCollection from './useCollection';
 import { snapshotToData } from './helpers';
 
 export type CollectionDataHook<T> = {
-  error?: object;
+  error?: FirebaseError;
   loading: boolean;
   value?: T[];
 };

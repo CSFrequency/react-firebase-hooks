@@ -1,9 +1,9 @@
-import { database } from 'firebase';
+import { database, FirebaseError } from 'firebase';
 import { useEffect, useReducer } from 'react';
 import { useIsEqualRef } from '../util';
 
 export type ListHook = {
-  error?: Object;
+  error?: FirebaseError;
   loading: boolean;
   value?: database.DataSnapshot[];
 };
@@ -14,7 +14,7 @@ type KeyValueState = {
 };
 
 type ReducerState = {
-  error?: object;
+  error?: FirebaseError;
   loading: boolean;
   value: KeyValueState;
 };
@@ -29,7 +29,7 @@ type ChangeAction = {
   snapshot: database.DataSnapshot | null;
 };
 type EmptyAction = { type: 'empty' };
-type ErrorAction = { type: 'error'; error: object };
+type ErrorAction = { type: 'error'; error: FirebaseError };
 type MoveAction = {
   type: 'move';
   previousKey?: string | null;
@@ -160,7 +160,7 @@ export default (query?: database.Query | null): ListHook => {
         () => {
           dispatch({ type: 'value' });
         },
-        (error: object) => {
+        (error: FirebaseError) => {
           dispatch({ type: 'error', error });
         }
       );
