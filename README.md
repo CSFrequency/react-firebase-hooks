@@ -27,10 +27,10 @@ This library explores how React Hooks can work to make integration with Firebase
 
 ## Documentation
 
-- [Auth Hooks](auth/README.md)
-- [Cloud Firestore Hooks](firestore/README.md)
-- [Cloud Storage Hooks](storage/README.md)
-- [Realtime Database Hooks](database/README.md)
+- [Auth Hooks](/auth)
+- [Cloud Firestore Hooks](/firestore)
+- [Cloud Storage Hooks](/storage)
+- [Realtime Database Hooks](/database)
 
 ## License
 
