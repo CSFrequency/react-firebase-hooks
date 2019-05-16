@@ -1,20 +1,20 @@
-# React Firebase Hooks
+# React Firebase Hooks (v2)
 
-A set of reusable React Hooks for [Firebase](https://firebase.google.com/).
+A set of reusable [React Hooks](https://reactjs.org/docs/hooks-intro.html) for [Firebase](https://firebase.google.com/).
 
 [![npm version](https://img.shields.io/npm/v/react-firebase-hooks.svg?style=flat-square)](https://www.npmjs.com/package/react-firebase-hooks)
 [![npm downloads](https://img.shields.io/npm/dm/react-firebase-hooks.svg?style=flat-square)](https://www.npmjs.com/package/react-firebase-hooks)
 
-> [Hooks](https://reactjs.org/docs/hooks-intro.html) are a new feature that lets you use state and other React features without writing a class and are available in React v16.8.0 or later.
+> Official support for Hooks was added to React Native in v0.59.0. React Firebase Hooks works with both the Firebase JS SDK and React Native Firebase, although some of the Flow and Typescript typings may be incorrect - we are investigating ways to improve this for React Native Firebase users.
 
-> Official support for Hooks was added to React Native in v0.59.0. React Firebase Hooks works with both the Firebase JS SDK and React Native Firebase, although some of the Flow and Typescript typings may be incorrect - we are investigating ways to improve this for React Native users.
+**This documentation is for v2 of React Firebase Hooks which is currently at the Release Candidate stage for testing. For v1 documentation, click [here](https://github.com/CSFrequency/react-firebase-hooks/tree/v1.2.1).**
 
 ## Installation
 
 React Firebase Hooks requires **React 16.8.0 or later** and **Firebase v5.0.0 or later**.
 
 ```
-npm install --save react-firebase-hooks
+npm install --save react-firebase-hooks@next
 ```
 
 This assumes that you’re using the [npm](https://npmjs.com) package manager with a module bundler like [Webpack](https://webpack.js.org/) or [Browserify](http://browserify.org/) to consume [CommonJS](http://webpack.github.io/docs/commonjs.html) modules.
