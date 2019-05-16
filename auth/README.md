@@ -18,11 +18,17 @@ List of Auth hooks:
 const [user, loading, error] = useAuthState(auth);
 ```
 
-Returns the `firebase.User` (if logged in), a boolean to indicate whether the the user is still being loaded and any `firebase.FirebaseError` returned by Firebase when trying to load the user.
+Retrieve and monitor the authentication state from Firebase.
 
 The `useAuthState` hook takes the following parameters:
 
 - `auth`: `firebase.auth.Auth` instance for the app you would like to monitor
+
+Returns:
+
+- `user`: The `firebase.User` if logged in, or `void` if not
+- `loading`: A `boolean` to indicate whether the the authentication state is still being loaded
+- `error`: Any `firebase.auth.Error` returned by Firebase when trying to load the user, or `void` if there is no error
 
 #### Full Example
 

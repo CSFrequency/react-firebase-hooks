@@ -22,11 +22,17 @@ List of Cloud Storage hooks:
 const [downloadUrl, loading, error] = useDownloadURL(reference);
 ```
 
-Returns the download URL as a `string` (if a reference is supplied), a boolean to indicate whether the the download URL is still being loaded and any `firebase.FirebaseError` returned by Firebase when trying to load the download URL.
+Retrieve the download URL for a storage reference.
 
 The `useDownloadURL` hook takes the following parameters:
 
 - `reference`: (optional) `firebase.storage.Reference` that you would like the download URL for
+
+Returns:
+
+- `downloadUrl`: A `string` download URL, or `void` if no storage reference is supplied
+- `loading`: A `boolean` to indicate whether the the download URL is still being loaded
+- `error`: Any `firebase.FirebaseError` returned by Firebase when trying to load the user, or `void` if there is no error
 
 #### Full example
 

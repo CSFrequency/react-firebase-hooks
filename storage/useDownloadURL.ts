@@ -6,7 +6,8 @@ export type DownloadURLHook = LoadingHook<string, FirebaseError>;
 
 export default (storageRef?: storage.Reference | null): DownloadURLHook => {
   const { error, loading, reset, setError, setValue, value } = useLoadingValue<
-    string
+    string,
+    FirebaseError
   >();
   const ref = useComparatorRef(storageRef, isEqual, reset);
 

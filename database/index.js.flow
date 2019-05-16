@@ -14,7 +14,14 @@ declare export function useList(query?: Query | null): ListHook;
 declare export function useListKeys(query?: Query | null): ListKeysHook;
 declare export function useListVals<T>(
   query?: Query | null,
-  keyField?: string
+  options?: {
+    keyField?: string,
+  }
 ): ListValsHook<T>;
 declare export function useObject(query?: Query | null): ObjectHook;
-declare export function useObjectVal<T>(query?: Query | null): ObjectValHook<T>;
+declare export function useObjectVal<T>(
+  query?: Query | null,
+  options?: {
+    keyField?: string,
+  }
+): ObjectValHook<T>;

@@ -81,12 +81,16 @@ export const useListKeys = (query?: database.Query | null): ListKeysHook => {
 
 export const useListVals = <T>(
   query?: database.Query | null,
-  keyField?: string
+  options?: {
+    keyField?: string;
+  }
 ): ListValsHook<T> => {
   const [value, loading, error] = useList(query);
   return [
     value
-      ? value.map(snapshot => snapshotToData(snapshot, keyField))
+      ? value.map(snapshot =>
+          snapshotToData(snapshot, options ? options.keyField : undefined)
+        )
       : undefined,
     loading,
     error,

@@ -8,7 +8,8 @@ export type ObjectValHook<T> = LoadingHook<T, FirebaseError>;
 
 export const useObject = (query?: database.Query | null): ObjectHook => {
   const { error, loading, reset, setError, setValue, value } = useLoadingValue<
-    database.DataSnapshot
+    database.DataSnapshot,
+    FirebaseError
   >();
   const ref = useIsEqualRef(query, reset);
 
@@ -34,8 +35,16 @@ export const useObject = (query?: database.Query | null): ObjectHook => {
 
 export const useObjectVal = <T>(
   query?: database.Query | null,
-  keyField?: string
+  options?: {
+    keyField?: string;
+  }
 ): ObjectValHook<T> => {
   const [value, loading, error] = useObject(query);
-  return [value ? snapshotToData(value, keyField) : undefined, loading, error];
+  return [
+    value
+      ? snapshotToData(value, options ? options.keyField : undefined)
+      : undefined,
+    loading,
+    error,
+  ];
 };

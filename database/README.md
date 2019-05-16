@@ -15,7 +15,7 @@ import { useList } from 'react-firebase-hooks/database';
 List of Realtime Database hooks:
 
 - [useList](#uselistref)
-- [useListKeys](#uselistkeyst)
+- [useListKeys](#uselistkeys)
 - [useListVals](#uselistvals)
 - [useObject](#useobjectref)
 - [useObjectVal](#useobjectval)
@@ -26,11 +26,17 @@ List of Realtime Database hooks:
 const [snapshots, loading, error] = useList(reference);
 ```
 
-Returns an array of `firebase.database.DataSnapshot` (if a reference is specified), a `boolean` to indicate if the data is still being loaded and any `firebase.FirebaseError` returned by Firebase when trying to load the data.
+Retrieve and monitor a list value in the Firebase Realtime Database.
 
 The `useList` hook takes the following parameters:
 
 - `reference`: (optional) `firebase.database.Reference` for the data you would like to load
+
+Returns:
+
+- `snapshots`: an array of `firebase.database.DataSnapshot`, or `void` if no reference is supplied
+- `loading`: a `boolean` to indicate if the data is still being loaded
+- `error`: Any `firebase.FirebaseError` returned by Firebase when trying to load the data, or `void` if there is no error
 
 #### Full Example
 
@@ -67,25 +73,38 @@ const DatabaseList = () => {
 const [keys, loading, error] = useListKeys(reference);
 ```
 
-As `useList`, but this hook returns a list of the `firebase.database.DataSnapshot.key` values, rather than the the `firebase.database.DataSnapshot`s themselves.
+As `useList`, but this hooks extracts the `firebase.database.DataSnapshot.key` values, rather than the the `firebase.database.DataSnapshot`s themselves.
 
 The `useListKeys` hook takes the following parameters:
 
 - `reference`: (optional) `firebase.database.Reference` for the data you would like to load
 
+Returns:
+
+- `keys`: an array of `string`, or `void` if no reference is supplied
+- `loading`: a `boolean` to indicate if the data is still being loaded
+- `error`: Any `firebase.FirebaseError` returned by Firebase when trying to load the data, or `void` if there is no error
+
 ### useListVals
 
 ```
-const [values, loading, error] = useListVals<T>(reference, keyField);
+const [values, loading, error] = useListVals<T>(reference, options);
 ```
 
-As `useList`, but this hook returns a typed list of the `firebase.database.DataSnapshot.val()` values, rather than the the
-`DataSnapshot`s themselves.
+As `useList`, but this hook extracts a typed list of the `firebase.database.DataSnapshot.val()` values, rather than the the
+`firebase.database.DataSnapshot`s themselves.
 
 The `useListVals` hook takes the following parameters:
 
 - `reference`: (optional) `firebase.database.Reference` for the data you would like to load
-- `keyField`: (optional) `string` field name that should be populated with the `firebase.database.DataSnapshot.key` property in the returned value.
+- `options`: (optional) `Object` with the following parameters:
+  - `keyField`: (optional) `string` field name that should be populated with the `firebase.firestore.QuerySnapshot.id` property in the returned values
+
+Returns:
+
+- `values`: an array of `T`, or `void` if no reference is supplied
+- `loading`: a `boolean` to indicate if the data is still being loaded
+- `error`: Any `firebase.FirebaseError` returned by Firebase when trying to load the data, or `void` if there is no error
 
 ### useObject
 
@@ -93,11 +112,17 @@ The `useListVals` hook takes the following parameters:
 const [snapshot, loading, error] = useObject(reference);
 ```
 
-Returns a `firebase.database.DataSnapshot` (if a reference is specified), a `boolean` to indicate if the data is still being loaded and any `firebase.FirebaseError` returned by Firebase when trying to load the data.
+Retrieve and monitor an object or primitive value in the Firebase Realtime Database.
 
 The `useObject` hook takes the following parameters:
 
 - `reference`: (optional) `firebase.database.Reference` for the data you would like to load
+
+Returns:
+
+- `snapshot`: a `firebase.database.DataSnapshot`, or `void` if no reference is supplied
+- `loading`: a `boolean` to indicate if the data is still being loaded
+- `error`: Any `firebase.FirebaseError` returned by Firebase when trying to load the data, or `void` if there is no error
 
 #### Full Example
 
@@ -122,13 +147,20 @@ const DatabaseValue = () => {
 ### useObjectVal
 
 ```
-const [value, loading, error] = useObjectVal<T>(reference, keyField);
+const [value, loading, error] = useObjectVal<T>(reference, options);
 ```
 
-As `useObject`, but this hook returns the typed contents of `DataSnapshot.val()` rather than the
-`DataSnapshot` itself.
+As `useObject`, but this hook returns the typed contents of `firebase.database.DataSnapshot.val()`, rather than the the
+`firebase.database.DataSnapshot` itself.
 
 The `useObjectVal` hook takes the following parameters:
 
 - `reference`: (optional) `firebase.database.Reference` for the data you would like to load
-- `keyField`: (optional) `string` field name that should be populated with the `firebase.database.DataSnapshot.key` property in the returned value.
+- `options`: (optional) `Object` with the following parameters:
+  - `keyField`: (optional) `string` field name that should be populated with the `firebase.database.DataSnapshot.key` property in the returned value.
+
+Returns:
+
+- `value`: a `T`, or `void` if no reference is supplied
+- `loading`: a `boolean` to indicate if the data is still being loaded
+- `error`: Any `firebase.FirebaseError` returned by Firebase when trying to load the data, or `void` if there is no error

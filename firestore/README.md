@@ -32,15 +32,24 @@ List of Cloud Firestore hooks:
 ### useCollection
 
 ```
-const [snapshot, loading, error] = useCollection(query, snapshotListenOptions);
+const [snapshot, loading, error] = useCollection(query, options);
 ```
 
-Returns a `firebase.firestore.QuerySnapshot` (if a query is specified), a `boolean` to indicate if the data is still being loaded and any `firebase.FirebaseError` returned by Firebase when trying to load the data.
+Retrieve and monitor a collection value in Cloud Firestore.
+
+Returns a `firebase.firestore.QuerySnapshot` (if a query is specified), a `boolean` to indicate if the data is still being loaded and any `Error` returned by Firebase when trying to load the data.
 
 The `useCollection` hook takes the following parameters:
 
 - `query`: (optional) `firebase.firestore.Query` for the data you would like to load
-- `snapshotListenOptions`: (optional) `firebase.firestore.SnapshotListenOptions` to customise how the query is loaded
+- `options`: (optional) `Object` with the following parameters:
+  - `snapshotListenOptions`: (optional) `firebase.firestore.SnapshotListenOptions` to customise how the query is loaded
+
+Returns:
+
+- `snapshot`: a `firebase.firestore.QuerySnapshot`, or `void` if no query is supplied
+- `loading`: a `boolean` to indicate if the data is still being loaded
+- `error`: Any `Error` returned by Firebase when trying to load the data, or `void` if there is no error
 
 #### Full example
 
@@ -78,17 +87,22 @@ const FirestoreCollection = () => {
 ### useCollectionOnce
 
 ```
-const [snapshot, loading, error] = useCollectionOnce(query, getOptions);
+const [snapshot, loading, error] = useCollectionOnce(query, options);
 ```
 
-As `useCollection`, but this hook will only read the current value of the `firebase.firestore.Query`.
-
-Returns a `firebase.firestore.QuerySnapshot` (if a query is specified), a `boolean` to indicate if the data is still being loaded and any `firebase.FirebaseError` returned by Firebase when trying to load the data.
+Retrieve the current value of the `firebase.firestore.Query`.
 
 The `useCollectionOnce` hook takes the following parameters:
 
 - `query`: (optional) `firebase.firestore.Query` for the data you would like to load
-- `getOptions`: (optional) `firebase.firestore.GetOptions` to customise how the collection is loaded
+- `options`: (optional) `Object` with the following parameters:
+  - `getOptions`: (optional) `firebase.firestore.GetOptions` to customise how the collection is loaded
+
+Returns:
+
+- `snapshot`: a `firebase.firestore.QuerySnapshot`, or `void` if no query is supplied
+- `loading`: a `boolean` to indicate if the data is still being loaded
+- `error`: Any `Error` returned by Firebase when trying to load the data, or `void` if there is no error
 
 ### useCollectionData
 
@@ -96,8 +110,8 @@ The `useCollectionOnce` hook takes the following parameters:
 const [values, loading, error] = useCollectionData<T>(query, options);
 ```
 
-As `useCollection`, but this hook returns a typed list of the `firebase.firestore.QuerySnapshot.docs` values rather than the
-`QuerySnapshot` itself.
+As `useCollection`, but this hook extracts a typed list of the `firebase.firestore.QuerySnapshot.docs` values, rather than the
+`firebase.firestore.QuerySnapshot` itself.
 
 The `useCollectionData` hook takes the following parameters:
 
@@ -106,16 +120,19 @@ The `useCollectionData` hook takes the following parameters:
   - `idField`: (optional) name of the field that should be populated with the `firebase.firestore.QuerySnapshot.id` property.
   - `snapshotListenOptions`: (optional) `firebase.firestore.SnapshotListenOptions` to customise how the collection is loaded
 
+Returns:
+
+- `values`: an array of `T`, or `void` if no query is supplied
+- `loading`: a `boolean` to indicate if the data is still being loaded
+- `error`: Any `Error` returned by Firebase when trying to load the data, or `void` if there is no error
+
 ### useCollectionDataOnce
 
 ```
-const [value, loading, error] = useCollectionDataOnce<T>(query, options);
+const [values, loading, error] = useCollectionDataOnce<T>(query, options);
 ```
 
 As `useCollectionData`, but this hook will only read the current value of the `firebase.firestore.Query`.
-
-Returns a typed list of the `firebase.firestore.QuerySnapshot.docs` values rather than the
-`QuerySnapshot` itself.
 
 The `useCollectionDataOnce` hook takes the following parameters:
 
@@ -124,18 +141,31 @@ The `useCollectionDataOnce` hook takes the following parameters:
   - `getOptions`: (optional) `firebase.firestore.GetOptions` to customise how the collection is loaded
   - `idField`: (optional) name of the field that should be populated with the `firebase.firestore.QuerySnapshot.id` property.
 
+Returns:
+
+- `values`: an array of `T`, or `void` if no query is supplied
+- `loading`: a `boolean` to indicate if the data is still being loaded
+- `error`: Any `Error` returned by Firebase when trying to load the data, or `void` if there is no error
+
 ### useDocument
 
 ```
-const [snapshot, loading, error] = useDocument(reference, snapshotListenOptions);
+const [snapshot, loading, error] = useDocument(reference, options);
 ```
 
-Returns a `firebase.firestore.DocumentSnapshot` (if a document is specified), a `boolean` to indicate if the data is still being loaded and any `firebase.FirebaseError` returned by Firebase when trying to load the data.
+Retrieve and monitor a document value in Cloud Firestore.
 
 The `useDocument` hook takes the following parameters:
 
 - `reference`: (optional) `firebase.firestore.DocumentReference` for the data you would like to load
-- `snapshotListenOptions`: (optional) `firebase.firestore.SnapshotListenOptions` to customise how the document is loaded
+- `options`: (optional) `Object` with the following parameters:
+  - `snapshotListenOptions`: (optional) `firebase.firestore.SnapshotListenOptions` to customise how the query is loaded
+
+Returns:
+
+- `snapshot`: a `firebase.firestore.DocumentSnapshot`, or `void` if no query is supplied
+- `loading`: a `boolean` to indicate if the data is still being loaded
+- `error`: Any `Error` returned by Firebase when trying to load the data, or `void` if there is no error
 
 #### Full example
 
@@ -164,33 +194,44 @@ const FirestoreDocument = () => {
 ### useDocumentOnce
 
 ```
-const [snapshot, loading, error] = useDocumentOnce(reference, getOptions);
+const [snapshot, loading, error] = useDocumentOnce(reference, options);
 ```
 
-As `useDocument`, but this hook will only read the current value of the `firebase.firestore.DocumentReference`.
-
-Returns a `firebase.firestore.DocumentSnapshot` (if a reference is specified), a `boolean` to indicate if the data is still being loaded and any `firebase.FirebaseError` returned by Firebase when trying to load the data.
+Retrieve the current value of the `firebase.firestore.DocumentReference`.
 
 The `useDocumentOnce` hook takes the following parameters:
 
 - `reference`: (optional) `firebase.firestore.DocumentReference` for the data you would like to load
-- `getOptions`: (optional) `firebase.firestore.GetOptions` to customise how the document is loaded
+- `options`: (optional) `Object` with the following parameters:
+  - `getOptions`: (optional) `firebase.firestore.GetOptions` to customise how the collection is loaded
+
+Returns:
+
+- `snapshot`: a `firebase.firestore.DocumentSnapshot`, or `void` if no reference is supplied
+- `loading`: a `boolean` to indicate if the data is still being loaded
+- `error`: Any `Error` returned by Firebase when trying to load the data, or `void` if there is no error
 
 ### useDocumentData
 
 ```
-const [values, loading, error] = useDocumentData<T>(reference, options);
+const [value, loading, error] = useDocumentData<T>(reference, options);
 ```
 
-As `useDocument`, but this hook returns the typed contents of `firebase.firestore.DocumentSnapshot.val()` values rather than the
-`DocumentSnapshot` itself.
+As `useDocument`, but this hook extracts the typed contents of `firebase.firestore.DocumentSnapshot.val()`, rather than the
+`firebase.firestore.DocumentSnapshot` itself.
 
 The `useDocumentData` hook takes the following parameters:
 
 - `reference`: (optional) `firebase.firestore.DocumentReference` for the data you would like to load
 - `options`: (optional) `Object` with the following parameters:
   - `idField`: (optional) name of the field that should be populated with the `firebase.firestore.DocumentSnapshot.id` property.
-  - `snapshotListenOptions`: (optional) `firebase.firestore.SnapshotListenOptions` to customise how the document is loaded
+  - `snapshotListenOptions`: (optional) `firebase.firestore.SnapshotListenOptions` to customise how the collection is loaded
+
+Returns:
+
+- `value`: `T`, or `void` if no query is supplied
+- `loading`: a `boolean` to indicate if the data is still being loaded
+- `error`: Any `Error` returned by Firebase when trying to load the data, or `void` if there is no error
 
 ### useDocumentDataOnce
 
@@ -198,13 +239,17 @@ The `useDocumentData` hook takes the following parameters:
 const [value, loading, error] = useDocumentDataOnce<T>(reference, options);
 ```
 
-As `useDocumentData`, but this hook will only read the current value of the `firebase.firestore.DocumentReference`.
-
-Returns the typed contents of `firebase.firestore.DocumentSnapshot.data()` rather than the `DocumentSnapshot` itself.
+As `useDocument`, but this hook will only read the current value of the `firebase.firestore.DocumentReference`.
 
 The `useDocumentDataOnce` hook takes the following parameters:
 
 - `reference`: (optional) `firebase.firestore.DocumentReference` for the data you would like to load
 - `options`: (optional) `Object` with the following parameters:
-  - `getOptions`: (optional) `firebase.firestore.GetOptions` to customise how the document is loaded
+  - `getOptions`: (optional) `firebase.firestore.GetOptions` to customise how the collection is loaded
   - `idField`: (optional) name of the field that should be populated with the `firebase.firestore.DocumentSnapshot.id` property.
+
+Returns:
+
+- `value`: `T`, or `void` if no query is supplied
+- `loading`: a `boolean` to indicate if the data is still being loaded
+- `error`: Any `Error` returned by Firebase when trying to load the data, or `void` if there is no error

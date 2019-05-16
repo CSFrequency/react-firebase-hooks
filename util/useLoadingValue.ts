@@ -1,25 +1,24 @@
 import { useReducer } from 'react';
-import { FirebaseError } from 'firebase';
 
-export type LoadingValue<T> = {
-  error?: FirebaseError;
+export type LoadingValue<T, E> = {
+  error?: E;
   loading: boolean;
   reset: () => void;
-  setError: (error: FirebaseError) => void;
+  setError: (error: E) => void;
   setValue: (value?: T | null) => void;
   value?: T;
 };
 
-type ReducerState = {
-  error?: FirebaseError;
+type ReducerState<E> = {
+  error?: E;
   loading: boolean;
   value?: any;
 };
 
-type ErrorAction = { type: 'error'; error: FirebaseError };
+type ErrorAction<E> = { type: 'error'; error: E };
 type ResetAction = { type: 'reset'; defaultValue?: any };
 type ValueAction = { type: 'value'; value: any };
-type ReducerAction = ErrorAction | ResetAction | ValueAction;
+type ReducerAction<E> = ErrorAction<E> | ResetAction | ValueAction;
 
 const defaultState = (defaultValue?: any) => {
   return {
@@ -28,7 +27,10 @@ const defaultState = (defaultValue?: any) => {
   };
 };
 
-const reducer = (state: ReducerState, action: ReducerAction): ReducerState => {
+const reducer = <E>() => (
+  state: ReducerState<E>,
+  action: ReducerAction<E>
+): ReducerState<E> => {
   switch (action.type) {
     case 'error':
       return {
@@ -49,16 +51,19 @@ const reducer = (state: ReducerState, action: ReducerAction): ReducerState => {
   }
 };
 
-export default <T>(getDefaultValue?: () => T | null): LoadingValue<T> => {
+export default <T, E>(getDefaultValue?: () => T | null): LoadingValue<T, E> => {
   const defaultValue = getDefaultValue ? getDefaultValue() : undefined;
-  const [state, dispatch] = useReducer(reducer, defaultState(defaultValue));
+  const [state, dispatch] = useReducer(
+    reducer<E>(),
+    defaultState(defaultValue)
+  );
 
   const reset = () => {
     const defaultValue = getDefaultValue ? getDefaultValue() : undefined;
     dispatch({ type: 'reset', defaultValue });
   };
 
-  const setError = (error: FirebaseError) => {
+  const setError = (error: E) => {
     dispatch({ type: 'error', error });
   };
 
