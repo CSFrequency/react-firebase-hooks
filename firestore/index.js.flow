@@ -9,26 +9,12 @@ import type {
   SnapshotListenOptions,
 } from 'firebase/firestore';
 
-export type CollectionHook = {
-  error?: FirebaseError,
-  loading: boolean,
-  value?: QuerySnapshot,
-};
-export type CollectionDataHook<T> = {
-  error?: FirebaseError,
-  loading: boolean,
-  value?: T,
-};
-export type DocumentHook = {
-  error?: FirebaseError,
-  loading: boolean,
-  value?: DocumentSnapshot,
-};
-export type DocumentDataHook<T> = {
-  error?: FirebaseError,
-  loading: boolean,
-  value?: T,
-};
+type LoadingHook<T> = [T | void, boolean, FirebaseError | void];
+
+export type CollectionHook = LoadingHook<QuerySnapshot>;
+export type CollectionDataHook<T> = LoadingHook<T[]>;
+export type DocumentHook = LoadingHook<DocumentSnapshot>;
+export type DocumentDataHook<T> = LoadingHook<T>;
 
 declare export function useCollection(
   query?: Query | null,

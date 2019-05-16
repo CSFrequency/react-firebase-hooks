@@ -1,14 +1,12 @@
 import { database, FirebaseError } from 'firebase';
 import { useEffect } from 'react';
-import { useIsEqualRef, useLoadingValue } from '../util';
+import { snapshotToData } from './helpers';
+import { LoadingHook, useIsEqualRef, useLoadingValue } from '../util';
 
-export type ObjectHook = {
-  error?: FirebaseError;
-  loading: boolean;
-  value?: database.DataSnapshot;
-};
+export type ObjectHook = LoadingHook<database.DataSnapshot, FirebaseError>;
+export type ObjectValHook<T> = LoadingHook<T, FirebaseError>;
 
-export default (query?: database.Query | null): ObjectHook => {
+export const useObject = (query?: database.Query | null): ObjectHook => {
   const { error, loading, reset, setError, setValue, value } = useLoadingValue<
     database.DataSnapshot
   >();
@@ -31,9 +29,13 @@ export default (query?: database.Query | null): ObjectHook => {
     [ref.current]
   );
 
-  return {
-    error,
-    loading,
-    value,
-  };
+  return [value, loading, error];
+};
+
+export const useObjectVal = <T>(
+  query?: database.Query | null,
+  keyField?: string
+): ObjectValHook<T> => {
+  const [value, loading, error] = useObject(query);
+  return [value ? snapshotToData(value, keyField) : undefined, loading, error];
 };

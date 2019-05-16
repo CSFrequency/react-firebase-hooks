@@ -6,30 +6,35 @@ Firebase Cloud Storage. The hooks wrap around the `firebase.storage().ref().getD
 In addition to returning the download URL, the hooks provide an `error` and `loading` property
 to give a complete lifecycle for loading from Cloud Storage.
 
+All hooks can be imported from `react-firebase-hooks/storage`, e.g.
+
+```
+import { useCollection } from 'react-firebase-hooks/storage';
+```
+
 List of Cloud Storage hooks:
 
-- [useDownloadURL](#usedownloadurlref)
+- [useDownloadURL](#usedownloadurl)
 
-### `useDownloadURL(ref)`
+### useDownloadURL
 
-Parameters:
+```
+const [downloadUrl, loading, error] = useDownloadURL(reference);
+```
 
-- `ref`: `firebase.storage.Reference`
+Returns the download URL as a `string` (if a reference is supplied), a boolean to indicate whether the the download URL is still being loaded and any `firebase.FirebaseError` returned by Firebase when trying to load the download URL.
 
-Returns:
-`DownloadURLHook` containing
+The `useDownloadURL` hook takes the following parameters:
 
-- `error`: An optional error object returned by Firebase
-- `loading`: A `boolean` to indicate if the download URL is still being loaded
-- `value`: The download URL
+- `reference`: (optional) `firebase.storage.Reference` that you would like the download URL for
 
-#### Example
+#### Full example
 
 ```js
 import { useDownloadURL } from 'react-firebase-hooks/storage';
 
 const DownloadURL = () => {
-  const { error, loading, value } = useDownloadURL(
+  const [value, loading, error] = useDownloadURL(
     firebase.storage().ref('path/to/file')
   );
 

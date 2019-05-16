@@ -1,20 +1,20 @@
-import { auth, User } from 'firebase';
+import { auth, FirebaseError, User } from 'firebase';
 import { useEffect } from 'react';
-import useLoadingValue from '../util/useLoadingValue';
+import { transformError } from './helpers';
+import { LoadingHook, useLoadingValue } from '../util';
 
-export type AuthStateHook = {
-  user?: firebase.User;
-  initialising: boolean;
-};
+export type AuthStateHook = LoadingHook<User, FirebaseError>;
 
 export default (auth: auth.Auth): AuthStateHook => {
-  const { loading, setValue, value } = useLoadingValue<User>(
+  const { error, loading, setError, setValue, value } = useLoadingValue<User>(
     () => auth.currentUser
   );
 
   useEffect(
     () => {
-      const listener = auth.onAuthStateChanged(setValue);
+      const listener = auth.onAuthStateChanged(setValue, (error: auth.Error) =>
+        setError(transformError(error))
+      );
 
       return () => {
         listener();
@@ -23,8 +23,5 @@ export default (auth: auth.Auth): AuthStateHook => {
     [auth]
   );
 
-  return {
-    initialising: loading,
-    user: value,
-  };
+  return [value, loading, error];
 };

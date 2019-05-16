@@ -1,127 +1,15 @@
 import { database, FirebaseError } from 'firebase';
-import { useEffect, useReducer } from 'react';
-import { useIsEqualRef } from '../util';
+import { useEffect } from 'react';
+import { snapshotToData } from './helpers';
+import useListReducer from './helpers/useListReducer';
+import { LoadingHook, useIsEqualRef } from '../util';
 
-export type ListHook = {
-  error?: FirebaseError;
-  loading: boolean;
-  value?: database.DataSnapshot[];
-};
+export type ListHook = LoadingHook<database.DataSnapshot[], FirebaseError>;
+export type ListKeysHook = LoadingHook<string[], FirebaseError>;
+export type ListValsHook<T> = LoadingHook<T[], FirebaseError>;
 
-type KeyValueState = {
-  keys?: string[];
-  values?: database.DataSnapshot[];
-};
-
-type ReducerState = {
-  error?: FirebaseError;
-  loading: boolean;
-  value: KeyValueState;
-};
-
-type AddAction = {
-  type: 'add';
-  previousKey?: string | null;
-  snapshot: database.DataSnapshot | null;
-};
-type ChangeAction = {
-  type: 'change';
-  snapshot: database.DataSnapshot | null;
-};
-type EmptyAction = { type: 'empty' };
-type ErrorAction = { type: 'error'; error: FirebaseError };
-type MoveAction = {
-  type: 'move';
-  previousKey?: string | null;
-  snapshot: database.DataSnapshot | null;
-};
-type RemoveAction = {
-  type: 'remove';
-  snapshot: database.DataSnapshot | null;
-};
-type ResetAction = { type: 'reset' };
-type ValueAction = { type: 'value' };
-type ReducerAction =
-  | AddAction
-  | ChangeAction
-  | EmptyAction
-  | ErrorAction
-  | MoveAction
-  | RemoveAction
-  | ResetAction
-  | ValueAction;
-
-const initialState: ReducerState = {
-  loading: true,
-  value: {
-    keys: [],
-    values: [],
-  },
-};
-
-const reducer = (state: ReducerState, action: ReducerAction): ReducerState => {
-  switch (action.type) {
-    case 'add':
-      if (!action.snapshot) {
-        return state;
-      }
-      return {
-        ...state,
-        value: addChild(state.value, action.snapshot, action.previousKey),
-      };
-    case 'change':
-      if (!action.snapshot) {
-        return state;
-      }
-      return {
-        ...state,
-        value: changeChild(state.value, action.snapshot),
-      };
-    case 'error':
-      return {
-        ...state,
-        error: action.error,
-        loading: false,
-      };
-    case 'move':
-      if (!action.snapshot) {
-        return state;
-      }
-      return {
-        ...state,
-        value: moveChild(state.value, action.snapshot, action.previousKey),
-      };
-    case 'remove':
-      if (!action.snapshot) {
-        return state;
-      }
-      return {
-        ...state,
-        value: removeChild(state.value, action.snapshot),
-      };
-    case 'reset':
-      return initialState;
-    case 'value':
-      return {
-        ...state,
-        loading: false,
-      };
-    case 'empty':
-      return {
-        ...state,
-        loading: false,
-        value: {
-          keys: undefined,
-          values: undefined,
-        },
-      };
-    default:
-      return state;
-  }
-};
-
-export default (query?: database.Query | null): ListHook => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+export const useList = (query?: database.Query | null): ListHook => {
+  const [state, dispatch] = useListReducer();
 
   const ref = useIsEqualRef(query, () => dispatch({ type: 'reset' }));
 
@@ -179,85 +67,28 @@ export default (query?: database.Query | null): ListHook => {
     [ref.current]
   );
 
-  return {
-    error: state.error,
-    loading: state.loading,
-    value: state.value.values,
-  };
+  return [state.value.values, state.loading, state.error];
 };
 
-const addChild = (
-  currentState: KeyValueState,
-  snapshot: firebase.database.DataSnapshot,
-  previousKey?: string | null
-): KeyValueState => {
-  if (!snapshot.key) {
-    return currentState;
-  }
-
-  const { keys, values } = currentState;
-  if (!previousKey) {
-    // The child has been added to the start of the list
-    return {
-      keys: keys ? [snapshot.key, ...keys] : [snapshot.key],
-      values: values ? [snapshot, ...values] : [snapshot],
-    };
-  }
-  // Establish the index for the previous child in the list
-  const index = keys ? keys.indexOf(previousKey) : 0;
-  // Insert the item after the previous child
-  return {
-    keys: keys
-      ? [...keys.slice(0, index + 1), snapshot.key, ...keys.slice(index + 1)]
-      : [snapshot.key],
-    values: values
-      ? [...values.slice(0, index + 1), snapshot, ...values.slice(index + 1)]
-      : [snapshot],
-  };
+export const useListKeys = (query?: database.Query | null): ListKeysHook => {
+  const [value, loading, error] = useList(query);
+  return [
+    value ? value.map(snapshot => snapshot.key as string) : undefined,
+    loading,
+    error,
+  ];
 };
 
-const changeChild = (
-  currentState: KeyValueState,
-  snapshot: firebase.database.DataSnapshot
-): KeyValueState => {
-  if (!snapshot.key) {
-    return currentState;
-  }
-  const { keys, values } = currentState;
-  const index = keys ? keys.indexOf(snapshot.key) : 0;
-  return {
-    ...currentState,
-    values: values
-      ? [...values.slice(0, index), snapshot, ...values.slice(index + 1)]
-      : [snapshot],
-  };
-};
-
-const removeChild = (
-  currentState: KeyValueState,
-  snapshot: firebase.database.DataSnapshot
-): KeyValueState => {
-  if (!snapshot.key) {
-    return currentState;
-  }
-
-  const { keys, values } = currentState;
-  const index = keys ? keys.indexOf(snapshot.key) : 0;
-  return {
-    keys: keys ? [...keys.slice(0, index), ...keys.slice(index + 1)] : [],
-    values: values
-      ? [...values.slice(0, index), ...values.slice(index + 1)]
-      : [],
-  };
-};
-
-const moveChild = (
-  currentState: KeyValueState,
-  snapshot: firebase.database.DataSnapshot,
-  previousKey?: string | null
-): KeyValueState => {
-  // Remove the child from it's previous location
-  const tempValue = removeChild(currentState, snapshot);
-  // Add the child into it's new location
-  return addChild(tempValue, snapshot, previousKey);
+export const useListVals = <T>(
+  query?: database.Query | null,
+  keyField?: string
+): ListValsHook<T> => {
+  const [value, loading, error] = useList(query);
+  return [
+    value
+      ? value.map(snapshot => snapshotToData(snapshot, keyField))
+      : undefined,
+    loading,
+    error,
+  ];
 };

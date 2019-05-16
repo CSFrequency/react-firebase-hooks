@@ -2,9 +2,7 @@
 import typeof { FirebaseError } from 'firebase';
 import type { Reference } from 'firebase/storage';
 
-export type DownloadURLHook = {
-  error?: FirebaseError,
-  loading: boolean,
-  value?: string,
-};
+type LoadingHook<T> = [T | void, boolean, FirebaseError | void];
+
+export type DownloadURLHook = LoadingHook<string>;
 declare export function useDownloadURL(ref?: Reference | null): DownloadURLHook;

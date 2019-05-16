@@ -1,15 +1,15 @@
 import { firestore, FirebaseError } from 'firebase';
 import { useEffect } from 'react';
-import { transformError } from './helpers';
-import { useIsEqualRef, useLoadingValue } from '../util';
+import { snapshotToData, transformError } from './helpers';
+import { LoadingHook, useIsEqualRef, useLoadingValue } from '../util';
 
-export type CollectionHook = {
-  error?: FirebaseError;
-  loading: boolean;
-  value?: firestore.QuerySnapshot;
-};
+export type CollectionHook = LoadingHook<
+  firestore.QuerySnapshot,
+  FirebaseError
+>;
+export type CollectionDataHook<T> = LoadingHook<T[], FirebaseError>;
 
-export default (
+export const useCollection = (
   query?: firestore.Query | null,
   options?: firestore.SnapshotListenOptions
 ): CollectionHook => {
@@ -39,9 +39,26 @@ export default (
     [ref.current]
   );
 
-  return {
-    error,
+  return [value, loading, error];
+};
+
+export const useCollectionData = <T>(
+  query?: firestore.Query | null,
+  options?: {
+    idField?: string;
+    snapshotListenOptions?: firestore.SnapshotListenOptions;
+  }
+): CollectionDataHook<T> => {
+  const idField = options ? options.idField : undefined;
+  const snapshotListenOptions = options
+    ? options.snapshotListenOptions
+    : undefined;
+  const [value, loading, error] = useCollection(query, snapshotListenOptions);
+  return [
+    (value
+      ? value.docs.map(doc => snapshotToData(doc, idField))
+      : undefined) as T[],
     loading,
-    value,
-  };
+    error,
+  ];
 };

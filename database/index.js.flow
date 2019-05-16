@@ -2,31 +2,13 @@
 import typeof { FirebaseError } from 'firebase';
 import type { DataSnapshot, Query } from 'firebase/database';
 
-export type ListHook = {
-  error?: FirebaseError,
-  loading: boolean,
-  value: DataSnapshot[],
-};
-export type ListKeysHook = {
-  error?: FirebaseError,
-  loading: boolean,
-  value: string[],
-};
-export type ListValsHook<T> = {
-  error?: FirebaseError,
-  loading: boolean,
-  value: T[],
-};
-export type ObjectHook = {
-  error?: FirebaseError,
-  loading: boolean,
-  value?: DataSnapshot,
-};
-export type ObjectValHook<T> = {
-  error?: FirebaseError,
-  loading: boolean,
-  value?: T,
-};
+type LoadingHook<T> = [T | void, boolean, FirebaseError | void];
+
+export type ListHook = LoadingHook<DataSnapshot[]>;
+export type ListKeysHook = LoadingHook<string[]>;
+export type ListValsHook<T> = LoadingHook<T[]>;
+export type ObjectHook = LoadingHook<DataSnapshot>;
+export type ObjectValHook<T> = LoadingHook<T>;
 
 declare export function useList(query?: Query | null): ListHook;
 declare export function useListKeys(query?: Query | null): ListKeysHook;

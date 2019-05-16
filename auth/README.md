@@ -2,29 +2,35 @@
 
 React Firebase Hooks provides a convenience listener for Firebase Auth's auth state. The hook wraps around the `firebase.auth().onAuthStateChange()` method to ensure that it is always up to date.
 
+All hooks can be imported from `react-firebase-hooks/auth`, e.g.
+
+```
+import { useAuthState } from 'react-firebase-hooks/auth';
+```
+
 List of Auth hooks:
 
-- [useAuthState](#useauthstateauth)
+- [useAuthState](#useauthstate)
 
-### `useAuthState(auth)`
+### useAuthState
 
-Parameters:
+```
+const [user, loading, error] = useAuthState(auth);
+```
 
-- `auth`: `firebase.auth.Auth`
+Returns the `firebase.User` (if logged in), a boolean to indicate whether the the user is still being loaded and any `firebase.FirebaseError` returned by Firebase when trying to load the user.
 
-Returns:
-`AuthStateHook` containing:
+The `useAuthState` hook takes the following parameters:
 
-- `initialising`: If the listener is still waiting for the user to be loaded
-- `user`: The `firebase.User`, or `null`, if no user is logged in
+- `auth`: `firebase.auth.Auth` instance for the app you would like to monitor
 
-#### Example
+#### Full Example
 
 ```js
 import { useAuthState } from 'react-firebase-hooks/auth';
 
 const CurrentUser = () => {
-  const { initialising, user } = useAuthState(firebase.auth());
+  const [user, initialising, error] = useAuthState(firebase.auth());
   const login = () => {
     firebase.auth().signInWithEmailAndPassword('test@test.com', 'password');
   };
@@ -38,6 +44,13 @@ const CurrentUser = () => {
         <p>Initialising User...</p>
       </div>
     );
+  }
+  if (error) {
+    return (
+      <div>
+        <p>Error: {error}>/p>
+      </div>
+    )
   }
   if (user) {
     return (

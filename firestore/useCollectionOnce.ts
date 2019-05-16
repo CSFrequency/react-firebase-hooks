@@ -1,12 +1,18 @@
-import { firestore } from 'firebase';
+import { firestore, FirebaseError } from 'firebase';
 import { useEffect } from 'react';
-import { useIsEqualRef, useLoadingValue } from '../util';
-import { CollectionHook } from './useCollection';
+import { snapshotToData } from './helpers';
+import { LoadingHook, useIsEqualRef, useLoadingValue } from '../util';
 
-export default (
+export type CollectionOnceHook = LoadingHook<
+  firestore.QuerySnapshot,
+  FirebaseError
+>;
+export type CollectionDataOnceHook<T> = LoadingHook<T[], FirebaseError>;
+
+export const useCollectionOnce = (
   query?: firestore.Query | null,
   options?: firestore.GetOptions
-): CollectionHook => {
+): CollectionOnceHook => {
   const { error, loading, reset, setError, setValue, value } = useLoadingValue<
     firestore.QuerySnapshot
   >();
@@ -26,9 +32,24 @@ export default (
     [ref.current]
   );
 
-  return {
-    error,
+  return [value, loading, error];
+};
+
+export const useCollectionDataOnce = <T>(
+  query?: firestore.Query | null,
+  options?: {
+    getOptions?: firestore.GetOptions;
+    idField?: string;
+  }
+): CollectionDataOnceHook<T> => {
+  const idField = options ? options.idField : undefined;
+  const getOptions = options ? options.getOptions : undefined;
+  const [value, loading, error] = useCollectionOnce(query, getOptions);
+  return [
+    (value
+      ? value.docs.map(doc => snapshotToData(doc, idField))
+      : undefined) as T[],
     loading,
-    value,
-  };
+    error,
+  ];
 };

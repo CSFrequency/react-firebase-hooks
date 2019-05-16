@@ -1,15 +1,15 @@
 import { firestore, FirebaseError } from 'firebase';
 import { useEffect } from 'react';
-import { transformError } from './helpers';
-import { useIsEqualRef, useLoadingValue } from '../util';
+import { snapshotToData, transformError } from './helpers';
+import { LoadingHook, useIsEqualRef, useLoadingValue } from '../util';
 
-export type DocumentHook = {
-  error?: FirebaseError;
-  loading: boolean;
-  value?: firestore.DocumentSnapshot;
-};
+export type DocumentHook = LoadingHook<
+  firestore.DocumentSnapshot,
+  FirebaseError
+>;
+export type DocumentDataHook<T> = LoadingHook<T, FirebaseError>;
 
-export default (
+export const useDocument = (
   docRef?: firestore.DocumentReference | null,
   options?: firestore.SnapshotListenOptions
 ): DocumentHook => {
@@ -39,9 +39,24 @@ export default (
     [ref.current]
   );
 
-  return {
-    error,
+  return [value, loading, error];
+};
+
+export const useDocumentData = <T>(
+  docRef?: firestore.DocumentReference | null,
+  options?: {
+    idField?: string;
+    snapshotListenOptions?: firestore.SnapshotListenOptions;
+  }
+): DocumentDataHook<T> => {
+  const idField = options ? options.idField : undefined;
+  const snapshotListenOptions = options
+    ? options.snapshotListenOptions
+    : undefined;
+  const [value, loading, error] = useDocument(docRef, snapshotListenOptions);
+  return [
+    (value ? snapshotToData(value, idField) : undefined) as T,
     loading,
-    value,
-  };
+    error,
+  ];
 };
