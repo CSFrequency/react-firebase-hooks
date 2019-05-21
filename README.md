@@ -1,4 +1,4 @@
-# React Firebase Hooks
+# React Firebase Hooks - v1
 
 A set of reusable React Hooks for [Firebase](https://firebase.google.com/).
 
@@ -9,14 +9,14 @@ A set of reusable React Hooks for [Firebase](https://firebase.google.com/).
 
 > Official support for Hooks was added to React Native in v0.59.0. React Firebase Hooks works with both the Firebase JS SDK and React Native Firebase, although some of the Flow and Typescript typings may be incorrect - we are investigating ways to improve this for React Native users.
 
-**If you'd like to try our v2 Release Candidate, which updates the hooks to return Arrays rather than Objects, check out the [PR](https://github.com/CSFrequency/react-firebase-hooks/pull/20) and [Updated Documentation](https://github.com/CSFrequency/react-firebase-hooks/tree/v2.0.x).**
+**This documentation is for v1 of React Firebase Hooks which is an old version. If you'd like to switch to v2, check out the [Release Notes](https://github.com/CSFrequency/react-firebase-hooks/releases/tag/v2.0.0) and [Updated Documentation](https://github.com/CSFrequency/react-firebase-hooks).**
 
 ## Installation
 
 React Firebase Hooks requires **React 16.8.0 or later** and **Firebase v5.0.0 or later**.
 
 ```
-npm install --save react-firebase-hooks
+npm install --save react-firebase-hooks@1.2.1
 ```
 
 This assumes that you’re using the [npm](https://npmjs.com) package manager with a module bundler like [Webpack](https://webpack.js.org/) or [Browserify](http://browserify.org/) to consume [CommonJS](http://webpack.github.io/docs/commonjs.html) modules.
