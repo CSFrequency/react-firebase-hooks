@@ -1,5 +1,4 @@
 // @flow
-import typeof { FirebaseError } from 'firebase';
 import type {
   DocumentReference,
   DocumentSnapshot,
@@ -9,60 +8,62 @@ import type {
   SnapshotListenOptions,
 } from 'firebase/firestore';
 
-export type CollectionHook = {
-  error?: FirebaseError,
-  loading: boolean,
-  value?: QuerySnapshot,
-};
-export type CollectionDataHook<T> = {
-  error?: FirebaseError,
-  loading: boolean,
-  value?: T,
-};
-export type DocumentHook = {
-  error?: FirebaseError,
-  loading: boolean,
-  value?: DocumentSnapshot,
-};
-export type DocumentDataHook<T> = {
-  error?: FirebaseError,
-  loading: boolean,
-  value?: T,
-};
+type LoadingHook<T> = [T | void, boolean, Error | void];
+
+export type CollectionHook = LoadingHook<QuerySnapshot>;
+export type CollectionDataHook<T> = LoadingHook<T[]>;
+export type DocumentHook = LoadingHook<DocumentSnapshot>;
+export type DocumentDataHook<T> = LoadingHook<T>;
 
 declare export function useCollection(
   query?: Query | null,
-  options?: SnapshotListenOptions
+  options?: {
+    snapshotListenOptions?: SnapshotListenOptions,
+  }
 ): CollectionHook;
 declare export function useCollectionOnce(
   query?: Query | null,
-  options?: GetOptions
+  options?: {
+    getOptions?: GetOptions,
+  }
 ): CollectionHook;
 declare export function useCollectionData<T>(
   query?: Query | null,
-  options?: SnapshotListenOptions,
-  idField?: string
+  options?: {
+    idField?: string,
+    snapshotListenOptions?: SnapshotListenOptions,
+  }
 ): CollectionDataHook<T>;
 declare export function useCollectionDataOnce<T>(
   query?: Query | null,
-  options?: GetOptions,
-  idField?: string
+  options?: {
+    getOptions?: GetOptions,
+    idField?: string,
+  }
 ): CollectionDataHook<T>;
 declare export function useDocument(
   ref?: DocumentReference | null,
-  options?: SnapshotListenOptions
+  options?: {
+    snapshotListenOptions?: SnapshotListenOptions,
+  }
 ): DocumentHook;
 declare export function useDocumentOnce(
   ref?: DocumentReference | null,
-  options?: GetOptions
+  options?: {
+    getOptions?: GetOptions,
+  }
 ): DocumentHook;
 declare export function useDocumentData<T>(
   ref?: DocumentReference | null,
-  options?: SnapshotListenOptions,
-  idField?: string
+  options?: {
+    idField?: string,
+    snapshotListenOptions?: SnapshotListenOptions,
+  }
 ): DocumentDataHook<T>;
 declare export function useDocumentDataOnce<T>(
   ref?: DocumentReference | null,
-  options?: GetOptions,
-  idField?: string
+  options?: {
+    getOptions?: GetOptions,
+    idField?: string,
+  }
 ): DocumentDataHook<T>;

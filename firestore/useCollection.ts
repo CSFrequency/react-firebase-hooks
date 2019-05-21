@@ -1,20 +1,20 @@
-import { firestore, FirebaseError } from 'firebase';
+import { firestore } from 'firebase';
 import { useEffect } from 'react';
-import { transformError } from './helpers';
-import { useIsEqualRef, useLoadingValue } from '../util';
+import { snapshotToData } from './helpers';
+import { LoadingHook, useIsEqualRef, useLoadingValue } from '../util';
 
-export type CollectionHook = {
-  error?: FirebaseError;
-  loading: boolean;
-  value?: firestore.QuerySnapshot;
-};
+export type CollectionHook = LoadingHook<firestore.QuerySnapshot, Error>;
+export type CollectionDataHook<T> = LoadingHook<T[], Error>;
 
-export default (
+export const useCollection = (
   query?: firestore.Query | null,
-  options?: firestore.SnapshotListenOptions
+  options?: {
+    snapshotListenOptions?: firestore.SnapshotListenOptions;
+  }
 ): CollectionHook => {
   const { error, loading, reset, setError, setValue, value } = useLoadingValue<
-    firestore.QuerySnapshot
+    firestore.QuerySnapshot,
+    Error
   >();
   const ref = useIsEqualRef(query, reset);
 
@@ -24,13 +24,14 @@ export default (
         setValue(undefined);
         return;
       }
-      const listener = options
-        ? ref.current.onSnapshot(options, setValue, (error: Error) =>
-            setError(transformError(error))
-          )
-        : ref.current.onSnapshot(setValue, (error: Error) =>
-            setError(transformError(error))
-          );
+      const listener =
+        options && options.snapshotListenOptions
+          ? ref.current.onSnapshot(
+              options.snapshotListenOptions,
+              setValue,
+              setError
+            )
+          : ref.current.onSnapshot(setValue, setError);
 
       return () => {
         listener();
@@ -39,9 +40,28 @@ export default (
     [ref.current]
   );
 
-  return {
-    error,
+  return [value, loading, error];
+};
+
+export const useCollectionData = <T>(
+  query?: firestore.Query | null,
+  options?: {
+    idField?: string;
+    snapshotListenOptions?: firestore.SnapshotListenOptions;
+  }
+): CollectionDataHook<T> => {
+  const idField = options ? options.idField : undefined;
+  const snapshotListenOptions = options
+    ? options.snapshotListenOptions
+    : undefined;
+  const [value, loading, error] = useCollection(query, {
+    snapshotListenOptions,
+  });
+  return [
+    (value
+      ? value.docs.map(doc => snapshotToData(doc, idField))
+      : undefined) as T[],
     loading,
-    value,
-  };
+    error,
+  ];
 };

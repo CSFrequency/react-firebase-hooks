@@ -1,20 +1,20 @@
-import { firestore, FirebaseError } from 'firebase';
+import { firestore } from 'firebase';
 import { useEffect } from 'react';
-import { transformError } from './helpers';
-import { useIsEqualRef, useLoadingValue } from '../util';
+import { snapshotToData } from './helpers';
+import { LoadingHook, useIsEqualRef, useLoadingValue } from '../util';
 
-export type DocumentHook = {
-  error?: FirebaseError;
-  loading: boolean;
-  value?: firestore.DocumentSnapshot;
-};
+export type DocumentHook = LoadingHook<firestore.DocumentSnapshot, Error>;
+export type DocumentDataHook<T> = LoadingHook<T, Error>;
 
-export default (
+export const useDocument = (
   docRef?: firestore.DocumentReference | null,
-  options?: firestore.SnapshotListenOptions
+  options?: {
+    snapshotListenOptions?: firestore.SnapshotListenOptions;
+  }
 ): DocumentHook => {
   const { error, loading, reset, setError, setValue, value } = useLoadingValue<
-    firestore.DocumentSnapshot
+    firestore.DocumentSnapshot,
+    Error
   >();
   const ref = useIsEqualRef(docRef, reset);
 
@@ -24,13 +24,14 @@ export default (
         setValue(undefined);
         return;
       }
-      const listener = options
-        ? ref.current.onSnapshot(options, setValue, (error: Error) =>
-            setError(transformError(error))
-          )
-        : ref.current.onSnapshot(setValue, (error: Error) =>
-            setError(transformError(error))
-          );
+      const listener =
+        options && options.snapshotListenOptions
+          ? ref.current.onSnapshot(
+              options.snapshotListenOptions,
+              setValue,
+              setError
+            )
+          : ref.current.onSnapshot(setValue, setError);
 
       return () => {
         listener();
@@ -39,9 +40,26 @@ export default (
     [ref.current]
   );
 
-  return {
-    error,
+  return [value, loading, error];
+};
+
+export const useDocumentData = <T>(
+  docRef?: firestore.DocumentReference | null,
+  options?: {
+    idField?: string;
+    snapshotListenOptions?: firestore.SnapshotListenOptions;
+  }
+): DocumentDataHook<T> => {
+  const idField = options ? options.idField : undefined;
+  const snapshotListenOptions = options
+    ? options.snapshotListenOptions
+    : undefined;
+  const [value, loading, error] = useDocument(docRef, {
+    snapshotListenOptions,
+  });
+  return [
+    (value ? snapshotToData(value, idField) : undefined) as T,
     loading,
-    value,
-  };
+    error,
+  ];
 };

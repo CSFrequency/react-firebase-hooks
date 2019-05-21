@@ -1,8 +1,9 @@
 // @flow
 import type { FirebaseUser as User } from 'firebase';
 import type { Auth } from 'firebase/auth';
-export type AuthStateHook = {
-  user?: User,
-  initialising: boolean,
-};
+import typeof { Error as AuthError } from 'firebase/auth';
+
+type LoadingHook<T> = [T | void, boolean, AuthError | void];
+
+export type AuthStateHook = LoadingHook<User>;
 declare export function useAuthState(auth: Auth): AuthStateHook;
