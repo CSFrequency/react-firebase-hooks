@@ -14,7 +14,7 @@ A set of reusable [React Hooks](https://reactjs.org/docs/hooks-intro.html) for [
 React Firebase Hooks requires **React 16.8.0 or later** and **Firebase v5.0.0 or later**.
 
 ```
-npm install --save react-firebase-hooks@1.2.1
+npm install --save react-firebase-hooks
 ```
 
 This assumes that you’re using the [npm](https://npmjs.com) package manager with a module bundler like [Webpack](https://webpack.js.org/) or [Browserify](http://browserify.org/) to consume [CommonJS](http://webpack.github.io/docs/commonjs.html) modules.
@@ -24,6 +24,12 @@ This assumes that you’re using the [npm](https://npmjs.com) package manager wi
 There has been a **lot** of hype around React Hooks, but this hype merely reflects that there are obvious real world benefits of Hooks to React developers everywhere.
 
 This library explores how React Hooks can work to make integration with Firebase even more straightforward than it already is. It takes inspiration for naming from RxFire and is based on an internal library that we had been using in a number of apps prior to the release of React Hooks. The implementation with hooks is 10x simpler than our previous implementation.
+
+## Upgrading from v1 to v2
+
+After feedback on the initial release of React Firebase Hooks, we opted to change from `Object` to `Array` returns to allow for easier composition of hooks in v2.
+
+To upgrade your project from v1 to v2 check out the [Release Notes](https://github.com/CSFrequency/react-firebase-hooks/releases/tag/v2.0.0) which have full details of everything that needs to be changed.
 
 ## Documentation
 
