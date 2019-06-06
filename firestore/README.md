@@ -60,7 +60,7 @@ const FirestoreCollection = () => {
   const [value, loading, error] = useCollection(
     firebase.firestore().collection('hooks'),
     {
-      includeMetadataChanges: true,
+      snapshotListenOptions: { includeMetadataChanges: true }
     }
   );
   return (
