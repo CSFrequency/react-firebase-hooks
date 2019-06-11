@@ -54,7 +54,7 @@ const CurrentUser = () => {
   if (error) {
     return (
       <div>
-        <p>Error: {error}>/p>
+        <p>Error: {error}</p>
       </div>
     )
   }
