@@ -60,7 +60,7 @@ const FirestoreCollection = () => {
   const [value, loading, error] = useCollection(
     firebase.firestore().collection('hooks'),
     {
-      snapshotListenOptions: { includeMetadataChanges: true }
+      snapshotListenOptions: { includeMetadataChanges: true },
     }
   );
   return (
@@ -176,7 +176,7 @@ const FirestoreDocument = () => {
   const [value, loading, error] = useDocument(
     firebase.firestore().doc('hooks/nBShXiRGFAhuiPfBaGpt'),
     {
-      includeMetadataChanges: true,
+      snapshotListenOptions: { includeMetadataChanges: true },
     }
   );
   return (
