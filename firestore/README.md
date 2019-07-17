@@ -66,7 +66,7 @@ const FirestoreCollection = () => {
   return (
     <div>
       <p>
-        {error && <strong>Error: {error}</strong>}
+        {error && <strong>Error: {JSON.stringify(error)}</strong>}
         {loading && <span>Collection: Loading...</span>}
         {value && (
           <span>
@@ -182,7 +182,7 @@ const FirestoreDocument = () => {
   return (
     <div>
       <p>
-        {error && <strong>Error: {error}</strong>}
+        {error && <strong>Error: {JSON.stringify(error)}</strong>}
         {loading && <span>Document: Loading...</span>}
         {value && <span>Document: {JSON.stringify(value.data())}</span>}
       </p>
