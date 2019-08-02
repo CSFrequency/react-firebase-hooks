@@ -35,37 +35,34 @@ export const useList = (query?: database.Query | null): ListHook => {
     dispatch({ type: 'remove', snapshot });
   };
 
-  useEffect(
-    () => {
-      const query: database.Query | null | undefined = ref.current;
-      if (!query) {
-        dispatch({ type: 'empty' });
-        return;
-      }
-      // This is here to indicate that all the data has been successfully received
-      query.once(
-        'value',
-        () => {
-          dispatch({ type: 'value' });
-        },
-        (error: FirebaseError) => {
-          dispatch({ type: 'error', error });
-        }
-      );
-      query.on('child_added', onChildAdded);
-      query.on('child_changed', onChildChanged);
-      query.on('child_moved', onChildMoved);
-      query.on('child_removed', onChildRemoved);
+  const onError = (error: FirebaseError) => {
+    dispatch({ type: 'error', error });
+  };
 
-      return () => {
-        query.off('child_added', onChildAdded);
-        query.off('child_changed', onChildChanged);
-        query.off('child_moved', onChildMoved);
-        query.off('child_removed', onChildRemoved);
-      };
-    },
-    [ref.current]
-  );
+  const onValue = () => {
+    dispatch({ type: 'value' });
+  };
+
+  useEffect(() => {
+    const query: database.Query | null | undefined = ref.current;
+    if (!query) {
+      dispatch({ type: 'empty' });
+      return;
+    }
+    // This is here to indicate that all the data has been successfully received
+    query.once('value', onValue, onError);
+    query.on('child_added', onChildAdded, onError);
+    query.on('child_changed', onChildChanged, onError);
+    query.on('child_moved', onChildMoved, onError);
+    query.on('child_removed', onChildRemoved, onError);
+
+    return () => {
+      query.off('child_added', onChildAdded);
+      query.off('child_changed', onChildChanged);
+      query.off('child_moved', onChildMoved);
+      query.off('child_removed', onChildRemoved);
+    };
+  }, [ref.current]);
 
   return [state.value.values, state.loading, state.error];
 };
