@@ -37,12 +37,14 @@ const reducer = <E>() => (
         ...state,
         error: action.error,
         loading: false,
+        value: undefined,
       };
     case 'reset':
       return defaultState(action.defaultValue);
     case 'value':
       return {
         ...state,
+        error: undefined,
         loading: false,
         value: action.value,
       };
