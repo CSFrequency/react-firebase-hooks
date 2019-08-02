@@ -63,6 +63,7 @@ const listReducer = (
       }
       return {
         ...state,
+        error: undefined,
         value: addChild(state.value, action.snapshot, action.previousKey),
       };
     case 'change':
@@ -71,6 +72,7 @@ const listReducer = (
       }
       return {
         ...state,
+        error: undefined,
         value: changeChild(state.value, action.snapshot),
       };
     case 'error':
@@ -78,6 +80,10 @@ const listReducer = (
         ...state,
         error: action.error,
         loading: false,
+        value: {
+          keys: undefined,
+          values: undefined,
+        },
       };
     case 'move':
       if (!action.snapshot) {
@@ -85,6 +91,7 @@ const listReducer = (
       }
       return {
         ...state,
+        error: undefined,
         value: moveChild(state.value, action.snapshot, action.previousKey),
       };
     case 'remove':
@@ -93,6 +100,7 @@ const listReducer = (
       }
       return {
         ...state,
+        error: undefined,
         value: removeChild(state.value, action.snapshot),
       };
     case 'reset':
@@ -100,6 +108,7 @@ const listReducer = (
     case 'value':
       return {
         ...state,
+        error: undefined,
         loading: false,
       };
     case 'empty':
