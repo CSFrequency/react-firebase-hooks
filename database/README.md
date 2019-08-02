@@ -34,9 +34,9 @@ The `useList` hook takes the following parameters:
 
 Returns:
 
-- `snapshots`: an array of `firebase.database.DataSnapshot`, or `void` if no reference is supplied
+- `snapshots`: an array of `firebase.database.DataSnapshot`, or `undefined` if no reference is supplied
 - `loading`: a `boolean` to indicate if the data is still being loaded
-- `error`: Any `firebase.FirebaseError` returned by Firebase when trying to load the data, or `void` if there is no error
+- `error`: Any `firebase.FirebaseError` returned by Firebase when trying to load the data, or `undefined` if there is no error
 
 #### Full Example
 
@@ -81,9 +81,9 @@ The `useListKeys` hook takes the following parameters:
 
 Returns:
 
-- `keys`: an array of `string`, or `void` if no reference is supplied
+- `keys`: an array of `string`, or `undefined` if no reference is supplied
 - `loading`: a `boolean` to indicate if the data is still being loaded
-- `error`: Any `firebase.FirebaseError` returned by Firebase when trying to load the data, or `void` if there is no error
+- `error`: Any `firebase.FirebaseError` returned by Firebase when trying to load the data, or `undefined` if there is no error
 
 ### useListVals
 
@@ -102,9 +102,9 @@ The `useListVals` hook takes the following parameters:
 
 Returns:
 
-- `values`: an array of `T`, or `void` if no reference is supplied
+- `values`: an array of `T`, or `undefined` if no reference is supplied
 - `loading`: a `boolean` to indicate if the data is still being loaded
-- `error`: Any `firebase.FirebaseError` returned by Firebase when trying to load the data, or `void` if there is no error
+- `error`: Any `firebase.FirebaseError` returned by Firebase when trying to load the data, or `undefined` if there is no error
 
 ### useObject
 
@@ -120,9 +120,9 @@ The `useObject` hook takes the following parameters:
 
 Returns:
 
-- `snapshot`: a `firebase.database.DataSnapshot`, or `void` if no reference is supplied
+- `snapshot`: a `firebase.database.DataSnapshot`, or `undefined` if no reference is supplied
 - `loading`: a `boolean` to indicate if the data is still being loaded
-- `error`: Any `firebase.FirebaseError` returned by Firebase when trying to load the data, or `void` if there is no error
+- `error`: Any `firebase.FirebaseError` returned by Firebase when trying to load the data, or `undefined` if there is no error
 
 #### Full Example
 
@@ -161,6 +161,6 @@ The `useObjectVal` hook takes the following parameters:
 
 Returns:
 
-- `value`: a `T`, or `void` if no reference is supplied
+- `value`: a `T`, or `undefined` if no reference is supplied
 - `loading`: a `boolean` to indicate if the data is still being loaded
-- `error`: Any `firebase.FirebaseError` returned by Firebase when trying to load the data, or `void` if there is no error
+- `error`: Any `firebase.FirebaseError` returned by Firebase when trying to load the data, or `undefined` if there is no error

@@ -26,9 +26,9 @@ The `useAuthState` hook takes the following parameters:
 
 Returns:
 
-- `user`: The `firebase.User` if logged in, or `void` if not
+- `user`: The `firebase.User` if logged in, or `undefined` if not
 - `loading`: A `boolean` to indicate whether the the authentication state is still being loaded
-- `error`: Any `firebase.auth.Error` returned by Firebase when trying to load the user, or `void` if there is no error
+- `error`: Any `firebase.auth.Error` returned by Firebase when trying to load the user, or `undefined` if there is no error
 
 #### Full Example
 
@@ -56,7 +56,7 @@ const CurrentUser = () => {
       <div>
         <p>Error: {error}</p>
       </div>
-    )
+    );
   }
   if (user) {
     return (

@@ -5,7 +5,7 @@ export const snapshotToData = (
   idField?: string
 ) => {
   if (!snapshot.exists) {
-    return null;
+    return undefined;
   }
 
   return {

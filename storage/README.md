@@ -30,9 +30,9 @@ The `useDownloadURL` hook takes the following parameters:
 
 Returns:
 
-- `downloadUrl`: A `string` download URL, or `void` if no storage reference is supplied
+- `downloadUrl`: A `string` download URL, or `undefined` if no storage reference is supplied
 - `loading`: A `boolean` to indicate whether the the download URL is still being loaded
-- `error`: Any `firebase.FirebaseError` returned by Firebase when trying to load the user, or `void` if there is no error
+- `error`: Any `firebase.FirebaseError` returned by Firebase when trying to load the user, or `undefined` if there is no error
 
 #### Full example
 

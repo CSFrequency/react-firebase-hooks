@@ -8,7 +8,7 @@ export const snapshotToData = (
   keyField?: string
 ) => {
   if (!snapshot.exists) {
-    return null;
+    return undefined;
   }
 
   const val = snapshot.val();

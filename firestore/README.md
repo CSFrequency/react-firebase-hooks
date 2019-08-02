@@ -47,9 +47,9 @@ The `useCollection` hook takes the following parameters:
 
 Returns:
 
-- `snapshot`: a `firebase.firestore.QuerySnapshot`, or `void` if no query is supplied
+- `snapshot`: a `firebase.firestore.QuerySnapshot`, or `undefined` if no query is supplied
 - `loading`: a `boolean` to indicate if the data is still being loaded
-- `error`: Any `Error` returned by Firebase when trying to load the data, or `void` if there is no error
+- `error`: Any `Error` returned by Firebase when trying to load the data, or `undefined` if there is no error
 
 #### Full example
 
@@ -100,9 +100,9 @@ The `useCollectionOnce` hook takes the following parameters:
 
 Returns:
 
-- `snapshot`: a `firebase.firestore.QuerySnapshot`, or `void` if no query is supplied
+- `snapshot`: a `firebase.firestore.QuerySnapshot`, or `undefined` if no query is supplied
 - `loading`: a `boolean` to indicate if the data is still being loaded
-- `error`: Any `Error` returned by Firebase when trying to load the data, or `void` if there is no error
+- `error`: Any `Error` returned by Firebase when trying to load the data, or `undefined` if there is no error
 
 ### useCollectionData
 
@@ -122,9 +122,9 @@ The `useCollectionData` hook takes the following parameters:
 
 Returns:
 
-- `values`: an array of `T`, or `void` if no query is supplied
+- `values`: an array of `T`, or `undefined` if no query is supplied
 - `loading`: a `boolean` to indicate if the data is still being loaded
-- `error`: Any `Error` returned by Firebase when trying to load the data, or `void` if there is no error
+- `error`: Any `Error` returned by Firebase when trying to load the data, or `undefined` if there is no error
 
 ### useCollectionDataOnce
 
@@ -143,9 +143,9 @@ The `useCollectionDataOnce` hook takes the following parameters:
 
 Returns:
 
-- `values`: an array of `T`, or `void` if no query is supplied
+- `values`: an array of `T`, or `undefined` if no query is supplied
 - `loading`: a `boolean` to indicate if the data is still being loaded
-- `error`: Any `Error` returned by Firebase when trying to load the data, or `void` if there is no error
+- `error`: Any `Error` returned by Firebase when trying to load the data, or `undefined` if there is no error
 
 ### useDocument
 
@@ -163,9 +163,9 @@ The `useDocument` hook takes the following parameters:
 
 Returns:
 
-- `snapshot`: a `firebase.firestore.DocumentSnapshot`, or `void` if no query is supplied
+- `snapshot`: a `firebase.firestore.DocumentSnapshot`, or `undefined` if no query is supplied
 - `loading`: a `boolean` to indicate if the data is still being loaded
-- `error`: Any `Error` returned by Firebase when trying to load the data, or `void` if there is no error
+- `error`: Any `Error` returned by Firebase when trying to load the data, or `undefined` if there is no error
 
 #### Full example
 
@@ -207,9 +207,9 @@ The `useDocumentOnce` hook takes the following parameters:
 
 Returns:
 
-- `snapshot`: a `firebase.firestore.DocumentSnapshot`, or `void` if no reference is supplied
+- `snapshot`: a `firebase.firestore.DocumentSnapshot`, or `undefined` if no reference is supplied
 - `loading`: a `boolean` to indicate if the data is still being loaded
-- `error`: Any `Error` returned by Firebase when trying to load the data, or `void` if there is no error
+- `error`: Any `Error` returned by Firebase when trying to load the data, or `undefined` if there is no error
 
 ### useDocumentData
 
@@ -229,9 +229,9 @@ The `useDocumentData` hook takes the following parameters:
 
 Returns:
 
-- `value`: `T`, or `void` if no query is supplied
+- `value`: `T`, or `undefined` if no query is supplied
 - `loading`: a `boolean` to indicate if the data is still being loaded
-- `error`: Any `Error` returned by Firebase when trying to load the data, or `void` if there is no error
+- `error`: Any `Error` returned by Firebase when trying to load the data, or `undefined` if there is no error
 
 ### useDocumentDataOnce
 
@@ -250,6 +250,6 @@ The `useDocumentDataOnce` hook takes the following parameters:
 
 Returns:
 
-- `value`: `T`, or `void` if no query is supplied
+- `value`: `T`, or `undefined` if no query is supplied
 - `loading`: a `boolean` to indicate if the data is still being loaded
-- `error`: Any `Error` returned by Firebase when trying to load the data, or `void` if there is no error
+- `error`: Any `Error` returned by Firebase when trying to load the data, or `undefined` if there is no error
