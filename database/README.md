@@ -45,6 +45,7 @@ import { useList } from 'react-firebase-hooks/database';
 
 const DatabaseList = () => {
   const [snapshots, loading, error] = useList(firebase.database().ref('list'));
+  const value = snapshots.val()
 
   return (
     <div>
