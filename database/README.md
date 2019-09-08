@@ -17,7 +17,7 @@ List of Realtime Database hooks:
 - [useList](#uselistref)
 - [useListKeys](#uselistkeys)
 - [useListVals](#uselistvals)
-- [useObject](#useobjectref)
+- [useObject](#useobject)
 - [useObjectVal](#useobjectval)
 
 ### useList
