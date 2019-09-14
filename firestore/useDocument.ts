@@ -1,5 +1,5 @@
 import { firestore } from 'firebase';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { snapshotToData } from './helpers';
 import { LoadingHook, useIsEqualRef, useLoadingValue } from '../util';
 
@@ -54,12 +54,12 @@ export const useDocumentData = <T>(
   const snapshotListenOptions = options
     ? options.snapshotListenOptions
     : undefined;
-  const [value, loading, error] = useDocument(docRef, {
+  const [snapshot, loading, error] = useDocument(docRef, {
     snapshotListenOptions,
   });
-  return [
-    (value ? snapshotToData(value, idField) : undefined) as T,
-    loading,
-    error,
-  ];
+  const value = useMemo(
+    () => (snapshot ? snapshotToData(snapshot, idField) : undefined) as T,
+    [snapshot, idField]
+  );
+  return [value, loading, error];
 };

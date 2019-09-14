@@ -1,5 +1,5 @@
 import { database, FirebaseError } from 'firebase';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { snapshotToData } from './helpers';
 import { LoadingHook, useIsEqualRef, useLoadingValue } from '../util';
 
@@ -39,12 +39,13 @@ export const useObjectVal = <T>(
     keyField?: string;
   }
 ): ObjectValHook<T> => {
-  const [value, loading, error] = useObject(query);
-  return [
-    value
-      ? snapshotToData(value, options ? options.keyField : undefined)
-      : undefined,
-    loading,
-    error,
-  ];
+  const [snapshot, loading, error] = useObject(query);
+  const value = useMemo(
+    () =>
+      snapshot
+        ? snapshotToData(snapshot, options ? options.keyField : undefined)
+        : undefined,
+    [snapshot, options && options.keyField]
+  );
+  return [value, loading, error];
 };

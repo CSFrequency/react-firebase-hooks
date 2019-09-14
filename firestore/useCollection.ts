@@ -1,5 +1,5 @@
 import { firestore } from 'firebase';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { snapshotToData } from './helpers';
 import { LoadingHook, useIsEqualRef, useLoadingValue } from '../util';
 
@@ -54,14 +54,15 @@ export const useCollectionData = <T>(
   const snapshotListenOptions = options
     ? options.snapshotListenOptions
     : undefined;
-  const [value, loading, error] = useCollection(query, {
+  const [snapshot, loading, error] = useCollection(query, {
     snapshotListenOptions,
   });
-  return [
-    (value
-      ? value.docs.map(doc => snapshotToData(doc, idField))
-      : undefined) as T[],
-    loading,
-    error,
-  ];
+  const values = useMemo(
+    () =>
+      (snapshot
+        ? snapshot.docs.map(doc => snapshotToData(doc, idField))
+        : undefined) as T[],
+    [snapshot, idField]
+  );
+  return [values, loading, error];
 };
