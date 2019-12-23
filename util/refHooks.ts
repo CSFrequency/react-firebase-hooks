@@ -17,7 +17,7 @@ export const useComparatorRef = <T>(
         onChange();
       }
     }
-  });
+  }, [value, isEqual, ref, onChange]);
   return ref;
 };
 
