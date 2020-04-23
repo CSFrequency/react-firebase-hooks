@@ -36,7 +36,7 @@ Returns:
 import { useAuthState } from 'react-firebase-hooks/auth';
 
 const CurrentUser = () => {
-  const [user, initialising, error] = useAuthState(firebase.auth());
+  const [user, loading, error] = useAuthState(firebase.auth());
   const login = () => {
     firebase.auth().signInWithEmailAndPassword('test@test.com', 'password');
   };
