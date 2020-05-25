@@ -35,14 +35,15 @@ Returns:
 ```js
 import { useAuthState } from 'react-firebase-hooks/auth';
 
+const login = () => {
+  firebase.auth().signInWithEmailAndPassword('test@test.com', 'password');
+};
+const logout = () => {
+  firebase.auth().signOut();
+};
+
 const CurrentUser = () => {
   const [user, loading, error] = useAuthState(firebase.auth());
-  const login = () => {
-    firebase.auth().signInWithEmailAndPassword('test@test.com', 'password');
-  };
-  const logout = () => {
-    firebase.auth().signOut();
-  };
 
   if (loading) {
     return (
