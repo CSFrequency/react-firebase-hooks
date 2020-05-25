@@ -44,7 +44,7 @@ const CurrentUser = () => {
     firebase.auth().signOut();
   };
 
-  if (initialising) {
+  if (loading) {
     return (
       <div>
         <p>Initialising User...</p>
