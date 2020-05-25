@@ -1,5 +1,5 @@
 import { database, FirebaseError } from 'firebase';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { snapshotToData } from './helpers';
 import useListReducer from './helpers/useListReducer';
 import { LoadingHook, useIsEqualRef } from '../util';
@@ -82,14 +82,15 @@ export const useListVals = <T>(
     keyField?: string;
   }
 ): ListValsHook<T> => {
-  const [value, loading, error] = useList(query);
-  return [
-    value
-      ? value.map(snapshot =>
-          snapshotToData(snapshot, options ? options.keyField : undefined)
-        )
-      : undefined,
-    loading,
-    error,
-  ];
+  const [snapshots, loading, error] = useList(query);
+  const values = useMemo(
+    () =>
+      snapshots
+        ? snapshots.map(snapshot =>
+            snapshotToData(snapshot, options ? options.keyField : undefined)
+          )
+        : undefined,
+    [snapshots, options && options.keyField]
+  );
+  return [values, loading, error];
 };
