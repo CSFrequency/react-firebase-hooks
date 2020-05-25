@@ -18,16 +18,19 @@ export const useCollectionOnce = (
   >();
   const ref = useIsEqualRef(query, reset);
 
-  useEffect(() => {
-    if (!ref.current) {
-      reset();
-      return;
-    }
-    ref.current
-      .get(options ? options.getOptions : undefined)
-      .then(setValue)
-      .catch(setError);
-  }, [ref.current]);
+  useEffect(
+    () => {
+      if (!ref.current) {
+        setValue(undefined);
+        return;
+      }
+      ref.current
+        .get(options ? options.getOptions : undefined)
+        .then(setValue)
+        .catch(setError);
+    },
+    [ref.current]
+  );
 
   return [value, loading, error];
 };
