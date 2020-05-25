@@ -51,11 +51,11 @@ const DatabaseList = () => {
       <p>
         {error && <strong>Error: {error}</strong>}
         {loading && <span>List: Loading...</span>}
-        {!loading && value && (
+        {!loading && snapshots && (
           <React.Fragment>
             <span>
               List:{' '}
-              {value.map(v => (
+              {snapshots.map((v) => (
                 <React.Fragment key={v.key}>{v.val()}, </React.Fragment>
               ))}
             </span>
