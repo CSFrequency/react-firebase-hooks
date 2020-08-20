@@ -1,5 +1,5 @@
 import { firestore } from 'firebase';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { snapshotToData } from './helpers';
 import { LoadingHook, useIsEqualRef, useLoadingValue } from '../util';
 
@@ -32,7 +32,11 @@ export const useCollectionOnce = (
     [ref.current]
   );
 
-  return [value, loading, error];
+  const resArray: CollectionOnceHook = [value, loading, error];
+  return useMemo(
+    () => resArray,
+    resArray,
+  );
 };
 
 export const useCollectionDataOnce = <T>(
@@ -45,11 +49,15 @@ export const useCollectionDataOnce = <T>(
   const idField = options ? options.idField : undefined;
   const getOptions = options ? options.getOptions : undefined;
   const [value, loading, error] = useCollectionOnce(query, { getOptions });
-  return [
+  const resArray: CollectionDataOnceHook<T> = [
     (value
       ? value.docs.map(doc => snapshotToData(doc, idField))
       : undefined) as T[],
     loading,
     error,
   ];
+  return useMemo(
+    () => resArray,
+    resArray,
+  );
 };

@@ -40,7 +40,11 @@ export const useDocument = (
     [ref.current]
   );
 
-  return [value, loading, error];
+  const resArray: DocumentHook = [value, loading, error];
+  return useMemo(
+    () => resArray,
+    resArray,
+  );
 };
 
 export const useDocumentData = <T>(
@@ -61,5 +65,10 @@ export const useDocumentData = <T>(
     () => (snapshot ? snapshotToData(snapshot, idField) : undefined) as T,
     [snapshot, idField]
   );
-  return [value, loading, error];
+
+  const resArray: DocumentDataHook<T> = [value, loading, error];
+  return useMemo(
+    () => resArray,
+    resArray,
+  );
 };

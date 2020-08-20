@@ -64,16 +64,25 @@ export const useList = (query?: database.Query | null): ListHook => {
     };
   }, [ref.current]);
 
-  return [state.value.values, state.loading, state.error];
+  const resArray: ListHook = [state.value.values, state.loading, state.error];
+  return useMemo(
+    () => resArray,
+    resArray,
+  );
 };
 
 export const useListKeys = (query?: database.Query | null): ListKeysHook => {
   const [value, loading, error] = useList(query);
-  return [
+  const resArray: ListKeysHook = [
     value ? value.map(snapshot => snapshot.key as string) : undefined,
     loading,
     error,
   ];
+
+  return useMemo(
+    () => resArray,
+    resArray,
+  );
 };
 
 export const useListVals = <T>(
@@ -92,5 +101,10 @@ export const useListVals = <T>(
         : undefined,
     [snapshots, options && options.keyField]
   );
-  return [values, loading, error];
+
+  const resArray: ListValsHook<T> = [values, loading, error];
+  return useMemo(
+    () => resArray,
+    resArray,
+  );
 };

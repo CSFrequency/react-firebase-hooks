@@ -30,7 +30,11 @@ export const useObject = (query?: database.Query | null): ObjectHook => {
     [ref.current]
   );
 
-  return [value, loading, error];
+  const resArray: ObjectHook = [value, loading, error];
+  return useMemo(
+    () => resArray,
+    resArray,
+  );
 };
 
 export const useObjectVal = <T>(
@@ -47,5 +51,10 @@ export const useObjectVal = <T>(
         : undefined,
     [snapshot, options && options.keyField]
   );
-  return [value, loading, error];
+
+  const resArray: ObjectValHook<T> = [value, loading, error];
+  return useMemo(
+    () => resArray,
+    resArray,
+  );
 };

@@ -1,5 +1,5 @@
 import { auth, User } from 'firebase';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { LoadingHook, useLoadingValue } from '../util';
 
 export type AuthStateHook = LoadingHook<User, auth.Error>;
@@ -21,5 +21,9 @@ export default (auth: auth.Auth): AuthStateHook => {
     [auth]
   );
 
-  return [value, loading, error];
+  const resArray:AuthStateHook = [value, loading, error]
+  return useMemo<AuthStateHook>(
+    () => resArray,
+    resArray,
+  );
 };
