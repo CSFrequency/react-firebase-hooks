@@ -48,11 +48,15 @@ export const useCollectionDataOnce = <T>(
 ): CollectionDataOnceHook<T> => {
   const idField = options ? options.idField : undefined;
   const getOptions = options ? options.getOptions : undefined;
-  const [value, loading, error] = useCollectionOnce(query, { getOptions });
-  const resArray: CollectionDataOnceHook<T> = [
-    (value
-      ? value.docs.map(doc => snapshotToData(doc, idField))
+  const [snapshots, loading, error] = useCollectionOnce(query, { getOptions });
+  const values = useMemo(
+    () => (snapshots
+      ? snapshots.docs.map(doc => snapshotToData(doc, idField))
       : undefined) as T[],
+    [snapshots, idField]
+  );
+  const resArray: CollectionDataOnceHook<T> = [
+    values,
     loading,
     error,
   ];

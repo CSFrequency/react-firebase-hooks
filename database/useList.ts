@@ -72,9 +72,13 @@ export const useList = (query?: database.Query | null): ListHook => {
 };
 
 export const useListKeys = (query?: database.Query | null): ListKeysHook => {
-  const [value, loading, error] = useList(query);
+  const [snapshots, loading, error] = useList(query);
+  const values = useMemo(
+    () => (snapshots ? snapshots.map(snapshot => snapshot.key as string) : undefined),
+    [snapshots]
+  );
   const resArray: ListKeysHook = [
-    value ? value.map(snapshot => snapshot.key as string) : undefined,
+    values,
     loading,
     error,
   ];
