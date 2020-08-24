@@ -47,10 +47,12 @@ export const useDocumentData = <T>(
   docRef?: firestore.DocumentReference | null,
   options?: {
     idField?: string;
+    refField?: string;
     snapshotListenOptions?: firestore.SnapshotListenOptions;
   }
 ): DocumentDataHook<T> => {
   const idField = options ? options.idField : undefined;
+  const refField = options ? options.refField : undefined;
   const snapshotListenOptions = options
     ? options.snapshotListenOptions
     : undefined;
@@ -58,8 +60,8 @@ export const useDocumentData = <T>(
     snapshotListenOptions,
   });
   const value = useMemo(
-    () => (snapshot ? snapshotToData(snapshot, idField) : undefined) as T,
-    [snapshot, idField]
+    () => (snapshot ? snapshotToData(snapshot, idField, refField) : undefined) as T,
+    [snapshot, idField, refField]
   );
   return [value, loading, error];
 };

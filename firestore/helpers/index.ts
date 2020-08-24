@@ -2,7 +2,8 @@ import { firestore } from 'firebase';
 
 export const snapshotToData = (
   snapshot: firestore.DocumentSnapshot,
-  idField?: string
+  idField?: string,
+  refField?: string,
 ) => {
   if (!snapshot.exists) {
     return undefined;
@@ -11,5 +12,6 @@ export const snapshotToData = (
   return {
     ...snapshot.data(),
     ...(idField ? { [idField]: snapshot.id } : null),
+    ...(refField ? { [refField]: snapshot.ref } : null),
   };
 };

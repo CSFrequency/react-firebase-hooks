@@ -40,13 +40,15 @@ export const useDocumentDataOnce = <T>(
   options?: {
     getOptions?: firestore.GetOptions;
     idField?: string;
+    refField?: string;
   }
 ): DocumentDataOnceHook<T> => {
   const idField = options ? options.idField : undefined;
+  const refField = options ? options.refField : undefined;
   const getOptions = options ? options.getOptions : undefined;
   const [value, loading, error] = useDocumentOnce(docRef, { getOptions });
   return [
-    (value ? snapshotToData(value, idField) : undefined) as T,
+    (value ? snapshotToData(value, idField, refField) : undefined) as T,
     loading,
     error,
   ];

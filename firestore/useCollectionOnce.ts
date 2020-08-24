@@ -40,14 +40,16 @@ export const useCollectionDataOnce = <T>(
   options?: {
     getOptions?: firestore.GetOptions;
     idField?: string;
+    refField?: string;
   }
 ): CollectionDataOnceHook<T> => {
   const idField = options ? options.idField : undefined;
+  const refField = options ? options.refField : undefined;
   const getOptions = options ? options.getOptions : undefined;
   const [value, loading, error] = useCollectionOnce(query, { getOptions });
   return [
     (value
-      ? value.docs.map(doc => snapshotToData(doc, idField))
+      ? value.docs.map(doc => snapshotToData(doc, idField, refField))
       : undefined) as T[],
     loading,
     error,
