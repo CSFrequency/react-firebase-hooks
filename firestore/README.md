@@ -14,7 +14,7 @@ There are 2 variants of each hook:
 
 All hooks can be imported from `react-firebase-hooks/firestore`, e.g.
 
-```
+```js
 import { useCollection } from 'react-firebase-hooks/firestore';
 ```
 
@@ -31,7 +31,7 @@ List of Cloud Firestore hooks:
 
 ### useCollection
 
-```
+```js
 const [snapshot, loading, error] = useCollection(query, options);
 ```
 
@@ -86,7 +86,7 @@ const FirestoreCollection = () => {
 
 ### useCollectionOnce
 
-```
+```js
 const [snapshot, loading, error] = useCollectionOnce(query, options);
 ```
 
@@ -106,7 +106,7 @@ Returns:
 
 ### useCollectionData
 
-```
+```js
 const [values, loading, error] = useCollectionData<T>(query, options);
 ```
 
@@ -128,7 +128,7 @@ Returns:
 
 ### useCollectionDataOnce
 
-```
+```js
 const [values, loading, error] = useCollectionDataOnce<T>(query, options);
 ```
 
@@ -149,7 +149,7 @@ Returns:
 
 ### useDocument
 
-```
+```js
 const [snapshot, loading, error] = useDocument(reference, options);
 ```
 
@@ -193,7 +193,7 @@ const FirestoreDocument = () => {
 
 ### useDocumentOnce
 
-```
+```js
 const [snapshot, loading, error] = useDocumentOnce(reference, options);
 ```
 
@@ -213,7 +213,7 @@ Returns:
 
 ### useDocumentData
 
-```
+```js
 const [value, loading, error] = useDocumentData<T>(reference, options);
 ```
 
@@ -235,7 +235,7 @@ Returns:
 
 ### useDocumentDataOnce
 
-```
+```js
 const [value, loading, error] = useDocumentDataOnce<T>(reference, options);
 ```
 
