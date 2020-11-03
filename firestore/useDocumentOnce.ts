@@ -1,19 +1,19 @@
-import { firestore } from 'firebase';
+import firebase from 'firebase/app';
 import { useEffect } from 'react';
 import { snapshotToData } from './helpers';
 import { LoadingHook, useIsEqualRef, useLoadingValue } from '../util';
 
-export type DocumentOnceHook = LoadingHook<firestore.DocumentSnapshot, Error>;
+export type DocumentOnceHook = LoadingHook<firebase.firestore.DocumentSnapshot, Error>;
 export type DocumentDataOnceHook<T> = LoadingHook<T, Error>;
 
 export const useDocumentOnce = (
-  docRef?: firestore.DocumentReference | null,
+  docRef?: firebase.firestore.DocumentReference | null,
   options?: {
-    getOptions?: firestore.GetOptions;
+    getOptions?: firebase.firestore.GetOptions;
   }
 ): DocumentOnceHook => {
   const { error, loading, reset, setError, setValue, value } = useLoadingValue<
-    firestore.DocumentSnapshot,
+    firebase.firestore.DocumentSnapshot,
     Error
   >();
   const ref = useIsEqualRef(docRef, reset);
@@ -36,9 +36,9 @@ export const useDocumentOnce = (
 };
 
 export const useDocumentDataOnce = <T>(
-  docRef?: firestore.DocumentReference | null,
+  docRef?: firebase.firestore.DocumentReference | null,
   options?: {
-    getOptions?: firestore.GetOptions;
+    getOptions?: firebase.firestore.GetOptions;
     idField?: string;
   }
 ): DocumentDataOnceHook<T> => {
