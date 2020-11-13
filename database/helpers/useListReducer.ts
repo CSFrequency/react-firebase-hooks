@@ -127,7 +127,7 @@ const listReducer = (
 
 const addChild = (
   currentState: KeyValueState,
-  snapshot: firebase.database.DataSnapshot,
+  snapshot: database.DataSnapshot,
   previousKey?: string | null
 ): KeyValueState => {
   if (!snapshot.key) {
@@ -157,7 +157,7 @@ const addChild = (
 
 const changeChild = (
   currentState: KeyValueState,
-  snapshot: firebase.database.DataSnapshot
+  snapshot: database.DataSnapshot
 ): KeyValueState => {
   if (!snapshot.key) {
     return currentState;
@@ -174,7 +174,7 @@ const changeChild = (
 
 const removeChild = (
   currentState: KeyValueState,
-  snapshot: firebase.database.DataSnapshot
+  snapshot: database.DataSnapshot
 ): KeyValueState => {
   if (!snapshot.key) {
     return currentState;
@@ -192,7 +192,7 @@ const removeChild = (
 
 const moveChild = (
   currentState: KeyValueState,
-  snapshot: firebase.database.DataSnapshot,
+  snapshot: database.DataSnapshot,
   previousKey?: string | null
 ): KeyValueState => {
   // Remove the child from it's previous location
