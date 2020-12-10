@@ -75,7 +75,7 @@ export const useList = (query?: firebase.database.Query | null): ListHook => {
 };
 
 export const useListKeys = (
-  query?: database.Query | null
+  query?: firebase.database.Query | null
 ): ListKeysHook => {
   const [snapshots, loading, error] = useList(query);
   const values = useMemo(
