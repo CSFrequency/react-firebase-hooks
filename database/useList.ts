@@ -1,10 +1,13 @@
-import firebase from 'firebase';
+import firebase from 'firebase/app';
 import { useEffect, useMemo } from 'react';
 import { snapshotToData } from './helpers';
 import useListReducer from './helpers/useListReducer';
 import { LoadingHook, useIsEqualRef } from '../util';
 
-export type ListHook = LoadingHook<firebase.database.DataSnapshot[], firebase.FirebaseError>;
+export type ListHook = LoadingHook<
+  firebase.database.DataSnapshot[],
+  firebase.FirebaseError
+>;
 export type ListKeysHook = LoadingHook<string[], firebase.FirebaseError>;
 export type ListValsHook<T> = LoadingHook<T[], firebase.FirebaseError>;
 
@@ -67,10 +70,12 @@ export const useList = (query?: firebase.database.Query | null): ListHook => {
   return [state.value.values, state.loading, state.error];
 };
 
-export const useListKeys = (query?: firebase.database.Query | null): ListKeysHook => {
+export const useListKeys = (
+  query?: firebase.database.Query | null
+): ListKeysHook => {
   const [value, loading, error] = useList(query);
   return [
-    value ? value.map(snapshot => snapshot.key as string) : undefined,
+    value ? value.map((snapshot) => snapshot.key as string) : undefined,
     loading,
     error,
   ];
@@ -86,7 +91,7 @@ export const useListVals = <T>(
   const values = useMemo(
     () =>
       snapshots
-        ? snapshots.map(snapshot =>
+        ? snapshots.map((snapshot) =>
             snapshotToData(snapshot, options ? options.keyField : undefined)
           )
         : undefined,

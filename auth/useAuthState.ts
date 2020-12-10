@@ -10,16 +10,13 @@ export default (auth: firebase.auth.Auth): AuthStateHook => {
     firebase.auth.Error
   >(() => auth.currentUser);
 
-  useEffect(
-    () => {
-      const listener = auth.onAuthStateChanged(setValue, setError);
+  useEffect(() => {
+    const listener = auth.onAuthStateChanged(setValue, setError);
 
-      return () => {
-        listener();
-      };
-    },
-    [auth]
-  );
+    return () => {
+      listener();
+    };
+  }, [auth]);
 
   return [value, loading, error];
 };

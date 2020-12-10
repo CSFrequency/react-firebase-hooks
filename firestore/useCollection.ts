@@ -3,7 +3,10 @@ import { useEffect, useMemo } from 'react';
 import { snapshotToData } from './helpers';
 import { LoadingHook, useIsEqualRef, useLoadingValue } from '../util';
 
-export type CollectionHook = LoadingHook<firebase.firestore.QuerySnapshot, Error>;
+export type CollectionHook = LoadingHook<
+  firebase.firestore.QuerySnapshot,
+  Error
+>;
 export type CollectionDataHook<T> = LoadingHook<T[], Error>;
 
 export const useCollection = (
@@ -18,27 +21,24 @@ export const useCollection = (
   >();
   const ref = useIsEqualRef(query, reset);
 
-  useEffect(
-    () => {
-      if (!ref.current) {
-        setValue(undefined);
-        return;
-      }
-      const listener =
-        options && options.snapshotListenOptions
-          ? ref.current.onSnapshot(
-              options.snapshotListenOptions,
-              setValue,
-              setError
-            )
-          : ref.current.onSnapshot(setValue, setError);
+  useEffect(() => {
+    if (!ref.current) {
+      setValue(undefined);
+      return;
+    }
+    const listener =
+      options && options.snapshotListenOptions
+        ? ref.current.onSnapshot(
+            options.snapshotListenOptions,
+            setValue,
+            setError
+          )
+        : ref.current.onSnapshot(setValue, setError);
 
-      return () => {
-        listener();
-      };
-    },
-    [ref.current]
-  );
+    return () => {
+      listener();
+    };
+  }, [ref.current]);
 
   return [value, loading, error];
 };
@@ -60,7 +60,7 @@ export const useCollectionData = <T>(
   const values = useMemo(
     () =>
       (snapshot
-        ? snapshot.docs.map(doc => snapshotToData(doc, idField))
+        ? snapshot.docs.map((doc) => snapshotToData(doc, idField))
         : undefined) as T[],
     [snapshot, idField]
   );

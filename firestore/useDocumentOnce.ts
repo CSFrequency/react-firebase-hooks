@@ -3,7 +3,10 @@ import { useEffect } from 'react';
 import { snapshotToData } from './helpers';
 import { LoadingHook, useIsEqualRef, useLoadingValue } from '../util';
 
-export type DocumentOnceHook = LoadingHook<firebase.firestore.DocumentSnapshot, Error>;
+export type DocumentOnceHook = LoadingHook<
+  firebase.firestore.DocumentSnapshot,
+  Error
+>;
 export type DocumentDataOnceHook<T> = LoadingHook<T, Error>;
 
 export const useDocumentOnce = (
@@ -18,19 +21,16 @@ export const useDocumentOnce = (
   >();
   const ref = useIsEqualRef(docRef, reset);
 
-  useEffect(
-    () => {
-      if (!ref.current) {
-        setValue(undefined);
-        return;
-      }
-      ref.current
-        .get(options ? options.getOptions : undefined)
-        .then(setValue)
-        .catch(setError);
-    },
-    [ref.current]
-  );
+  useEffect(() => {
+    if (!ref.current) {
+      setValue(undefined);
+      return;
+    }
+    ref.current
+      .get(options ? options.getOptions : undefined)
+      .then(setValue)
+      .catch(setError);
+  }, [ref.current]);
 
   return [value, loading, error];
 };

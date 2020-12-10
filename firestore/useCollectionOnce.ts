@@ -3,7 +3,10 @@ import { useEffect } from 'react';
 import { snapshotToData } from './helpers';
 import { LoadingHook, useIsEqualRef, useLoadingValue } from '../util';
 
-export type CollectionOnceHook = LoadingHook<firebase.firestore.QuerySnapshot, Error>;
+export type CollectionOnceHook = LoadingHook<
+  firebase.firestore.QuerySnapshot,
+  Error
+>;
 export type CollectionDataOnceHook<T> = LoadingHook<T[], Error>;
 
 export const useCollectionOnce = (
@@ -18,19 +21,16 @@ export const useCollectionOnce = (
   >();
   const ref = useIsEqualRef(query, reset);
 
-  useEffect(
-    () => {
-      if (!ref.current) {
-        setValue(undefined);
-        return;
-      }
-      ref.current
-        .get(options ? options.getOptions : undefined)
-        .then(setValue)
-        .catch(setError);
-    },
-    [ref.current]
-  );
+  useEffect(() => {
+    if (!ref.current) {
+      setValue(undefined);
+      return;
+    }
+    ref.current
+      .get(options ? options.getOptions : undefined)
+      .then(setValue)
+      .catch(setError);
+  }, [ref.current]);
 
   return [value, loading, error];
 };
@@ -47,7 +47,7 @@ export const useCollectionDataOnce = <T>(
   const [value, loading, error] = useCollectionOnce(query, { getOptions });
   return [
     (value
-      ? value.docs.map(doc => snapshotToData(doc, idField))
+      ? value.docs.map((doc) => snapshotToData(doc, idField))
       : undefined) as T[],
     loading,
     error,
