@@ -67,18 +67,31 @@ export const useList = (query?: firebase.database.Query | null): ListHook => {
     };
   }, [ref.current]);
 
-  return [state.value.values, state.loading, state.error];
+  const resArray: ListHook = [state.value.values, state.loading, state.error];
+  return useMemo(
+    () => resArray,
+    resArray,
+  );
 };
 
 export const useListKeys = (
   query?: firebase.database.Query | null
 ): ListKeysHook => {
-  const [value, loading, error] = useList(query);
-  return [
-    value ? value.map((snapshot) => snapshot.key as string) : undefined,
+  const [snapshots, loading, error] = useList(query);
+  const values = useMemo(
+    () => (snapshots ? snapshots.map(snapshot => snapshot.key as string) : undefined),
+    [snapshots]
+  );
+  const resArray: ListKeysHook = [
+    values,
     loading,
     error,
   ];
+
+  return useMemo(
+    () => resArray,
+    resArray,
+  );
 };
 
 export const useListVals = <T>(
@@ -97,5 +110,10 @@ export const useListVals = <T>(
         : undefined,
     [snapshots, options && options.keyField]
   );
-  return [values, loading, error];
+
+  const resArray: ListValsHook<T> = [values, loading, error];
+  return useMemo(
+    () => resArray,
+    resArray,
+  );
 };

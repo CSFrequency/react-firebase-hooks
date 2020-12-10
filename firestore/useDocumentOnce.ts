@@ -1,5 +1,5 @@
 import firebase from 'firebase/app';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { snapshotToData } from './helpers';
 import { LoadingHook, useIsEqualRef, useLoadingValue } from '../util';
 
@@ -32,7 +32,11 @@ export const useDocumentOnce = (
       .catch(setError);
   }, [ref.current]);
 
-  return [value, loading, error];
+  const resArray: DocumentOnceHook = [value, loading, error]
+  return useMemo(
+    () => resArray,
+    resArray,
+  );
 };
 
 export const useDocumentDataOnce = <T>(
@@ -44,10 +48,15 @@ export const useDocumentDataOnce = <T>(
 ): DocumentDataOnceHook<T> => {
   const idField = options ? options.idField : undefined;
   const getOptions = options ? options.getOptions : undefined;
-  const [value, loading, error] = useDocumentOnce(docRef, { getOptions });
-  return [
-    (value ? snapshotToData(value, idField) : undefined) as T,
-    loading,
-    error,
-  ];
+  const [snapshot, loading, error] = useDocumentOnce(docRef, { getOptions });
+  const value = useMemo(
+    () => (snapshot ? snapshotToData(snapshot, idField) : undefined) as T,
+    [snapshot, idField]
+  );
+
+  const resArray: DocumentDataOnceHook<T> = [value, loading, error]
+  return useMemo(
+    () => resArray,
+    resArray,
+  );
 };

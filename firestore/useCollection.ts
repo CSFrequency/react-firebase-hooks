@@ -40,7 +40,11 @@ export const useCollection = (
     };
   }, [ref.current]);
 
-  return [value, loading, error];
+  const resArray: CollectionHook = [value, loading, error];
+  return useMemo(
+    () => resArray,
+    resArray,
+  );
 };
 
 export const useCollectionData = <T>(
@@ -54,15 +58,19 @@ export const useCollectionData = <T>(
   const snapshotListenOptions = options
     ? options.snapshotListenOptions
     : undefined;
-  const [snapshot, loading, error] = useCollection(query, {
+  const [snapshots, loading, error] = useCollection(query, {
     snapshotListenOptions,
   });
   const values = useMemo(
-    () =>
-      (snapshot
-        ? snapshot.docs.map((doc) => snapshotToData(doc, idField))
-        : undefined) as T[],
-    [snapshot, idField]
+    () => (snapshots
+      ? snapshots.docs.map(doc => snapshotToData(doc, idField))
+      : undefined) as T[],
+    [snapshots, idField]
   );
-  return [values, loading, error];
+
+  const resArray: CollectionDataHook<T> = [values, loading, error]
+  return useMemo(
+    () => resArray,
+    resArray,
+  );
 };
