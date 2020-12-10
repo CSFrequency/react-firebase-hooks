@@ -31,6 +31,7 @@ declare export function useCollectionData<T>(
   query?: Query | null,
   options?: {
     idField?: string,
+    refField?: string,
     snapshotListenOptions?: SnapshotListenOptions,
   }
 ): CollectionDataHook<T>;
@@ -39,6 +40,7 @@ declare export function useCollectionDataOnce<T>(
   options?: {
     getOptions?: GetOptions,
     idField?: string,
+    refField?: string,
   }
 ): CollectionDataHook<T>;
 declare export function useDocument(
@@ -57,6 +59,7 @@ declare export function useDocumentData<T>(
   ref?: DocumentReference | null,
   options?: {
     idField?: string,
+    refField?: string,
     snapshotListenOptions?: SnapshotListenOptions,
   }
 ): DocumentDataHook<T>;
@@ -65,5 +68,6 @@ declare export function useDocumentDataOnce<T>(
   options?: {
     getOptions?: GetOptions,
     idField?: string,
+    refField?: string,
   }
 ): DocumentDataHook<T>;

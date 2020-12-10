@@ -45,14 +45,16 @@ export const useDocumentDataOnce = <T>(
   options?: {
     getOptions?: firebase.firestore.GetOptions;
     idField?: string;
+    refField?: string;
   }
 ): DocumentDataOnceHook<T> => {
   const idField = options ? options.idField : undefined;
+  const refField = options ? options.refField : undefined;
   const getOptions = options ? options.getOptions : undefined;
   const [snapshot, loading, error] = useDocumentOnce<T>(docRef, { getOptions });
   const value = useMemo(
-    () => (snapshot ? snapshotToData(snapshot, idField) : undefined) as T,
-    [snapshot, idField]
+    () => (snapshot ? snapshotToData(snapshot, idField, refField) : undefined) as T,
+    [snapshot, idField, refField]
   );
 
   const resArray: DocumentDataOnceHook<T> = [value, loading, error];

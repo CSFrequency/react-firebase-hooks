@@ -118,6 +118,7 @@ The `useCollectionData` hook takes the following parameters:
 - `query`: (optional) `firebase.firestore.Query` for the data you would like to load
 - `options`: (optional) `Object` with the following parameters:
   - `idField`: (optional) name of the field that should be populated with the `firebase.firestore.QuerySnapshot.id` property.
+  - `refField`: (optional) name of the field that should be populated with the `firebase.firestore.QuerySnapshot.ref` property.
   - `snapshotListenOptions`: (optional) `firebase.firestore.SnapshotListenOptions` to customise how the collection is loaded
 
 Returns:
@@ -140,6 +141,7 @@ The `useCollectionDataOnce` hook takes the following parameters:
 - `options`: (optional) `Object` with the following parameters:
   - `getOptions`: (optional) `firebase.firestore.GetOptions` to customise how the collection is loaded
   - `idField`: (optional) name of the field that should be populated with the `firebase.firestore.QuerySnapshot.id` property.
+  - `refField`: (optional) name of the field that should be populated with the `firebase.firestore.QuerySnapshot.ref` property.
 
 Returns:
 
@@ -225,6 +227,7 @@ The `useDocumentData` hook takes the following parameters:
 - `reference`: (optional) `firebase.firestore.DocumentReference` for the data you would like to load
 - `options`: (optional) `Object` with the following parameters:
   - `idField`: (optional) name of the field that should be populated with the `firebase.firestore.DocumentSnapshot.id` property.
+  - `refField`: (optional) name of the field that should be populated with the `firebase.firestore.QuerySnapshot.ref` property.
   - `snapshotListenOptions`: (optional) `firebase.firestore.SnapshotListenOptions` to customise how the collection is loaded
 
 Returns:
@@ -247,6 +250,7 @@ The `useDocumentDataOnce` hook takes the following parameters:
 - `options`: (optional) `Object` with the following parameters:
   - `getOptions`: (optional) `firebase.firestore.GetOptions` to customise how the collection is loaded
   - `idField`: (optional) name of the field that should be populated with the `firebase.firestore.DocumentSnapshot.id` property.
+  - `refField`: (optional) name of the field that should be populated with the `firebase.firestore.QuerySnapshot.ref` property.
 
 Returns:
 

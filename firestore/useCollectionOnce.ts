@@ -45,9 +45,11 @@ export const useCollectionDataOnce = <T>(
   options?: {
     getOptions?: firebase.firestore.GetOptions;
     idField?: string;
+    refField?: string;
   }
 ): CollectionDataOnceHook<T> => {
   const idField = options ? options.idField : undefined;
+  const refField = options ? options.refField : undefined;
   const getOptions = options ? options.getOptions : undefined;
   const [snapshots, loading, error] = useCollectionOnce<T>(query, {
     getOptions,
@@ -55,9 +57,9 @@ export const useCollectionDataOnce = <T>(
   const values = useMemo(
     () =>
       (snapshots
-        ? snapshots.docs.map((doc) => snapshotToData(doc, idField))
+        ? snapshots.docs.map((doc) => snapshotToData(doc, idField, refField))
         : undefined) as T[],
-    [snapshots, idField]
+    [snapshots, idField, refField]
   );
   const resArray: CollectionDataOnceHook<T> = [values, loading, error];
   return useMemo(() => resArray, resArray);

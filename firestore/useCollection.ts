@@ -52,10 +52,12 @@ export const useCollectionData = <T>(
   query?: firebase.firestore.Query | null,
   options?: {
     idField?: string;
+    refField?: string;
     snapshotListenOptions?: firebase.firestore.SnapshotListenOptions;
   }
 ): CollectionDataHook<T> => {
   const idField = options ? options.idField : undefined;
+  const refField = options ? options.refField : undefined;
   const snapshotListenOptions = options
     ? options.snapshotListenOptions
     : undefined;
@@ -65,9 +67,9 @@ export const useCollectionData = <T>(
   const values = useMemo(
     () =>
       (snapshots
-        ? snapshots.docs.map((doc) => snapshotToData(doc, idField))
+        ? snapshots.docs.map(doc => snapshotToData(doc, idField, refField))
         : undefined) as T[],
-    [snapshots, idField]
+    [snapshots, idField, refField]
   );
 
   const resArray: CollectionDataHook<T> = [values, loading, error];
