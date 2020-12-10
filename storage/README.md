@@ -8,7 +8,7 @@ to give a complete lifecycle for loading from Cloud Storage.
 
 All hooks can be imported from `react-firebase-hooks/storage`, e.g.
 
-```
+```js
 import { useDownloadURL } from 'react-firebase-hooks/storage';
 ```
 
@@ -18,7 +18,7 @@ List of Cloud Storage hooks:
 
 ### useDownloadURL
 
-```
+```js
 const [downloadUrl, loading, error] = useDownloadURL(reference);
 ```
 

@@ -8,7 +8,7 @@ to give a complete lifecycle for loading and listening to the Realtime Database.
 
 All hooks can be imported from `react-firebase-hooks/database`, e.g.
 
-```
+```js
 import { useList } from 'react-firebase-hooks/database';
 ```
 
@@ -22,7 +22,7 @@ List of Realtime Database hooks:
 
 ### useList
 
-```
+```js
 const [snapshots, loading, error] = useList(reference);
 ```
 
@@ -69,7 +69,7 @@ const DatabaseList = () => {
 
 ### useListKeys
 
-```
+```js
 const [keys, loading, error] = useListKeys(reference);
 ```
 
@@ -87,8 +87,8 @@ Returns:
 
 ### useListVals
 
-```
-const [values, loading, error] = useListVals<T>(reference, options);
+```js
+const [values, loading, error] = useListVals < T > (reference, options);
 ```
 
 As `useList`, but this hook extracts a typed list of the `firebase.database.DataSnapshot.val()` values, rather than the the
@@ -108,7 +108,7 @@ Returns:
 
 ### useObject
 
-```
+```js
 const [snapshot, loading, error] = useObject(reference);
 ```
 
@@ -146,8 +146,8 @@ const DatabaseValue = () => {
 
 ### useObjectVal
 
-```
-const [value, loading, error] = useObjectVal<T>(reference, options);
+```js
+const [value, loading, error] = useObjectVal < T > (reference, options);
 ```
 
 As `useObject`, but this hook returns the typed contents of `firebase.database.DataSnapshot.val()`, rather than the the

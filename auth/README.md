@@ -4,7 +4,7 @@ React Firebase Hooks provides a convenience listener for Firebase Auth's auth st
 
 All hooks can be imported from `react-firebase-hooks/auth`, e.g.
 
-```
+```js
 import { useAuthState } from 'react-firebase-hooks/auth';
 ```
 
@@ -14,7 +14,7 @@ List of Auth hooks:
 
 ### useAuthState
 
-```
+```js
 const [user, loading, error] = useAuthState(auth);
 ```
 
