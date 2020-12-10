@@ -1,4 +1,4 @@
-import { useReducer } from 'react';
+import { useMemo, useReducer } from 'react';
 
 export type LoadingValue<T, E> = {
   error?: E;
@@ -73,12 +73,21 @@ export default <T, E>(getDefaultValue?: () => T | null): LoadingValue<T, E> => {
     dispatch({ type: 'value', value });
   };
 
-  return {
-    error: state.error,
-    loading: state.loading,
-    reset,
-    setError,
-    setValue,
-    value: state.value,
-  };
+  return useMemo(
+    () => ({
+      error: state.error,
+      loading: state.loading,
+      reset,
+      setError,
+      setValue,
+      value: state.value,
+    }), [
+      state.error,
+      state.loading,
+      reset,
+      setError,
+      setValue,
+      state.value,
+    ]
+  );
 };

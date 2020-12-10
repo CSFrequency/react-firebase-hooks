@@ -1,10 +1,10 @@
-import { database } from 'firebase';
+import firebase from 'firebase/app';
 
 const isObject = (val: any) =>
   val != null && typeof val === 'object' && Array.isArray(val) === false;
 
 export const snapshotToData = (
-  snapshot: database.DataSnapshot,
+  snapshot: firebase.database.DataSnapshot,
   keyField?: string
 ) => {
   if (!snapshot.exists) {

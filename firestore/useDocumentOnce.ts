@@ -1,44 +1,49 @@
-import { firestore } from 'firebase';
-import { useEffect } from 'react';
+import firebase from 'firebase/app';
+import { useEffect, useMemo } from 'react';
 import { snapshotToData } from './helpers';
 import { LoadingHook, useIsEqualRef, useLoadingValue } from '../util';
 
-export type DocumentOnceHook = LoadingHook<firestore.DocumentSnapshot, Error>;
+export type DocumentOnceHook<T> = LoadingHook<
+  firebase.firestore.DocumentSnapshot<T>,
+  Error
+>;
 export type DocumentDataOnceHook<T> = LoadingHook<T, Error>;
 
-export const useDocumentOnce = (
-  docRef?: firestore.DocumentReference | null,
+export const useDocumentOnce = <T>(
+  docRef?: firebase.firestore.DocumentReference | null,
   options?: {
-    getOptions?: firestore.GetOptions;
+    getOptions?: firebase.firestore.GetOptions;
   }
-): DocumentOnceHook => {
+): DocumentOnceHook<T> => {
   const { error, loading, reset, setError, setValue, value } = useLoadingValue<
-    firestore.DocumentSnapshot,
+    firebase.firestore.DocumentSnapshot,
     Error
   >();
   const ref = useIsEqualRef(docRef, reset);
 
-  useEffect(
-    () => {
-      if (!ref.current) {
-        setValue(undefined);
-        return;
-      }
-      ref.current
-        .get(options ? options.getOptions : undefined)
-        .then(setValue)
-        .catch(setError);
-    },
-    [ref.current]
-  );
+  useEffect(() => {
+    if (!ref.current) {
+      setValue(undefined);
+      return;
+    }
+    ref.current
+      .get(options ? options.getOptions : undefined)
+      .then(setValue)
+      .catch(setError);
+  }, [ref.current]);
 
-  return [value, loading, error];
+  const resArray: DocumentOnceHook<T> = [
+    value as firebase.firestore.DocumentSnapshot<T>,
+    loading,
+    error,
+  ];
+  return useMemo(() => resArray, resArray);
 };
 
 export const useDocumentDataOnce = <T>(
-  docRef?: firestore.DocumentReference | null,
+  docRef?: firebase.firestore.DocumentReference | null,
   options?: {
-    getOptions?: firestore.GetOptions;
+    getOptions?: firebase.firestore.GetOptions;
     idField?: string;
     refField?: string;
   }
@@ -46,10 +51,12 @@ export const useDocumentDataOnce = <T>(
   const idField = options ? options.idField : undefined;
   const refField = options ? options.refField : undefined;
   const getOptions = options ? options.getOptions : undefined;
-  const [value, loading, error] = useDocumentOnce(docRef, { getOptions });
-  return [
-    (value ? snapshotToData(value, idField, refField) : undefined) as T,
-    loading,
-    error,
-  ];
+  const [snapshot, loading, error] = useDocumentOnce<T>(docRef, { getOptions });
+  const value = useMemo(
+    () => (snapshot ? snapshotToData(snapshot, idField, refField) : undefined) as T,
+    [snapshot, idField, refField]
+  );
+
+  const resArray: DocumentDataOnceHook<T> = [value, loading, error];
+  return useMemo(() => resArray, resArray);
 };

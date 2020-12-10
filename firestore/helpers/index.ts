@@ -1,7 +1,7 @@
-import { firestore } from 'firebase';
+import firebase from 'firebase/app';
 
 export const snapshotToData = (
-  snapshot: firestore.DocumentSnapshot,
+  snapshot: firebase.firestore.DocumentSnapshot,
   idField?: string,
   refField?: string,
 ) => {
