@@ -3,18 +3,18 @@ import { useEffect, useMemo } from 'react';
 import { snapshotToData } from './helpers';
 import { LoadingHook, useIsEqualRef, useLoadingValue } from '../util';
 
-export type DocumentHook = LoadingHook<
-  firebase.firestore.DocumentSnapshot,
+export type DocumentHook<T> = LoadingHook<
+  firebase.firestore.DocumentSnapshot<T>,
   Error
 >;
 export type DocumentDataHook<T> = LoadingHook<T, Error>;
 
-export const useDocument = (
+export const useDocument = <T>(
   docRef?: firebase.firestore.DocumentReference | null,
   options?: {
     snapshotListenOptions?: firebase.firestore.SnapshotListenOptions;
   }
-): DocumentHook => {
+): DocumentHook<T> => {
   const { error, loading, reset, setError, setValue, value } = useLoadingValue<
     firebase.firestore.DocumentSnapshot,
     Error
@@ -40,11 +40,12 @@ export const useDocument = (
     };
   }, [ref.current]);
 
-  const resArray: DocumentHook = [value, loading, error];
-  return useMemo(
-    () => resArray,
-    resArray,
-  );
+  const resArray: DocumentHook<T> = [
+    value as firebase.firestore.DocumentSnapshot<T>,
+    loading,
+    error,
+  ];
+  return useMemo(() => resArray, resArray);
 };
 
 export const useDocumentData = <T>(
@@ -58,7 +59,7 @@ export const useDocumentData = <T>(
   const snapshotListenOptions = options
     ? options.snapshotListenOptions
     : undefined;
-  const [snapshot, loading, error] = useDocument(docRef, {
+  const [snapshot, loading, error] = useDocument<T>(docRef, {
     snapshotListenOptions,
   });
   const value = useMemo(
@@ -67,8 +68,5 @@ export const useDocumentData = <T>(
   );
 
   const resArray: DocumentDataHook<T> = [value, loading, error];
-  return useMemo(
-    () => resArray,
-    resArray,
-  );
+  return useMemo(() => resArray, resArray);
 };
