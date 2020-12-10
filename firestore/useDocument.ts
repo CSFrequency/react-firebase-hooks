@@ -1,19 +1,19 @@
-import { firestore } from 'firebase';
+import firebase from 'firebase/app';
 import { useEffect, useMemo } from 'react';
 import { snapshotToData } from './helpers';
 import { LoadingHook, useIsEqualRef, useLoadingValue } from '../util';
 
-export type DocumentHook = LoadingHook<firestore.DocumentSnapshot, Error>;
+export type DocumentHook = LoadingHook<firebase.firestore.DocumentSnapshot, Error>;
 export type DocumentDataHook<T> = LoadingHook<T, Error>;
 
 export const useDocument = (
-  docRef?: firestore.DocumentReference | null,
+  docRef?: firebase.firestore.DocumentReference | null,
   options?: {
-    snapshotListenOptions?: firestore.SnapshotListenOptions;
+    snapshotListenOptions?: firebase.firestore.SnapshotListenOptions;
   }
 ): DocumentHook => {
   const { error, loading, reset, setError, setValue, value } = useLoadingValue<
-    firestore.DocumentSnapshot,
+    firebase.firestore.DocumentSnapshot,
     Error
   >();
   const ref = useIsEqualRef(docRef, reset);
@@ -44,10 +44,10 @@ export const useDocument = (
 };
 
 export const useDocumentData = <T>(
-  docRef?: firestore.DocumentReference | null,
+  docRef?: firebase.firestore.DocumentReference | null,
   options?: {
     idField?: string;
-    snapshotListenOptions?: firestore.SnapshotListenOptions;
+    snapshotListenOptions?: firebase.firestore.SnapshotListenOptions;
   }
 ): DocumentDataHook<T> => {
   const idField = options ? options.idField : undefined;

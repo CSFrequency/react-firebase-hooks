@@ -1,19 +1,19 @@
-import { firestore } from 'firebase';
+import firebase from 'firebase/app';
 import { useEffect } from 'react';
 import { snapshotToData } from './helpers';
 import { LoadingHook, useIsEqualRef, useLoadingValue } from '../util';
 
-export type CollectionOnceHook = LoadingHook<firestore.QuerySnapshot, Error>;
+export type CollectionOnceHook = LoadingHook<firebase.firestore.QuerySnapshot, Error>;
 export type CollectionDataOnceHook<T> = LoadingHook<T[], Error>;
 
 export const useCollectionOnce = (
-  query?: firestore.Query | null,
+  query?: firebase.firestore.Query | null,
   options?: {
-    getOptions?: firestore.GetOptions;
+    getOptions?: firebase.firestore.GetOptions;
   }
 ): CollectionOnceHook => {
   const { error, loading, reset, setError, setValue, value } = useLoadingValue<
-    firestore.QuerySnapshot,
+    firebase.firestore.QuerySnapshot,
     Error
   >();
   const ref = useIsEqualRef(query, reset);
@@ -36,9 +36,9 @@ export const useCollectionOnce = (
 };
 
 export const useCollectionDataOnce = <T>(
-  query?: firestore.Query | null,
+  query?: firebase.firestore.Query | null,
   options?: {
-    getOptions?: firestore.GetOptions;
+    getOptions?: firebase.firestore.GetOptions;
     idField?: string;
   }
 ): CollectionDataOnceHook<T> => {
