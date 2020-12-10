@@ -33,30 +33,24 @@ export const useObject = (
   }, [ref.current]);
 
   const resArray: ObjectHook = [value, loading, error];
-  return useMemo(
-    () => resArray,
-    resArray,
-  );
+  return useMemo(() => resArray, resArray);
 };
 
 export const useObjectVal = <T>(
   query?: firebase.database.Query | null,
   options?: {
     keyField?: string;
+    refField?: string;
   }
 ): ObjectValHook<T> => {
+  const keyField = options ? options.keyField : undefined;
+  const refField = options ? options.refField : undefined;
   const [snapshot, loading, error] = useObject(query);
   const value = useMemo(
-    () =>
-      snapshot
-        ? snapshotToData(snapshot, options ? options.keyField : undefined)
-        : undefined,
+    () => (snapshot ? snapshotToData(snapshot, keyField, refField) : undefined),
     [snapshot, options && options.keyField]
   );
 
   const resArray: ObjectValHook<T> = [value, loading, error];
-  return useMemo(
-    () => resArray,
-    resArray,
-  );
+  return useMemo(() => resArray, resArray);
 };

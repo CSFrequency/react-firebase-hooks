@@ -98,7 +98,8 @@ The `useListVals` hook takes the following parameters:
 
 - `reference`: (optional) `firebase.database.Reference` for the data you would like to load
 - `options`: (optional) `Object` with the following parameters:
-  - `keyField`: (optional) `string` field name that should be populated with the `firebase.firestore.QuerySnapshot.id` property in the returned values
+  - `keyField`: (optional) `string` field name that should be populated with the `firebase.database.DataSnapshot.id` property in the returned values.
+  - `refField`: (optional) `string` field name that should be populated with the `firebase.database.DataSnapshot.ref` property.
 
 Returns:
 
@@ -158,6 +159,7 @@ The `useObjectVal` hook takes the following parameters:
 - `reference`: (optional) `firebase.database.Reference` for the data you would like to load
 - `options`: (optional) `Object` with the following parameters:
   - `keyField`: (optional) `string` field name that should be populated with the `firebase.database.DataSnapshot.key` property in the returned value.
+  - `refField`: (optional) `string` field name that should be populated with the `firebase.database.DataSnapshot.ref` property.
 
 Returns:
 

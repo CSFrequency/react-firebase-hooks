@@ -68,10 +68,7 @@ export const useList = (query?: firebase.database.Query | null): ListHook => {
   }, [ref.current]);
 
   const resArray: ListHook = [state.value.values, state.loading, state.error];
-  return useMemo(
-    () => resArray,
-    resArray,
-  );
+  return useMemo(() => resArray, resArray);
 };
 
 export const useListKeys = (
@@ -79,41 +76,37 @@ export const useListKeys = (
 ): ListKeysHook => {
   const [snapshots, loading, error] = useList(query);
   const values = useMemo(
-    () => (snapshots ? snapshots.map(snapshot => snapshot.key as string) : undefined),
+    () =>
+      snapshots
+        ? snapshots.map((snapshot) => snapshot.key as string)
+        : undefined,
     [snapshots]
   );
-  const resArray: ListKeysHook = [
-    values,
-    loading,
-    error,
-  ];
+  const resArray: ListKeysHook = [values, loading, error];
 
-  return useMemo(
-    () => resArray,
-    resArray,
-  );
+  return useMemo(() => resArray, resArray);
 };
 
 export const useListVals = <T>(
   query?: firebase.database.Query | null,
   options?: {
     keyField?: string;
+    refField?: string;
   }
 ): ListValsHook<T> => {
+  const keyField = options ? options.keyField : undefined;
+  const refField = options ? options.refField : undefined;
   const [snapshots, loading, error] = useList(query);
   const values = useMemo(
     () =>
       snapshots
         ? snapshots.map((snapshot) =>
-            snapshotToData(snapshot, options ? options.keyField : undefined)
+            snapshotToData(snapshot, keyField, refField)
           )
         : undefined,
     [snapshots, options && options.keyField]
   );
 
   const resArray: ListValsHook<T> = [values, loading, error];
-  return useMemo(
-    () => resArray,
-    resArray,
-  );
+  return useMemo(() => resArray, resArray);
 };

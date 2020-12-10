@@ -5,7 +5,8 @@ const isObject = (val: any) =>
 
 export const snapshotToData = (
   snapshot: firebase.database.DataSnapshot,
-  keyField?: string
+  keyField?: string,
+  refField?: string
 ) => {
   if (!snapshot.exists) {
     return undefined;
@@ -16,6 +17,7 @@ export const snapshotToData = (
     return {
       ...val,
       ...(keyField ? { [keyField]: snapshot.key } : null),
+      ...(refField ? { [refField]: snapshot.ref } : null),
     };
   }
   return val;
