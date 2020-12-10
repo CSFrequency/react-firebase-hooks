@@ -9,7 +9,7 @@ to give a complete lifecycle for loading from Cloud Storage.
 All hooks can be imported from `react-firebase-hooks/storage`, e.g.
 
 ```
-import { useCollection } from 'react-firebase-hooks/storage';
+import { useDownloadURL } from 'react-firebase-hooks/storage';
 ```
 
 List of Cloud Storage hooks:
