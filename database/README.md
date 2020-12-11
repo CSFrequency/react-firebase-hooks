@@ -8,7 +8,7 @@ to give a complete lifecycle for loading and listening to the Realtime Database.
 
 All hooks can be imported from `react-firebase-hooks/database`, e.g.
 
-```
+```js
 import { useList } from 'react-firebase-hooks/database';
 ```
 
@@ -22,7 +22,7 @@ List of Realtime Database hooks:
 
 ### useList
 
-```
+```js
 const [snapshots, loading, error] = useList(reference);
 ```
 
@@ -69,7 +69,7 @@ const DatabaseList = () => {
 
 ### useListKeys
 
-```
+```js
 const [keys, loading, error] = useListKeys(reference);
 ```
 
@@ -87,8 +87,8 @@ Returns:
 
 ### useListVals
 
-```
-const [values, loading, error] = useListVals<T>(reference, options);
+```js
+const [values, loading, error] = useListVals < T > (reference, options);
 ```
 
 As `useList`, but this hook extracts a typed list of the `firebase.database.DataSnapshot.val()` values, rather than the the
@@ -98,7 +98,8 @@ The `useListVals` hook takes the following parameters:
 
 - `reference`: (optional) `firebase.database.Reference` for the data you would like to load
 - `options`: (optional) `Object` with the following parameters:
-  - `keyField`: (optional) `string` field name that should be populated with the `firebase.firestore.QuerySnapshot.id` property in the returned values
+  - `keyField`: (optional) `string` field name that should be populated with the `firebase.database.DataSnapshot.id` property in the returned values.
+  - `refField`: (optional) `string` field name that should be populated with the `firebase.database.DataSnapshot.ref` property.
 
 Returns:
 
@@ -108,7 +109,7 @@ Returns:
 
 ### useObject
 
-```
+```js
 const [snapshot, loading, error] = useObject(reference);
 ```
 
@@ -146,8 +147,8 @@ const DatabaseValue = () => {
 
 ### useObjectVal
 
-```
-const [value, loading, error] = useObjectVal<T>(reference, options);
+```js
+const [value, loading, error] = useObjectVal < T > (reference, options);
 ```
 
 As `useObject`, but this hook returns the typed contents of `firebase.database.DataSnapshot.val()`, rather than the the
@@ -158,6 +159,7 @@ The `useObjectVal` hook takes the following parameters:
 - `reference`: (optional) `firebase.database.Reference` for the data you would like to load
 - `options`: (optional) `Object` with the following parameters:
   - `keyField`: (optional) `string` field name that should be populated with the `firebase.database.DataSnapshot.key` property in the returned value.
+  - `refField`: (optional) `string` field name that should be populated with the `firebase.database.DataSnapshot.ref` property.
 
 Returns:
 

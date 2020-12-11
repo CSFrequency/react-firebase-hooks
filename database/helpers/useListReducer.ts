@@ -1,13 +1,13 @@
-import { database, FirebaseError } from 'firebase';
+import firebase from 'firebase/app';
 import { useReducer } from 'react';
 
 type KeyValueState = {
   keys?: string[];
-  values?: database.DataSnapshot[];
+  values?: firebase.database.DataSnapshot[];
 };
 
 type ReducerState = {
-  error?: FirebaseError;
+  error?: firebase.FirebaseError;
   loading: boolean;
   value: KeyValueState;
 };
@@ -15,22 +15,22 @@ type ReducerState = {
 type AddAction = {
   type: 'add';
   previousKey?: string | null;
-  snapshot: database.DataSnapshot | null;
+  snapshot: firebase.database.DataSnapshot | null;
 };
 type ChangeAction = {
   type: 'change';
-  snapshot: database.DataSnapshot | null;
+  snapshot: firebase.database.DataSnapshot | null;
 };
 type EmptyAction = { type: 'empty' };
-type ErrorAction = { type: 'error'; error: FirebaseError };
+type ErrorAction = { type: 'error'; error: firebase.FirebaseError };
 type MoveAction = {
   type: 'move';
   previousKey?: string | null;
-  snapshot: database.DataSnapshot | null;
+  snapshot: firebase.database.DataSnapshot | null;
 };
 type RemoveAction = {
   type: 'remove';
-  snapshot: database.DataSnapshot | null;
+  snapshot: firebase.database.DataSnapshot | null;
 };
 type ResetAction = { type: 'reset' };
 type ValueAction = { type: 'value'; snapshots: database.DataSnapshot[] | null };

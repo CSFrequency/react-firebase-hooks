@@ -14,7 +14,7 @@ There are 2 variants of each hook:
 
 All hooks can be imported from `react-firebase-hooks/firestore`, e.g.
 
-```
+```js
 import { useCollection } from 'react-firebase-hooks/firestore';
 ```
 
@@ -31,7 +31,7 @@ List of Cloud Firestore hooks:
 
 ### useCollection
 
-```
+```js
 const [snapshot, loading, error] = useCollection(query, options);
 ```
 
@@ -86,7 +86,7 @@ const FirestoreCollection = () => {
 
 ### useCollectionOnce
 
-```
+```js
 const [snapshot, loading, error] = useCollectionOnce(query, options);
 ```
 
@@ -106,7 +106,7 @@ Returns:
 
 ### useCollectionData
 
-```
+```js
 const [values, loading, error] = useCollectionData<T>(query, options);
 ```
 
@@ -118,6 +118,7 @@ The `useCollectionData` hook takes the following parameters:
 - `query`: (optional) `firebase.firestore.Query` for the data you would like to load
 - `options`: (optional) `Object` with the following parameters:
   - `idField`: (optional) name of the field that should be populated with the `firebase.firestore.QuerySnapshot.id` property.
+  - `refField`: (optional) name of the field that should be populated with the `firebase.firestore.QuerySnapshot.ref` property.
   - `snapshotListenOptions`: (optional) `firebase.firestore.SnapshotListenOptions` to customise how the collection is loaded
 
 Returns:
@@ -128,7 +129,7 @@ Returns:
 
 ### useCollectionDataOnce
 
-```
+```js
 const [values, loading, error] = useCollectionDataOnce<T>(query, options);
 ```
 
@@ -140,6 +141,7 @@ The `useCollectionDataOnce` hook takes the following parameters:
 - `options`: (optional) `Object` with the following parameters:
   - `getOptions`: (optional) `firebase.firestore.GetOptions` to customise how the collection is loaded
   - `idField`: (optional) name of the field that should be populated with the `firebase.firestore.QuerySnapshot.id` property.
+  - `refField`: (optional) name of the field that should be populated with the `firebase.firestore.QuerySnapshot.ref` property.
 
 Returns:
 
@@ -149,7 +151,7 @@ Returns:
 
 ### useDocument
 
-```
+```js
 const [snapshot, loading, error] = useDocument(reference, options);
 ```
 
@@ -193,7 +195,7 @@ const FirestoreDocument = () => {
 
 ### useDocumentOnce
 
-```
+```js
 const [snapshot, loading, error] = useDocumentOnce(reference, options);
 ```
 
@@ -213,7 +215,7 @@ Returns:
 
 ### useDocumentData
 
-```
+```js
 const [value, loading, error] = useDocumentData<T>(reference, options);
 ```
 
@@ -225,6 +227,7 @@ The `useDocumentData` hook takes the following parameters:
 - `reference`: (optional) `firebase.firestore.DocumentReference` for the data you would like to load
 - `options`: (optional) `Object` with the following parameters:
   - `idField`: (optional) name of the field that should be populated with the `firebase.firestore.DocumentSnapshot.id` property.
+  - `refField`: (optional) name of the field that should be populated with the `firebase.firestore.QuerySnapshot.ref` property.
   - `snapshotListenOptions`: (optional) `firebase.firestore.SnapshotListenOptions` to customise how the collection is loaded
 
 Returns:
@@ -235,7 +238,7 @@ Returns:
 
 ### useDocumentDataOnce
 
-```
+```js
 const [value, loading, error] = useDocumentDataOnce<T>(reference, options);
 ```
 
@@ -247,6 +250,7 @@ The `useDocumentDataOnce` hook takes the following parameters:
 - `options`: (optional) `Object` with the following parameters:
   - `getOptions`: (optional) `firebase.firestore.GetOptions` to customise how the collection is loaded
   - `idField`: (optional) name of the field that should be populated with the `firebase.firestore.DocumentSnapshot.id` property.
+  - `refField`: (optional) name of the field that should be populated with the `firebase.firestore.QuerySnapshot.ref` property.
 
 Returns:
 

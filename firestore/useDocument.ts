@@ -1,65 +1,74 @@
-import { firestore } from 'firebase';
+import firebase from 'firebase/app';
 import { useEffect, useMemo } from 'react';
 import { snapshotToData } from './helpers';
 import { LoadingHook, useIsEqualRef, useLoadingValue } from '../util';
 
-export type DocumentHook = LoadingHook<firestore.DocumentSnapshot, Error>;
+export type DocumentHook<T> = LoadingHook<
+  firebase.firestore.DocumentSnapshot<T>,
+  Error
+>;
 export type DocumentDataHook<T> = LoadingHook<T, Error>;
 
-export const useDocument = (
-  docRef?: firestore.DocumentReference | null,
+export const useDocument = <T>(
+  docRef?: firebase.firestore.DocumentReference | null,
   options?: {
-    snapshotListenOptions?: firestore.SnapshotListenOptions;
+    snapshotListenOptions?: firebase.firestore.SnapshotListenOptions;
   }
-): DocumentHook => {
+): DocumentHook<T> => {
   const { error, loading, reset, setError, setValue, value } = useLoadingValue<
-    firestore.DocumentSnapshot,
+    firebase.firestore.DocumentSnapshot,
     Error
   >();
   const ref = useIsEqualRef(docRef, reset);
 
-  useEffect(
-    () => {
-      if (!ref.current) {
-        setValue(undefined);
-        return;
-      }
-      const listener =
-        options && options.snapshotListenOptions
-          ? ref.current.onSnapshot(
-              options.snapshotListenOptions,
-              setValue,
-              setError
-            )
-          : ref.current.onSnapshot(setValue, setError);
+  useEffect(() => {
+    if (!ref.current) {
+      setValue(undefined);
+      return;
+    }
+    const listener =
+      options && options.snapshotListenOptions
+        ? ref.current.onSnapshot(
+            options.snapshotListenOptions,
+            setValue,
+            setError
+          )
+        : ref.current.onSnapshot(setValue, setError);
 
-      return () => {
-        listener();
-      };
-    },
-    [ref.current]
-  );
+    return () => {
+      listener();
+    };
+  }, [ref.current]);
 
-  return [value, loading, error];
+  const resArray: DocumentHook<T> = [
+    value as firebase.firestore.DocumentSnapshot<T>,
+    loading,
+    error,
+  ];
+  return useMemo(() => resArray, resArray);
 };
 
 export const useDocumentData = <T>(
-  docRef?: firestore.DocumentReference | null,
+  docRef?: firebase.firestore.DocumentReference | null,
   options?: {
     idField?: string;
-    snapshotListenOptions?: firestore.SnapshotListenOptions;
+    refField?: string;
+    snapshotListenOptions?: firebase.firestore.SnapshotListenOptions;
   }
 ): DocumentDataHook<T> => {
   const idField = options ? options.idField : undefined;
+  const refField = options ? options.refField : undefined;
   const snapshotListenOptions = options
     ? options.snapshotListenOptions
     : undefined;
-  const [snapshot, loading, error] = useDocument(docRef, {
+  const [snapshot, loading, error] = useDocument<T>(docRef, {
     snapshotListenOptions,
   });
   const value = useMemo(
-    () => (snapshot ? snapshotToData(snapshot, idField) : undefined) as T,
-    [snapshot, idField]
+    () => (snapshot ? snapshotToData(snapshot, idField, refField) : undefined) as T,
+    [snapshot, idField, refField]
   );
-  return [value, loading, error];
+
+  const resArray: DocumentDataHook<T> = [value, loading, error];
+  return useMemo(() => resArray, resArray);
 };
