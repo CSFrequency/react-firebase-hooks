@@ -33,7 +33,7 @@ type RemoveAction = {
   snapshot: firebase.database.DataSnapshot | null;
 };
 type ResetAction = { type: 'reset' };
-type ValueAction = { type: 'value'; snapshots: database.DataSnapshot[] | null };
+type ValueAction = { type: 'value'; snapshots: firebase.database.DataSnapshot[] | null };
 type ReducerAction =
   | AddAction
   | ChangeAction
@@ -126,7 +126,7 @@ const listReducer = (
   }
 };
 
-const setValue = (snapshots: database.DataSnapshot[] | null): KeyValueState => {
+const setValue = (snapshots: firebase.database.DataSnapshot[] | null): KeyValueState => {
   if (!snapshots) {
     return {
       keys: [],
@@ -135,7 +135,7 @@ const setValue = (snapshots: database.DataSnapshot[] | null): KeyValueState => {
   }
 
   const keys: string[] = [];
-  const values: database.DataSnapshot[] = [];
+  const values: firebase.database.DataSnapshot[] = [];
   snapshots.forEach((snapshot) => {
     if (!snapshot.key) {
       return;
@@ -152,7 +152,7 @@ const setValue = (snapshots: database.DataSnapshot[] | null): KeyValueState => {
 
 const addChild = (
   currentState: KeyValueState,
-  snapshot: database.DataSnapshot,
+  snapshot: firebase.database.DataSnapshot,
   previousKey?: string | null
 ): KeyValueState => {
   if (!snapshot.key) {
@@ -182,7 +182,7 @@ const addChild = (
 
 const changeChild = (
   currentState: KeyValueState,
-  snapshot: database.DataSnapshot
+  snapshot: firebase.database.DataSnapshot
 ): KeyValueState => {
   if (!snapshot.key) {
     return currentState;
@@ -199,7 +199,7 @@ const changeChild = (
 
 const removeChild = (
   currentState: KeyValueState,
-  snapshot: database.DataSnapshot
+  snapshot: firebase.database.DataSnapshot
 ): KeyValueState => {
   if (!snapshot.key) {
     return currentState;
@@ -217,7 +217,7 @@ const removeChild = (
 
 const moveChild = (
   currentState: KeyValueState,
-  snapshot: database.DataSnapshot,
+  snapshot: firebase.database.DataSnapshot,
   previousKey?: string | null
 ): KeyValueState => {
   // Remove the child from it's previous location
