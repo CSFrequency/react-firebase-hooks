@@ -109,13 +109,20 @@ export const useList = (query?: firebase.database.Query | null): ListHook => {
   return useMemo(() => resArray, resArray);
 };
 
-export const useListKeys = (query?: firebase.database.Query | null): ListKeysHook => {
-  const [value, loading, error] = useList(query);
-  return [
-    value ? value.map((snapshot) => snapshot.key as string) : undefined,
-    loading,
-    error,
-  ];
+export const useListKeys = (
+  query?: firebase.database.Query | null
+): ListKeysHook => {
+  const [snapshots, loading, error] = useList(query);
+  const values = useMemo(
+    () =>
+      snapshots
+        ? snapshots.map((snapshot) => snapshot.key as string)
+        : undefined,
+    [snapshots]
+  );
+  const resArray: ListKeysHook = [values, loading, error];
+
+  return useMemo(() => resArray, resArray);
 };
 
 export const useListVals = <T>(
@@ -132,10 +139,10 @@ export const useListVals = <T>(
     () =>
       snapshots
         ? snapshots.map((snapshot) =>
-            snapshotToData(snapshot, options ? options.keyField : undefined, refField)
+            snapshotToData(snapshot, keyField, refField)
           )
         : undefined,
-    [snapshots, options && options.keyField]
+    [snapshots, keyField, refField]
   );
 
   const resArray: ListValsHook<T> = [values, loading, error];
