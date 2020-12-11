@@ -104,7 +104,7 @@ export const useListVals = <T>(
             snapshotToData(snapshot, keyField, refField)
           )
         : undefined,
-    [snapshots, options && options.keyField]
+    [snapshots, keyField, refField]
   );
 
   const resArray: ListValsHook<T> = [values, loading, error];
