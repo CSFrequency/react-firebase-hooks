@@ -41,13 +41,18 @@ export const useObjectVal = <T>(
   options?: {
     keyField?: string;
     refField?: string;
+    transform?: (any) => T;
   }
 ): ObjectValHook<T> => {
   const keyField = options ? options.keyField : undefined;
   const refField = options ? options.refField : undefined;
+  const transform = options ? options.transform : (value) => value as T;
   const [snapshot, loading, error] = useObject(query);
   const value = useMemo(
-    () => (snapshot ? snapshotToData(snapshot, keyField, refField) : undefined),
+    () =>
+      snapshot
+        ? snapshotToData<T>(snapshot, keyField, refField, transform)
+        : undefined,
     [snapshot, keyField, refField]
   );
 

@@ -92,16 +92,18 @@ export const useListVals = <T>(
   options?: {
     keyField?: string;
     refField?: string;
+    transform?: (any) => T;
   }
 ): ListValsHook<T> => {
   const keyField = options ? options.keyField : undefined;
   const refField = options ? options.refField : undefined;
+  const transform = options ? options.transform : (value) => value as T;
   const [snapshots, loading, error] = useList(query);
   const values = useMemo(
     () =>
       snapshots
         ? snapshots.map((snapshot) =>
-            snapshotToData(snapshot, keyField, refField)
+            snapshotToData<T>(snapshot, keyField, refField, transform)
           )
         : undefined,
     [snapshots, keyField, refField]
