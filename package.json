@@ -49,10 +49,10 @@
   "module": "dist/index.esm.js",
   "dependencies": {},
   "devDependencies": {
-    "@types/react": "^16.8.3",
+    "@types/react": "^17.0.0",
     "firebase": "^8.0.0",
     "path": "^0.12.7",
-    "react": "^16.8.0",
+    "react": "^17.0.1",
     "rimraf": "^2.6.2",
     "rollup": "0.57.1",
     "rollup-plugin-commonjs": "9.1.0",
@@ -63,7 +63,7 @@
     "typescript": "2.8.1"
   },
   "peerDependencies": {
-    "react": "^16.8.0"
+    "react": "^16.8.0 || ^17.0.0"
   },
   "typings": "index.d.ts"
 }
