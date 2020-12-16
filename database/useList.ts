@@ -14,58 +14,100 @@ export type ListValsHook<T> = LoadingHook<T[], firebase.FirebaseError>;
 export const useList = (query?: firebase.database.Query | null): ListHook => {
   const [state, dispatch] = useListReducer();
 
-  const ref = useIsEqualRef(query, () => dispatch({ type: 'reset' }));
-
-  const onChildAdded = (
-    snapshot: firebase.database.DataSnapshot | null,
-    previousKey?: string | null
-  ) => {
-    dispatch({ type: 'add', previousKey, snapshot });
-  };
-
-  const onChildChanged = (snapshot: firebase.database.DataSnapshot | null) => {
-    dispatch({ type: 'change', snapshot });
-  };
-
-  const onChildMoved = (
-    snapshot: firebase.database.DataSnapshot | null,
-    previousKey?: string | null
-  ) => {
-    dispatch({ type: 'move', previousKey, snapshot });
-  };
-
-  const onChildRemoved = (snapshot: firebase.database.DataSnapshot | null) => {
-    dispatch({ type: 'remove', snapshot });
-  };
-
-  const onError = (error: firebase.FirebaseError) => {
-    dispatch({ type: 'error', error });
-  };
-
-  const onValue = () => {
-    dispatch({ type: 'value' });
-  };
+  const queryRef = useIsEqualRef(query, () => dispatch({ type: 'reset' }));
+  const ref: firebase.database.Query | null | undefined = queryRef.current;
 
   useEffect(() => {
-    const query: firebase.database.Query | null | undefined = ref.current;
-    if (!query) {
+    if (!ref) {
       dispatch({ type: 'empty' });
       return;
     }
-    // This is here to indicate that all the data has been successfully received
-    query.once('value', onValue, onError);
-    query.on('child_added', onChildAdded, onError);
-    query.on('child_changed', onChildChanged, onError);
-    query.on('child_moved', onChildMoved, onError);
-    query.on('child_removed', onChildRemoved, onError);
+
+    const onChildAdded = (
+      snapshot: firebase.database.DataSnapshot | null,
+      previousKey?: string | null
+    ) => {
+      dispatch({ type: 'add', previousKey, snapshot });
+    };
+
+    const onChildChanged = (
+      snapshot: firebase.database.DataSnapshot | null
+    ) => {
+      dispatch({ type: 'change', snapshot });
+    };
+
+    const onChildMoved = (
+      snapshot: firebase.database.DataSnapshot | null,
+      previousKey?: string | null
+    ) => {
+      dispatch({ type: 'move', previousKey, snapshot });
+    };
+
+    const onChildRemoved = (
+      snapshot: firebase.database.DataSnapshot | null
+    ) => {
+      dispatch({ type: 'remove', snapshot });
+    };
+
+    const onError = (error: firebase.FirebaseError) => {
+      dispatch({ type: 'error', error });
+    };
+
+    const onValue = (snapshots: firebase.database.DataSnapshot[] | null) => {
+      dispatch({ type: 'value', snapshots });
+    };
+
+    let childAddedHandler: ReturnType<typeof ref.on> | undefined;
+    const children: firebase.database.DataSnapshot[] = [];
+    const onInitialLoad = (snapshot: firebase.database.DataSnapshot) => {
+      let childrenToProcess = Object.keys(snapshot.val()).length;
+
+      const onChildAddedWithoutInitialLoad = (
+        addedChild: firebase.database.DataSnapshot,
+        previousKey?: string | null
+      ) => {
+        // process the first batch of children all at once
+        if (childrenToProcess > 0) {
+          childrenToProcess--;
+          children.push(addedChild);
+
+          if (childrenToProcess === 0) {
+            onValue(children);
+          }
+
+          return;
+        }
+
+        onChildAdded(snapshot, previousKey);
+      };
+
+      childAddedHandler = ref.on(
+        'child_added',
+        onChildAddedWithoutInitialLoad,
+        onError
+      );
+    };
+
+    ref.once('value', onInitialLoad, onError);
+    const childChangedHandler = ref.on(
+      'child_changed',
+      onChildChanged,
+      onError
+    );
+    const childMovedHandler = ref.on('child_moved', onChildMoved, onError);
+    const childRemovedHandler = ref.on(
+      'child_removed',
+      onChildRemoved,
+      onError
+    );
 
     return () => {
-      query.off('child_added', onChildAdded);
-      query.off('child_changed', onChildChanged);
-      query.off('child_moved', onChildMoved);
-      query.off('child_removed', onChildRemoved);
+      ref.off('child_added', childAddedHandler);
+      ref.off('child_changed', childChangedHandler);
+      ref.off('child_moved', childMovedHandler);
+      ref.off('child_removed', childRemovedHandler);
     };
-  }, [ref.current]);
+  }, [dispatch, ref]);
 
   const resArray: ListHook = [state.value.values, state.loading, state.error];
   return useMemo(() => resArray, resArray);

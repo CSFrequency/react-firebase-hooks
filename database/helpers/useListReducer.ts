@@ -33,7 +33,7 @@ type RemoveAction = {
   snapshot: firebase.database.DataSnapshot | null;
 };
 type ResetAction = { type: 'reset' };
-type ValueAction = { type: 'value' };
+type ValueAction = { type: 'value'; snapshots: firebase.database.DataSnapshot[] | null };
 type ReducerAction =
   | AddAction
   | ChangeAction
@@ -110,6 +110,7 @@ const listReducer = (
         ...state,
         error: undefined,
         loading: false,
+        value: setValue(action.snapshots),
       };
     case 'empty':
       return {
@@ -123,6 +124,30 @@ const listReducer = (
     default:
       return state;
   }
+};
+
+const setValue = (snapshots: firebase.database.DataSnapshot[] | null): KeyValueState => {
+  if (!snapshots) {
+    return {
+      keys: [],
+      values: [],
+    };
+  }
+
+  const keys: string[] = [];
+  const values: firebase.database.DataSnapshot[] = [];
+  snapshots.forEach((snapshot) => {
+    if (!snapshot.key) {
+      return;
+    }
+    keys.push(snapshot.key);
+    values.push(snapshot);
+  });
+
+  return {
+    keys,
+    values,
+  };
 };
 
 const addChild = (
