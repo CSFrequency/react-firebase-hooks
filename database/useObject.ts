@@ -48,7 +48,7 @@ export const useObjectVal = <T>(
   const [snapshot, loading, error] = useObject(query);
   const value = useMemo(
     () => (snapshot ? snapshotToData(snapshot, keyField, refField) : undefined),
-    [snapshot, options && options.keyField]
+    [snapshot, keyField, refField]
   );
 
   const resArray: ObjectValHook<T> = [value, loading, error];
