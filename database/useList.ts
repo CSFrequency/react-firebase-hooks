@@ -15,9 +15,9 @@ export const useList = (query?: firebase.database.Query | null): ListHook => {
   const [state, dispatch] = useListReducer();
 
   const queryRef = useIsEqualRef(query, () => dispatch({ type: 'reset' }));
+  const ref: firebase.database.Query | null | undefined = queryRef.current;
 
   useEffect(() => {
-    const ref: firebase.database.Query | null | undefined = queryRef.current;
     if (!ref) {
       dispatch({ type: 'empty' });
       return;
@@ -30,7 +30,9 @@ export const useList = (query?: firebase.database.Query | null): ListHook => {
       dispatch({ type: 'add', previousKey, snapshot });
     };
 
-    const onChildChanged = (snapshot: firebase.database.DataSnapshot | null) => {
+    const onChildChanged = (
+      snapshot: firebase.database.DataSnapshot | null
+    ) => {
       dispatch({ type: 'change', snapshot });
     };
 
@@ -41,7 +43,9 @@ export const useList = (query?: firebase.database.Query | null): ListHook => {
       dispatch({ type: 'move', previousKey, snapshot });
     };
 
-    const onChildRemoved = (snapshot: firebase.database.DataSnapshot | null) => {
+    const onChildRemoved = (
+      snapshot: firebase.database.DataSnapshot | null
+    ) => {
       dispatch({ type: 'remove', snapshot });
     };
 
@@ -60,7 +64,7 @@ export const useList = (query?: firebase.database.Query | null): ListHook => {
 
       const onChildAddedWithoutInitialLoad = (
         addedChild: firebase.database.DataSnapshot,
-        previousKey?: string
+        previousKey?: string | null
       ) => {
         // process the first batch of children all at once
         if (childrenToProcess > 0) {
@@ -103,7 +107,7 @@ export const useList = (query?: firebase.database.Query | null): ListHook => {
       ref.off('child_moved', childMovedHandler);
       ref.off('child_removed', childRemovedHandler);
     };
-  }, [dispatch, queryRef]);
+  }, [dispatch, ref]);
 
   const resArray: ListHook = [state.value.values, state.loading, state.error];
   return useMemo(() => resArray, resArray);
