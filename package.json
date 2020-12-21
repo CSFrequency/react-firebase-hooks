@@ -52,6 +52,7 @@
     "@types/react": "^17.0.0",
     "firebase": "^8.0.0",
     "path": "^0.12.7",
+    "prettier": "2.2.1",
     "react": "^17.0.1",
     "rimraf": "^2.6.2",
     "rollup": "0.57.1",

@@ -1,6 +1,6 @@
 import firebase from 'firebase/app';
 import { useEffect, useMemo } from 'react';
-import { snapshotToData } from './helpers';
+import { DataOptions, Options, snapshotToData } from './helpers';
 import { LoadingHook, useIsEqualRef, useLoadingValue } from '../util';
 
 export type CollectionHook<T> = LoadingHook<
@@ -11,9 +11,7 @@ export type CollectionDataHook<T> = LoadingHook<T[], Error>;
 
 export const useCollection = <T>(
   query?: firebase.firestore.Query | null,
-  options?: {
-    snapshotListenOptions?: firebase.firestore.SnapshotListenOptions;
-  }
+  options?: Options,
 ): CollectionHook<T> => {
   const { error, loading, reset, setError, setValue, value } = useLoadingValue<
     firebase.firestore.QuerySnapshot,
@@ -50,11 +48,7 @@ export const useCollection = <T>(
 
 export const useCollectionData = <T>(
   query?: firebase.firestore.Query | null,
-  options?: {
-    idField?: string;
-    refField?: string;
-    snapshotListenOptions?: firebase.firestore.SnapshotListenOptions;
-  }
+  options?: DataOptions
 ): CollectionDataHook<T> => {
   const idField = options ? options.idField : undefined;
   const refField = options ? options.refField : undefined;

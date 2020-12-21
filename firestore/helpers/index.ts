@@ -1,5 +1,13 @@
 import firebase from 'firebase/app';
 
+export type Options = {
+  snapshotListenOptions?: firebase.firestore.SnapshotListenOptions;
+};
+export type DataOptions = Options & {
+  idField?: string;
+  refField?: string;
+};
+
 export const snapshotToData = (
   snapshot: firebase.firestore.DocumentSnapshot,
   idField?: string,

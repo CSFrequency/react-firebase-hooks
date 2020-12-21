@@ -1,6 +1,6 @@
 import firebase from 'firebase/app';
 import { useEffect, useMemo } from 'react';
-import { snapshotToData } from './helpers';
+import { snapshotToData, ValOptions } from './helpers';
 import useListReducer from './helpers/useListReducer';
 import { LoadingHook, useIsEqualRef } from '../util';
 
@@ -131,10 +131,7 @@ export const useListKeys = (
 
 export const useListVals = <T>(
   query?: firebase.database.Query | null,
-  options?: {
-    keyField?: string;
-    refField?: string;
-  }
+  options?: ValOptions,
 ): ListValsHook<T> => {
   const keyField = options ? options.keyField : undefined;
   const refField = options ? options.refField : undefined;

@@ -1,5 +1,10 @@
 import firebase from 'firebase/app';
 
+export type ValOptions = {
+  keyField?: string;
+  refField?: string;
+};
+
 const isObject = (val: any) =>
   val != null && typeof val === 'object' && Array.isArray(val) === false;
 
