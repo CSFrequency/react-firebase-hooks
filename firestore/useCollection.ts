@@ -1,19 +1,18 @@
 import firebase from 'firebase/app';
 import { useEffect, useMemo } from 'react';
 import { snapshotToData } from './helpers';
-import { LoadingHook, useIsEqualRef, useLoadingValue } from '../util';
-
-export type CollectionHook<T> = LoadingHook<
-  firebase.firestore.QuerySnapshot<T>,
-  Error
->;
-export type CollectionDataHook<T> = LoadingHook<T[], Error>;
+import {
+  CollectionHook,
+  CollectionDataHook,
+  Data,
+  DataOptions,
+  Options,
+} from './types';
+import { useIsEqualRef, useLoadingValue } from '../util';
 
 export const useCollection = <T>(
   query?: firebase.firestore.Query | null,
-  options?: {
-    snapshotListenOptions?: firebase.firestore.SnapshotListenOptions;
-  }
+  options?: Options
 ): CollectionHook<T> => {
   const { error, loading, reset, setError, setValue, value } = useLoadingValue<
     firebase.firestore.QuerySnapshot,
@@ -48,14 +47,14 @@ export const useCollection = <T>(
   return useMemo(() => resArray, resArray);
 };
 
-export const useCollectionData = <T>(
+export const useCollectionData = <
+  T,
+  IDField extends string = '',
+  RefField extends string = ''
+>(
   query?: firebase.firestore.Query | null,
-  options?: {
-    idField?: string;
-    refField?: string;
-    snapshotListenOptions?: firebase.firestore.SnapshotListenOptions;
-  }
-): CollectionDataHook<T> => {
+  options?: DataOptions
+): CollectionDataHook<T, IDField, RefField> => {
   const idField = options ? options.idField : undefined;
   const refField = options ? options.refField : undefined;
   const snapshotListenOptions = options
@@ -67,11 +66,15 @@ export const useCollectionData = <T>(
   const values = useMemo(
     () =>
       (snapshots
-        ? snapshots.docs.map(doc => snapshotToData(doc, idField, refField))
-        : undefined) as T[],
+        ? snapshots.docs.map((doc) => snapshotToData(doc, idField, refField))
+        : undefined) as Data<T, IDField, RefField>[],
     [snapshots, idField, refField]
   );
 
-  const resArray: CollectionDataHook<T> = [values, loading, error];
+  const resArray: CollectionDataHook<T, IDField, RefField> = [
+    values,
+    loading,
+    error,
+  ];
   return useMemo(() => resArray, resArray);
 };

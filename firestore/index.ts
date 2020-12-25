@@ -1,24 +1,10 @@
+export { useCollection, useCollectionData } from './useCollection';
+export { useCollectionOnce, useCollectionDataOnce } from './useCollectionOnce';
+export { useDocument, useDocumentData } from './useDocument';
+export { useDocumentOnce, useDocumentDataOnce } from './useDocumentOnce';
 export {
-  useCollection,
-  useCollectionData,
   CollectionHook,
   CollectionDataHook,
-} from './useCollection';
-export {
-  useCollectionOnce,
-  useCollectionDataOnce,
-  CollectionOnceHook,
-  CollectionDataOnceHook,
-} from './useCollectionOnce';
-export {
-  useDocument,
-  useDocumentData,
   DocumentHook,
   DocumentDataHook,
-} from './useDocument';
-export {
-  useDocumentOnce,
-  useDocumentDataOnce,
-  DocumentOnceHook,
-  DocumentDataOnceHook,
-} from './useDocumentOnce';
+} from './types';

@@ -1,20 +1,19 @@
 import firebase from 'firebase/app';
 import { useEffect, useMemo } from 'react';
 import { snapshotToData } from './helpers';
-import { LoadingHook, useIsEqualRef, useLoadingValue } from '../util';
-
-export type CollectionOnceHook<T> = LoadingHook<
-  firebase.firestore.QuerySnapshot<T>,
-  Error
->;
-export type CollectionDataOnceHook<T> = LoadingHook<T[], Error>;
+import {
+  CollectionHook,
+  CollectionDataHook,
+  Data,
+  OnceDataOptions,
+  OnceOptions,
+} from './types';
+import { useIsEqualRef, useLoadingValue } from '../util';
 
 export const useCollectionOnce = <T>(
   query?: firebase.firestore.Query | null,
-  options?: {
-    getOptions?: firebase.firestore.GetOptions;
-  }
-): CollectionOnceHook<T> => {
+  options?: OnceOptions
+): CollectionHook<T> => {
   const { error, loading, reset, setError, setValue, value } = useLoadingValue<
     firebase.firestore.QuerySnapshot,
     Error
@@ -32,7 +31,7 @@ export const useCollectionOnce = <T>(
       .catch(setError);
   }, [ref.current]);
 
-  const resArray: CollectionOnceHook<T> = [
+  const resArray: CollectionHook<T> = [
     value as firebase.firestore.QuerySnapshot<T>,
     loading,
     error,
@@ -40,14 +39,14 @@ export const useCollectionOnce = <T>(
   return useMemo(() => resArray, resArray);
 };
 
-export const useCollectionDataOnce = <T>(
+export const useCollectionDataOnce = <
+  T,
+  IDField extends string = '',
+  RefField extends string = ''
+>(
   query?: firebase.firestore.Query | null,
-  options?: {
-    getOptions?: firebase.firestore.GetOptions;
-    idField?: string;
-    refField?: string;
-  }
-): CollectionDataOnceHook<T> => {
+  options?: OnceDataOptions
+): CollectionDataHook<T, IDField, RefField> => {
   const idField = options ? options.idField : undefined;
   const refField = options ? options.refField : undefined;
   const getOptions = options ? options.getOptions : undefined;
@@ -58,9 +57,13 @@ export const useCollectionDataOnce = <T>(
     () =>
       (snapshots
         ? snapshots.docs.map((doc) => snapshotToData(doc, idField, refField))
-        : undefined) as T[],
+        : undefined) as Data<T, IDField, RefField>[],
     [snapshots, idField, refField]
   );
-  const resArray: CollectionDataOnceHook<T> = [values, loading, error];
+  const resArray: CollectionDataHook<T, IDField, RefField> = [
+    values,
+    loading,
+    error,
+  ];
   return useMemo(() => resArray, resArray);
 };

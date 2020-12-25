@@ -1,19 +1,18 @@
 import firebase from 'firebase/app';
 import { useEffect, useMemo } from 'react';
 import { snapshotToData } from './helpers';
-import { LoadingHook, useIsEqualRef, useLoadingValue } from '../util';
-
-export type DocumentHook<T> = LoadingHook<
-  firebase.firestore.DocumentSnapshot<T>,
-  Error
->;
-export type DocumentDataHook<T> = LoadingHook<T, Error>;
+import {
+  Data,
+  DataOptions,
+  DocumentHook,
+  DocumentDataHook,
+  Options,
+} from './types';
+import { useIsEqualRef, useLoadingValue } from '../util';
 
 export const useDocument = <T>(
   docRef?: firebase.firestore.DocumentReference | null,
-  options?: {
-    snapshotListenOptions?: firebase.firestore.SnapshotListenOptions;
-  }
+  options?: Options
 ): DocumentHook<T> => {
   const { error, loading, reset, setError, setValue, value } = useLoadingValue<
     firebase.firestore.DocumentSnapshot,
@@ -48,14 +47,14 @@ export const useDocument = <T>(
   return useMemo(() => resArray, resArray);
 };
 
-export const useDocumentData = <T>(
+export const useDocumentData = <
+  T,
+  IDField extends string = '',
+  RefField extends string = ''
+>(
   docRef?: firebase.firestore.DocumentReference | null,
-  options?: {
-    idField?: string;
-    refField?: string;
-    snapshotListenOptions?: firebase.firestore.SnapshotListenOptions;
-  }
-): DocumentDataHook<T> => {
+  options?: DataOptions
+): DocumentDataHook<T, IDField, RefField> => {
   const idField = options ? options.idField : undefined;
   const refField = options ? options.refField : undefined;
   const snapshotListenOptions = options
@@ -65,10 +64,17 @@ export const useDocumentData = <T>(
     snapshotListenOptions,
   });
   const value = useMemo(
-    () => (snapshot ? snapshotToData(snapshot, idField, refField) : undefined) as T,
+    () =>
+      (snapshot
+        ? snapshotToData(snapshot, idField, refField)
+        : undefined) as Data<T, IDField, RefField>,
     [snapshot, idField, refField]
   );
 
-  const resArray: DocumentDataHook<T> = [value, loading, error];
+  const resArray: DocumentDataHook<T, IDField, RefField> = [
+    value,
+    loading,
+    error,
+  ];
   return useMemo(() => resArray, resArray);
 };
