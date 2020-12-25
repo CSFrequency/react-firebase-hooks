@@ -1,5 +1,11 @@
 import firebase from 'firebase/app';
 
+export type ValOptions<T> = {
+  keyField?: string;
+  refField?: string;
+  transform?: (fn: any) => T;
+};
+
 const isObject = (val: any) =>
   val != null && typeof val === 'object' && Array.isArray(val) === false;
 
@@ -7,7 +13,7 @@ export const snapshotToData = <T>(
   snapshot: firebase.database.DataSnapshot,
   keyField?: string,
   refField?: string,
-  transform: (any) => T = (value) => value as T
+  transform: (fn: any) => T = (value) => value as T
 ) => {
   if (!snapshot.exists) {
     return undefined;
@@ -16,7 +22,7 @@ export const snapshotToData = <T>(
   const val = snapshot.val();
   if (isObject(val)) {
     return {
-      ...transform(val),
+      ...(transform(val) as {}),
       ...(keyField ? { [keyField]: snapshot.key } : null),
       ...(refField ? { [refField]: snapshot.ref } : null),
     };

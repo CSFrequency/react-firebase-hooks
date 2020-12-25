@@ -3,7 +3,7 @@ import firebase from 'firebase/app';
 export const snapshotToData = (
   snapshot: firebase.firestore.DocumentSnapshot,
   idField?: string,
-  refField?: string,
+  refField?: string
 ) => {
   if (!snapshot.exists) {
     return undefined;

@@ -1,6 +1,6 @@
 import firebase from 'firebase/app';
 import { useEffect, useMemo } from 'react';
-import { snapshotToData } from './helpers';
+import { snapshotToData, ValOptions } from './helpers';
 import { LoadingHook, useIsEqualRef, useLoadingValue } from '../util';
 
 export type ObjectHook = LoadingHook<
@@ -38,11 +38,7 @@ export const useObject = (
 
 export const useObjectVal = <T>(
   query?: firebase.database.Query | null,
-  options?: {
-    keyField?: string;
-    refField?: string;
-    transform?: (any) => T;
-  }
+  options?: ValOptions<T>
 ): ObjectValHook<T> => {
   const keyField = options ? options.keyField : undefined;
   const refField = options ? options.refField : undefined;
