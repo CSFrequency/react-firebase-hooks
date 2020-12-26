@@ -14,11 +14,12 @@ import { useList } from 'react-firebase-hooks/database';
 
 List of Realtime Database hooks:
 
-- [useList](#uselistref)
+- [useList](#uselist)
 - [useListKeys](#uselistkeys)
 - [useListVals](#uselistvals)
 - [useObject](#useobject)
 - [useObjectVal](#useobjectval)
+- [transform option](#transform-option)
 
 ### useList
 
@@ -100,6 +101,7 @@ The `useListVals` hook takes the following parameters:
 - `options`: (optional) `Object` with the following parameters:
   - `keyField`: (optional) `string` field name that should be populated with the `firebase.database.DataSnapshot.id` property in the returned values.
   - `refField`: (optional) `string` field name that should be populated with the `firebase.database.DataSnapshot.ref` property.
+  - `transform`: (optional) a function that will receive the raw value for each row from the `firebase.database.DataSnapshot.val()` method and converts any fields from the restricted types that Firebase allows to whatever is required by the application.  See [`transform`](#transform-option) below.
 
 Returns:
 
@@ -160,9 +162,76 @@ The `useObjectVal` hook takes the following parameters:
 - `options`: (optional) `Object` with the following parameters:
   - `keyField`: (optional) `string` field name that should be populated with the `firebase.database.DataSnapshot.key` property in the returned value.
   - `refField`: (optional) `string` field name that should be populated with the `firebase.database.DataSnapshot.ref` property.
+  - `transform`: (optional) a function that will receive the raw value from the `firebase.database.DataSnapshot.val()` method and converts any fields from the restricted types that Firebase allows to whatever it is required by the application. See [`transform`](#transform-option) below.
+
 
 Returns:
 
 - `value`: a `T`, or `undefined` if no reference is supplied
 - `loading`: a `boolean` to indicate if the data is still being loaded
 - `error`: Any `firebase.FirebaseError` returned by Firebase when trying to load the data, or `undefined` if there is no error
+
+### transform option
+
+Firebase allows a restricted number of data types in its store.  The application, on the other hand, might require converting some of these types into whatever it really needs, `Date` types being a common case.
+
+```js
+transform?: (arg: any) => T;
+```
+
+Used as an option in both `useListVals` and `useObjectVal`, the `transform` function takes the values as stored in a Firebase database row and converts it to the data types expected by the application.  No changes will occur to the data if this option is omitted.
+
+The `transform` function needs to deal with just one row at a time.  It will be called once when used with `useObjectVal` and multiple times, once per row, when used with `useListVals` so the same function can be used in both.
+
+The `transform` function will not receive the `id` or `ref` values referenced in the properties named in the `keyField` or `refField` options, nor it is expected to produce them.  Either or both, if specified, will be merged afterwards.
+
+
+#### Full Example
+
+```js
+type SaleType = {
+  idSale: string;
+  date: Date; // <== it is declared as type Date which Firebase does not support.
+  // ...Other fields
+}
+
+const options = {
+  keyField: 'idSale',
+  transform: (val) => ({
+    ...val,
+    date: new Date(val.date),
+  }),
+};
+
+export const useSale: (
+  idSale: string
+) => [SaleType | undefined, boolean, any] = (idSale) =>
+  useObjectVal<SaleType>(database.ref(`sales/${idSale}`), options);
+
+export const useSales: () => [
+  SaleType[] | undefined,
+  boolean,
+  any
+] = () =>
+  useListVals<SaleType>(database.ref('sales'), options);
+```
+
+The `transform` function might be used for various purposes:
+
+```js
+transform: ({firstName, lastName, someBool, ...val}) => ({
+    // Merge in default values, declared elsewhere:
+    ...defaultValues,
+
+    // Override them with the actual values
+    ...val,
+
+    // Create new fields from existing values
+    fullName: `${firstName} ${lastName}`,
+
+    // Ensure a field is a proper boolean instead of truish or falsy:
+    someBool: !!someBool,
+
+    // Same goes for any other poorly represented data type
+  });
+```
