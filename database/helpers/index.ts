@@ -3,7 +3,7 @@ import firebase from 'firebase/app';
 export type ValOptions<T> = {
   keyField?: string;
   refField?: string;
-  transform?: (fn: any) => T;
+  transform?: (val: any) => T;
 };
 
 const isObject = (val: any) =>
@@ -13,7 +13,7 @@ export const snapshotToData = <T>(
   snapshot: firebase.database.DataSnapshot,
   keyField?: string,
   refField?: string,
-  transform: (fn: any) => T = (value) => value as T
+  transform: (val: any) => T = (value) => value as T
 ) => {
   if (!snapshot.exists) {
     return undefined;
