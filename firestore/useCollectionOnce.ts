@@ -10,8 +10,8 @@ import {
 } from './types';
 import { useIsEqualRef, useLoadingValue } from '../util';
 
-export const useCollectionOnce = <T>(
-  query?: firebase.firestore.Query | null,
+export const useCollectionOnce = <T = firebase.firestore.DocumentData>(
+  query?: firebase.firestore.Query<T> | null,
   options?: OnceOptions
 ): CollectionHook<T> => {
   const { error, loading, reset, setError, setValue, value } = useLoadingValue<
@@ -40,11 +40,11 @@ export const useCollectionOnce = <T>(
 };
 
 export const useCollectionDataOnce = <
-  T,
+  T = firebase.firestore.DocumentData,
   IDField extends string = '',
   RefField extends string = ''
 >(
-  query?: firebase.firestore.Query | null,
+  query?: firebase.firestore.Query<T> | null,
   options?: OnceDataOptions
 ): CollectionDataHook<T, IDField, RefField> => {
   const idField = options ? options.idField : undefined;

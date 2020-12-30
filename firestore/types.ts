@@ -14,27 +14,27 @@ export type OnceOptions = {
 };
 export type OnceDataOptions = OnceOptions & IDOptions;
 export type Data<
-  T,
+  T = firebase.firestore.DocumentData,
   IDField extends string = '',
   RefField extends string = ''
 > = T & Record<IDField, string> & Record<RefField, string>;
 
-export type CollectionHook<T> = LoadingHook<
+export type CollectionHook<T = firebase.firestore.DocumentData> = LoadingHook<
   firebase.firestore.QuerySnapshot<T>,
   Error
 >;
 export type CollectionDataHook<
-  T,
+  T = firebase.firestore.DocumentData,
   IDField extends string = '',
   RefField extends string = ''
 > = LoadingHook<Data<T, IDField, RefField>[], Error>;
 
-export type DocumentHook<T> = LoadingHook<
+export type DocumentHook<T = firebase.firestore.DocumentData> = LoadingHook<
   firebase.firestore.DocumentSnapshot<T>,
   Error
 >;
 export type DocumentDataHook<
-  T,
+  T = firebase.firestore.DocumentData,
   IDField extends string = '',
   RefField extends string = ''
 > = LoadingHook<Data<T, IDField, RefField>, Error>;

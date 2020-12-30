@@ -12,8 +12,8 @@ import { LoadingHook, useIsEqualRef, useLoadingValue } from '../util';
 
 export type DocumentDataOnceHook<T> = LoadingHook<T, Error>;
 
-export const useDocumentOnce = <T>(
-  docRef?: firebase.firestore.DocumentReference | null,
+export const useDocumentOnce = <T = firebase.firestore.DocumentData>(
+  docRef?: firebase.firestore.DocumentReference<T> | null,
   options?: OnceOptions
 ): DocumentHook<T> => {
   const { error, loading, reset, setError, setValue, value } = useLoadingValue<
@@ -42,11 +42,11 @@ export const useDocumentOnce = <T>(
 };
 
 export const useDocumentDataOnce = <
-  T,
+  T = firebase.firestore.DocumentData,
   IDField extends string = '',
   RefField extends string = ''
 >(
-  docRef?: firebase.firestore.DocumentReference | null,
+  docRef?: firebase.firestore.DocumentReference<T> | null,
   options?: OnceDataOptions
 ): DocumentDataHook<T, IDField, RefField> => {
   const idField = options ? options.idField : undefined;
