@@ -1,14 +1,9 @@
+export { useList, useListKeys, useListVals } from './useList';
+export { useObject, useObjectVal } from './useObject';
 export {
-  useList,
-  useListKeys,
-  useListVals,
   ListHook,
   ListKeysHook,
   ListValsHook,
-} from './useList';
-export {
-  useObject,
-  useObjectVal,
   ObjectHook,
   ObjectValHook,
-} from './useObject';
+} from './types';

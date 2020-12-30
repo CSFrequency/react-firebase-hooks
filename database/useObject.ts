@@ -1,13 +1,8 @@
 import firebase from 'firebase/app';
 import { useEffect, useMemo } from 'react';
 import { snapshotToData, ValOptions } from './helpers';
-import { LoadingHook, useIsEqualRef, useLoadingValue } from '../util';
-
-export type ObjectHook = LoadingHook<
-  firebase.database.DataSnapshot,
-  firebase.FirebaseError
->;
-export type ObjectValHook<T> = LoadingHook<T, firebase.FirebaseError>;
+import { ObjectHook, ObjectValHook, Val } from './types';
+import { useIsEqualRef, useLoadingValue } from '../util';
 
 export const useObject = (
   query?: firebase.database.Query | null
@@ -36,18 +31,29 @@ export const useObject = (
   return useMemo(() => resArray, resArray);
 };
 
-export const useObjectVal = <T>(
+export const useObjectVal = <
+  T,
+  KeyField extends string = '',
+  RefField extends string = ''
+>(
   query?: firebase.database.Query | null,
   options?: ValOptions
-): ObjectValHook<T> => {
+): ObjectValHook<T, KeyField, RefField> => {
   const keyField = options ? options.keyField : undefined;
   const refField = options ? options.refField : undefined;
   const [snapshot, loading, error] = useObject(query);
   const value = useMemo(
-    () => (snapshot ? snapshotToData(snapshot, keyField, refField) : undefined),
+    () =>
+      (snapshot
+        ? snapshotToData(snapshot, keyField, refField)
+        : undefined) as Val<T, KeyField, RefField>,
     [snapshot, keyField, refField]
   );
 
-  const resArray: ObjectValHook<T> = [value, loading, error];
+  const resArray: ObjectValHook<T, KeyField, RefField> = [
+    value,
+    loading,
+    error,
+  ];
   return useMemo(() => resArray, resArray);
 };

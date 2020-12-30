@@ -2,14 +2,8 @@ import firebase from 'firebase/app';
 import { useEffect, useMemo } from 'react';
 import { snapshotToData, ValOptions } from './helpers';
 import useListReducer from './helpers/useListReducer';
-import { LoadingHook, useIsEqualRef } from '../util';
-
-export type ListHook = LoadingHook<
-  firebase.database.DataSnapshot[],
-  firebase.FirebaseError
->;
-export type ListKeysHook = LoadingHook<string[], firebase.FirebaseError>;
-export type ListValsHook<T> = LoadingHook<T[], firebase.FirebaseError>;
+import { ListHook, ListKeysHook, ListValsHook, Val } from './types';
+import { useIsEqualRef } from '../util';
 
 export const useList = (query?: firebase.database.Query | null): ListHook => {
   const [state, dispatch] = useListReducer();
@@ -129,23 +123,31 @@ export const useListKeys = (
   return useMemo(() => resArray, resArray);
 };
 
-export const useListVals = <T>(
+export const useListVals = <
+  T,
+  KeyField extends string = '',
+  RefField extends string = ''
+>(
   query?: firebase.database.Query | null,
-  options?: ValOptions,
-): ListValsHook<T> => {
+  options?: ValOptions
+): ListValsHook<T, KeyField, RefField> => {
   const keyField = options ? options.keyField : undefined;
   const refField = options ? options.refField : undefined;
   const [snapshots, loading, error] = useList(query);
   const values = useMemo(
     () =>
-      snapshots
+      (snapshots
         ? snapshots.map((snapshot) =>
             snapshotToData(snapshot, keyField, refField)
           )
-        : undefined,
+        : undefined) as Val<T, KeyField, RefField>[],
     [snapshots, keyField, refField]
   );
 
-  const resArray: ListValsHook<T> = [values, loading, error];
+  const resArray: ListValsHook<T, KeyField, RefField> = [
+    values,
+    loading,
+    error,
+  ];
   return useMemo(() => resArray, resArray);
 };
