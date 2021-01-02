@@ -104,6 +104,7 @@ const useDocumentDataInternal = <
 ): DocumentDataHook<T, IDField, RefField> => {
   const idField = options ? options.idField : undefined;
   const refField = options ? options.refField : undefined;
+  const snapshotOptions = options ? options.snapshotOptions : undefined;
   const [snapshot, loading, error] = useDocumentInternal<T>(
     listen,
     docRef,
@@ -112,7 +113,7 @@ const useDocumentDataInternal = <
   const value = useMemo(
     () =>
       (snapshot
-        ? snapshotToData(snapshot, idField, refField)
+        ? snapshotToData(snapshot, snapshotOptions, idField, refField)
         : undefined) as Data<T, IDField, RefField>,
     [snapshot, idField, refField]
   );

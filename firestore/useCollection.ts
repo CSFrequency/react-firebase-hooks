@@ -104,6 +104,7 @@ const useCollectionDataInternal = <
 ): CollectionDataHook<T, IDField, RefField> => {
   const idField = options ? options.idField : undefined;
   const refField = options ? options.refField : undefined;
+  const snapshotOptions = options ? options.snapshotOptions : undefined;
   const [snapshots, loading, error] = useCollectionInternal<T>(
     listen,
     query,
@@ -112,7 +113,9 @@ const useCollectionDataInternal = <
   const values = useMemo(
     () =>
       (snapshots
-        ? snapshots.docs.map((doc) => snapshotToData(doc, idField, refField))
+        ? snapshots.docs.map((doc) =>
+            snapshotToData(doc, snapshotOptions, idField, refField)
+          )
         : undefined) as Data<T, IDField, RefField>[],
     [snapshots, idField, refField]
   );

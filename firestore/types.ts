@@ -4,6 +4,7 @@ import { LoadingHook } from '../util';
 type IDOptions = {
   idField?: string;
   refField?: string;
+  snapshotOptions?: firebase.firestore.SnapshotOptions;
 };
 export type Options = {
   snapshotListenOptions?: firebase.firestore.SnapshotListenOptions;
