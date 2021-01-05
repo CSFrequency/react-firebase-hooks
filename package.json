@@ -43,7 +43,8 @@
     "build": "npm run clean && rollup -c",
     "clean": "rimraf ./dist ./auth/dist ./auth/*.d.ts ./database/dist ./database/*.d.ts ./firestore/dist ./firestore/*.d.ts ./storage/dist ./storage/*.d.ts ./util/*.d.ts",
     "dev": "npm run clean && rollup -c -w",
-    "prepublish": "npm run build"
+    "prepublish": "npm run build",
+    "start": "rollup -c -w"
   },
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
