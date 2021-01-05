@@ -87,7 +87,7 @@ Import statement :
 import { useRegister } from 'react-firebase-hooks/auth';
 ```
 
-For full full example [check here](#registerandloginhookusage)
+For full full example [check here](#register-and-login-hook-usage)
 
 Register a user and receive the user credentials
 
@@ -116,7 +116,7 @@ Import statement :
 import { useLogin } from 'react-firebase-hooks/auth';
 ```
 
-For full full example [check here](#registerandloginhookusage)
+For full full example [check here](#register-and-login-hook-usage)
 
 Register a user and receive the user credentials
 
@@ -144,11 +144,7 @@ function App() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loggedInUser, error, login, loading] = useLogin(auth, email, password);
-  const [registeredUser, error, register, loading] = useRegister(
-    auth,
-    email,
-    password
-  );
+  const [registeredUser, error, register, loading] = useRegister(auth, email, password);
 
   if (error) {
     return (
