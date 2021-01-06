@@ -145,7 +145,9 @@ function App() {
   const [password, setPassword] = useState('');
   const [loggedInUser, error, login, loading] = useLogin(auth, email, password);
   const [registeredUser, error, register, loading] = useRegister(auth, email, password);
-  // Use only of the above hooks in one file
+  
+  // Use only one of the above two hooks in one file
+  
   if (error) {
     return (
       <div>
