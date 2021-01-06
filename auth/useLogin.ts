@@ -1,15 +1,19 @@
 import { useState, useMemo } from 'react';
 import firebase from 'firebase/app';
+import 'firebase/auth';
 import { AuthHookType } from '../util';
 
-export type loginHook = AuthHookType<firebase.auth.UserCredential>;
+export type loginHook = AuthHookType<
+  firebase.auth.UserCredential,
+  firebase.FirebaseError
+>;
 
 export default (
   auth: firebase.auth.Auth,
   email: string,
   password: string
 ): loginHook => {
-  const [error, setError] = useState<any>(null);
+  const [error, setError] = useState<firebase.FirebaseError>();
   const [
     loggedInUser,
     setLoggedInUser,
@@ -24,7 +28,7 @@ export default (
         setLoggedInUser(resUser);
         setLoading(false);
       })
-      .catch((err) => {
+      .catch((err: firebase.FirebaseError) => {
         setError(err);
         setLoading(false);
       });
