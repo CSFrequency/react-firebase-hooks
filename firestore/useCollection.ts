@@ -32,7 +32,7 @@ export const useCollectionData = <
   RefField extends string = ''
 >(
   query?: firebase.firestore.Query<T> | null,
-  options?: DataOptions
+  options?: DataOptions<T>
 ): CollectionDataHook<T, IDField, RefField> => {
   return useCollectionDataInternal(true, query, options);
 };
@@ -43,7 +43,7 @@ export const useCollectionDataOnce = <
   RefField extends string = ''
 >(
   query?: firebase.firestore.Query<T> | null,
-  options?: OnceDataOptions
+  options?: OnceDataOptions<T>
 ): CollectionDataHook<T, IDField, RefField> => {
   return useCollectionDataInternal(false, query, options);
 };
@@ -100,11 +100,12 @@ const useCollectionDataInternal = <
 >(
   listen: boolean,
   query?: firebase.firestore.Query<T> | null,
-  options?: DataOptions & OnceDataOptions
+  options?: DataOptions<T> & OnceDataOptions<T>
 ): CollectionDataHook<T, IDField, RefField> => {
   const idField = options ? options.idField : undefined;
   const refField = options ? options.refField : undefined;
   const snapshotOptions = options ? options.snapshotOptions : undefined;
+  const transform = options ? options.transform : undefined;
   const [snapshots, loading, error] = useCollectionInternal<T>(
     listen,
     query,
@@ -114,10 +115,16 @@ const useCollectionDataInternal = <
     () =>
       (snapshots
         ? snapshots.docs.map((doc) =>
-            snapshotToData(doc, snapshotOptions, idField, refField)
+            snapshotToData<T>(
+              doc,
+              snapshotOptions,
+              idField,
+              refField,
+              transform
+            )
           )
         : undefined) as Data<T, IDField, RefField>[],
-    [snapshots, idField, refField]
+    [snapshots, idField, refField, transform]
   );
 
   const resArray: CollectionDataHook<T, IDField, RefField> = [

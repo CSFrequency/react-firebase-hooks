@@ -32,7 +32,7 @@ export const useDocumentData = <
   RefField extends string = ''
 >(
   docRef?: firebase.firestore.DocumentReference<T> | null,
-  options?: DataOptions
+  options?: DataOptions<T>
 ): DocumentDataHook<T, IDField, RefField> => {
   return useDocumentDataInternal(true, docRef, options);
 };
@@ -43,7 +43,7 @@ export const useDocumentDataOnce = <
   RefField extends string = ''
 >(
   docRef?: firebase.firestore.DocumentReference<T> | null,
-  options?: OnceDataOptions
+  options?: OnceDataOptions<T>
 ): DocumentDataHook<T, IDField, RefField> => {
   return useDocumentDataInternal(false, docRef, options);
 };
@@ -100,11 +100,12 @@ const useDocumentDataInternal = <
 >(
   listen: boolean,
   docRef?: firebase.firestore.DocumentReference<T> | null,
-  options?: DataOptions
+  options?: DataOptions<T>
 ): DocumentDataHook<T, IDField, RefField> => {
   const idField = options ? options.idField : undefined;
   const refField = options ? options.refField : undefined;
   const snapshotOptions = options ? options.snapshotOptions : undefined;
+  const transform = options ? options.transform : undefined;
   const [snapshot, loading, error] = useDocumentInternal<T>(
     listen,
     docRef,
@@ -113,7 +114,13 @@ const useDocumentDataInternal = <
   const value = useMemo(
     () =>
       (snapshot
-        ? snapshotToData(snapshot, snapshotOptions, idField, refField)
+        ? snapshotToData(
+            snapshot,
+            snapshotOptions,
+            idField,
+            refField,
+            transform
+          )
         : undefined) as Data<T, IDField, RefField>,
     [snapshot, idField, refField]
   );

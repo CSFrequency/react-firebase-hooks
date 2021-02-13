@@ -29,6 +29,10 @@ List of Cloud Firestore hooks:
 - [useDocumentData](#usedocumentdata)
 - [useDocumentDataOnce](#usedocumentdataonce)
 
+Additional functionality:
+
+- [Transforming data](#transforming-data)
+
 ### useCollection
 
 ```js
@@ -121,6 +125,7 @@ The `useCollectionData` hook takes the following parameters:
   - `refField`: (optional) name of the field that should be populated with the `firebase.firestore.QuerySnapshot.ref` property.
   - `snapshotListenOptions`: (optional) `firebase.firestore.SnapshotListenOptions` to customise how the collection is loaded
   - `snapshotOptions`: (optional) `firebase.firestore.SnapshotOptions` to customise how data is retrieved from snapshots
+  - `transform`: (optional) a function that receives the raw `firebase.firestore.DocumentData` for each item in the collection to allow manual transformation of the data where required by the application. See [`Transforming data`](#transforming-data) below.
 
 Returns:
 
@@ -144,6 +149,7 @@ The `useCollectionDataOnce` hook takes the following parameters:
   - `idField`: (optional) name of the field that should be populated with the `firebase.firestore.QuerySnapshot.id` property.
   - `refField`: (optional) name of the field that should be populated with the `firebase.firestore.QuerySnapshot.ref` property.
   - `snapshotOptions`: (optional) `firebase.firestore.SnapshotOptions` to customise how data is retrieved from snapshots
+  - `transform`: (optional) a function that receives the raw `firebase.firestore.DocumentData` for each item in the collection to allow manual transformation of the data where required by the application. See [`Transforming data`](#transforming-data) below.
 
 Returns:
 
@@ -232,6 +238,7 @@ The `useDocumentData` hook takes the following parameters:
   - `refField`: (optional) name of the field that should be populated with the `firebase.firestore.QuerySnapshot.ref` property.
   - `snapshotListenOptions`: (optional) `firebase.firestore.SnapshotListenOptions` to customise how the collection is loaded
   - `snapshotOptions`: (optional) `firebase.firestore.SnapshotOptions` to customise how data is retrieved from snapshots
+  - `transform`: (optional) a function that receives the raw `firebase.firestore.DocumentData` to allow manual transformation of the data where required by the application. See [`Transforming data`](#transforming-data) below.
 
 Returns:
 
@@ -255,9 +262,24 @@ The `useDocumentDataOnce` hook takes the following parameters:
   - `idField`: (optional) name of the field that should be populated with the `firebase.firestore.DocumentSnapshot.id` property.
   - `refField`: (optional) name of the field that should be populated with the `firebase.firestore.QuerySnapshot.ref` property.
   - `snapshotOptions`: (optional) `firebase.firestore.SnapshotOptions` to customise how data is retrieved from snapshots
+  - `transform`: (optional) a function that receives the raw `firebase.firestore.DocumentData` to allow manual transformation of the data where required by the application. See [`Transforming data`](#transforming-data) below.
 
 Returns:
 
 - `value`: `T`, or `undefined` if no query is supplied
 - `loading`: a `boolean` to indicate if the data is still being loaded
 - `error`: Any `Error` returned by Firebase when trying to load the data, or `undefined` if there is no error
+
+## Transforming data
+
+Firestore allows a restricted number of data types in its store. The application, on the other hand, might require converting some of these types into whatever it really needs, `Date` types being a common case.
+
+Both `useCollectionData` and `useDocumentData` support an optional `transform` function which allows the transformation of the underlying Firestore data into whatever format the application requires.
+
+```js
+transform?: (val: any) => T;
+```
+
+The `transform` function is passed a single row of a data, so will be called once when used with `useDocumentData` and multiple times when used with `useCollectionData`.
+
+The `transform` function will not receive the `id` or `ref` values referenced in the properties named in the `idField` or `refField` options, nor it is expected to produce them. Either or both, if specified, will be merged afterwards.

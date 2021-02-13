@@ -1,19 +1,20 @@
 import firebase from 'firebase/app';
 import { LoadingHook } from '../util';
 
-type IDOptions = {
+type IDOptions<T> = {
   idField?: string;
   refField?: string;
   snapshotOptions?: firebase.firestore.SnapshotOptions;
+  transform?: (val: any) => T;
 };
 export type Options = {
   snapshotListenOptions?: firebase.firestore.SnapshotListenOptions;
 };
-export type DataOptions = Options & IDOptions;
+export type DataOptions<T> = Options & IDOptions<T>;
 export type OnceOptions = {
   getOptions?: firebase.firestore.GetOptions;
 };
-export type OnceDataOptions = OnceOptions & IDOptions;
+export type OnceDataOptions<T> = OnceOptions & IDOptions<T>;
 export type Data<
   T = firebase.firestore.DocumentData,
   IDField extends string = '',
