@@ -165,7 +165,7 @@ The `useObjectVal` hook takes the following parameters:
 - `options`: (optional) `Object` with the following parameters:
   - `keyField`: (optional) `string` field name that should be populated with the `firebase.database.DataSnapshot.key` property in the returned value.
   - `refField`: (optional) `string` field name that should be populated with the `firebase.database.DataSnapshot.ref` property.
-  - `transform`: (optional) a function that receives the raw `firebase.database.DataSnapshot.val()` for each item in the list to allow manual transformation of the data where required by the application. See [`Transforming data`](#transforming-data) below.
+  - `transform`: (optional) a function that receives the raw `firebase.database.DataSnapshot.val()` to allow manual transformation of the data where required by the application. See [`Transforming data`](#transforming-data) below.
 
 Returns:
 
@@ -185,7 +185,7 @@ transform?: (val: any) => T;
 
 The `transform` function is passed a single row of a data, so will be called once when used with `useObjectVal` and multiple times, when used with `useListVals`.
 
-The `transform` function will not receive the `id` or `ref` values referenced in the properties named in the `keyField` or `refField` options, nor it is expected to produce them. Either or both, if specified, will be merged afterwards.
+The `transform` function will not receive the `key` or `ref` values referenced in the properties named in the `keyField` or `refField` options, nor it is expected to produce them. Either or both, if specified, will be merged afterwards.
 
 #### Full Example
 
