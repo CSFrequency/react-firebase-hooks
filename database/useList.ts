@@ -139,16 +139,17 @@ export const useListVals = <
   RefField extends string = ''
 >(
   query?: firebase.database.Query | null,
-  options?: ValOptions
+  options?: ValOptions<T>
 ): ListValsHook<T, KeyField, RefField> => {
   const keyField = options ? options.keyField : undefined;
   const refField = options ? options.refField : undefined;
+  const transform = options ? options.transform : undefined;
   const [snapshots, loading, error] = useList(query);
   const values = useMemo(
     () =>
       (snapshots
         ? snapshots.map((snapshot) =>
-            snapshotToData(snapshot, keyField, refField)
+            snapshotToData(snapshot, keyField, refField, transform)
           )
         : undefined) as Val<T, KeyField, RefField>[],
     [snapshots, keyField, refField]

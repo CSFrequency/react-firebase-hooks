@@ -37,15 +37,16 @@ export const useObjectVal = <
   RefField extends string = ''
 >(
   query?: firebase.database.Query | null,
-  options?: ValOptions
+  options?: ValOptions<T>
 ): ObjectValHook<T, KeyField, RefField> => {
   const keyField = options ? options.keyField : undefined;
   const refField = options ? options.refField : undefined;
+  const transform = options ? options.transform : undefined;
   const [snapshot, loading, error] = useObject(query);
   const value = useMemo(
     () =>
       (snapshot
-        ? snapshotToData(snapshot, keyField, refField)
+        ? snapshotToData(snapshot, keyField, refField, transform)
         : undefined) as Val<T, KeyField, RefField>,
     [snapshot, keyField, refField]
   );
