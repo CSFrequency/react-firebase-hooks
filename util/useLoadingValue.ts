@@ -5,7 +5,7 @@ export type LoadingValue<T, E> = {
   loading: boolean;
   reset: () => void;
   setError: (error: E) => void;
-  setValue: (value?: T | null) => void;
+  setValue: (value?: T) => void;
   value?: T;
 };
 
@@ -53,7 +53,7 @@ const reducer = <E>() => (
   }
 };
 
-export default <T, E>(getDefaultValue?: () => T | null): LoadingValue<T, E> => {
+export default <T, E>(getDefaultValue?: () => T): LoadingValue<T, E> => {
   const defaultValue = getDefaultValue ? getDefaultValue() : undefined;
   const [state, dispatch] = useReducer(
     reducer<E>(),
@@ -69,7 +69,7 @@ export default <T, E>(getDefaultValue?: () => T | null): LoadingValue<T, E> => {
     dispatch({ type: 'error', error });
   };
 
-  const setValue = (value?: T | null) => {
+  const setValue = (value?: T) => {
     dispatch({ type: 'value', value });
   };
 
