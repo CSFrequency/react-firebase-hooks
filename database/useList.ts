@@ -152,7 +152,7 @@ export const useListVals = <
             snapshotToData(snapshot, keyField, refField, transform)
           )
         : undefined) as Val<T, KeyField, RefField>[],
-    [snapshots, keyField, refField]
+    [snapshots, keyField, refField, transform]
   );
 
   const resArray: ListValsHook<T, KeyField, RefField> = [

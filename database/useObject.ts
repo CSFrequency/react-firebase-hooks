@@ -48,7 +48,7 @@ export const useObjectVal = <
       (snapshot
         ? snapshotToData(snapshot, keyField, refField, transform)
         : undefined) as Val<T, KeyField, RefField>,
-    [snapshot, keyField, refField]
+    [snapshot, keyField, refField, transform]
   );
 
   const resArray: ObjectValHook<T, KeyField, RefField> = [
