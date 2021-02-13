@@ -52,34 +52,44 @@ export const useList = (query?: firebase.database.Query | null): ListHook => {
     };
 
     let childAddedHandler: ReturnType<typeof ref.on> | undefined;
-    const children: firebase.database.DataSnapshot[] = [];
     const onInitialLoad = (snapshot: firebase.database.DataSnapshot) => {
-      let childrenToProcess = Object.keys(snapshot.val()).length;
+      const snapshotVal = snapshot.val();
+      let childrenToProcess = snapshotVal
+        ? Object.keys(snapshot.val()).length
+        : 0;
 
-      const onChildAddedWithoutInitialLoad = (
-        addedChild: firebase.database.DataSnapshot,
-        previousKey?: string | null
-      ) => {
-        // process the first batch of children all at once
-        if (childrenToProcess > 0) {
-          childrenToProcess--;
-          children.push(addedChild);
+      // If the list is empty then initialise the hook and use the default `onChildAdded` behaviour
+      if (childrenToProcess === 0) {
+        childAddedHandler = ref.on('child_added', onChildAdded, onError);
+        onValue([]);
+      } else {
+        // Otherwise, we load the first batch of children all to reduce re-renders
+        const children: firebase.database.DataSnapshot[] = [];
 
-          if (childrenToProcess === 0) {
-            onValue(children);
+        const onChildAddedWithoutInitialLoad = (
+          addedChild: firebase.database.DataSnapshot,
+          previousKey?: string | null
+        ) => {
+          if (childrenToProcess > 0) {
+            childrenToProcess--;
+            children.push(addedChild);
+
+            if (childrenToProcess === 0) {
+              onValue(children);
+            }
+
+            return;
           }
 
-          return;
-        }
+          onChildAdded(snapshot, previousKey);
+        };
 
-        onChildAdded(snapshot, previousKey);
-      };
-
-      childAddedHandler = ref.on(
-        'child_added',
-        onChildAddedWithoutInitialLoad,
-        onError
-      );
+        childAddedHandler = ref.on(
+          'child_added',
+          onChildAddedWithoutInitialLoad,
+          onError
+        );
+      }
     };
 
     ref.once('value', onInitialLoad, onError);
