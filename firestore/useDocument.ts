@@ -122,7 +122,7 @@ const useDocumentDataInternal = <
             transform
           )
         : undefined) as Data<T, IDField, RefField>,
-    [snapshot, idField, refField]
+    [snapshot, snapshotOptions, idField, refField, transform]
   );
 
   const resArray: DocumentDataHook<T, IDField, RefField> = [

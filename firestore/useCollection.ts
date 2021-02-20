@@ -124,7 +124,7 @@ const useCollectionDataInternal = <
             )
           )
         : undefined) as Data<T, IDField, RefField>[],
-    [snapshots, idField, refField, transform]
+    [snapshots, snapshotOptions, idField, refField, transform]
   );
 
   const resArray: CollectionDataHook<T, IDField, RefField> = [
