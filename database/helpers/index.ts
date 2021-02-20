@@ -27,5 +27,5 @@ export const snapshotToData = <T>(
       ...(refField ? { [refField]: snapshot.ref } : null),
     };
   }
-  return val;
+  return transform ? transform(val) : val;
 };
