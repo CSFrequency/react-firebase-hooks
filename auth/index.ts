@@ -1,3 +1,5 @@
 export { default as useAuthState, AuthStateHook } from './useAuthState';
-export { default as useLogin, loginHook } from './useLogin';
-export { default as useRegister, registerHook } from './useRegister';
+export { default as useSignInWithEmailAndPassword } from './useSignInWithEmailAndPassword';
+export { default as useCreateUserWithEmailAndPassword } from './useCreateUserWithEmailAndPassword';
+
+export { EmailAndPasswordActionHook } from './types';

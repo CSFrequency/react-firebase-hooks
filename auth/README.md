@@ -11,8 +11,8 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 List of Auth hooks:
 
 - [useAuthState](#useauthstate)
-- [useRegister](#useregister)
-- [useLogin](#uselogin)
+- [useCreateUserWithEmailAndPassword](#usecreateuserwithemailandpassword)
+- [useSignInWithEmailAndPassword](#usesigninwithemailandpassword)
 
 ### useAuthState
 
@@ -32,7 +32,7 @@ Returns:
 - `loading`: A `boolean` to indicate whether the the authentication state is still being loaded
 - `error`: Any `firebase.auth.Error` returned by Firebase when trying to load the user, or `undefined` if there is no error
 
-#### If you are registering or logingIn the user for the first time consider using [useRegister](#useregister), [useLogin](#uselogin)
+#### If you are registering or signing in the user for the first time consider using [useCreateUserWithEmailAndPassword](#usecreateuserwithemailandpassword), [useSignInWithEmailAndPassword](#usesigninwithemailandpassword)
 
 #### Full Example
 
@@ -75,79 +75,45 @@ const CurrentUser = () => {
 };
 ```
 
-### useRegister
+### useCreateUserWithEmailAndPassword
 
 ```js
-const [registeredUser, error, register, loading] = useRegister( auth, email, password );
+const [
+  createUserWithEmailAndPassword,
+  user,
+  loading,
+  error,
+] = useCreateUserWithEmailAndPassword(auth);
 ```
 
-Import statement :
+Create a user with email and password. Wraps the underlying `firebase.auth().createUserWithEmailAndPassword` method and provides additional `loading` and `error` information.
 
-```js
-import { useRegister } from 'react-firebase-hooks/auth';
-```
-
-For full full example [check here](#register-and-login-hook-usage)
-
-Register a user and receive the user credentials
-
-The `useRegister` hook takes the following parameters:
+The `useCreateUserWithEmailAndPassword` hook takes the following parameters:
 
 - `auth`: `firebase.auth.Auth` instance for the app you would like to monitor
-- `email`: `string` email of the user
-- `password`: `string` password of the user
 
 Returns:
 
-- `registeredUser`: The `registeredUser` if data is received or `undefined` if not
-- `loading`: A `boolean` to indicate whether the the registration is completed or it's yet processing
-- `error`: `any` returned by Firebase when trying to register the user, or `undefined` if there is no error
-- `register`: `void` a function you can call to start the registration
+- `createUserWithEmailAndPassword(email: string, password: string)`: a function you can call to start the registration
+- `user`: The `firebase.User` if the user was created or `undefined` if not
+- `loading`: A `boolean` to indicate whether the the user creation is processing
+- `error`: Any `firebase.auth.Error` returned by Firebase when trying to create the user, or `undefined` if there is no error
 
-### useLogin
-
-```js
-const [loggedInUser, error, login, loading] = useLogin(auth, email, password);
-```
-
-Import statement :
-
-```js
-import { useLogin } from 'react-firebase-hooks/auth';
-```
-
-For full full example [check here](#register-and-login-hook-usage)
-
-Register a user and receive the user credentials
-
-The `useLogin` hook takes the following parameters:
-
-- `auth`: `firebase.auth.Auth` instance for the app you would like to monitor
-- `email`: `string` email of the user
-- `password`: `string` password of the user
-
-Returns:
-
-- `loggedInUser`: The `loggedInUser` if data is received or `undefined` if not
-- `loading`: A `boolean` to indicate whether the the login process is completed or it's yet processing
-- `error`: `any` returned by Firebase when trying to register the user, or `undefined` if there is no error
-- `login`: `void` a function you can call to start the login process
-
-## Register and Login hook usage
+#### Full Example
 
 ```jsx
-import React, { useState } from 'react';
-import { auth } from './firebase';
-import { useLogin, useRegister } from 'react-firebase-hooks/auth';
+import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
 
-function App() {
+const SignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loggedInUser, error, login, loading] = useLogin(auth, email, password);
-  const [registeredUser, error, register, loading] = useRegister(auth, email, password);
-  
-  // Use only one of the above two hooks in one file
-  
+  const [
+    createUserWithEmailAndPassword,
+    user,
+    loading,
+    error,
+  ] = useCreateUserWithEmailAndPassword(auth);
+
   if (error) {
     return (
       <div>
@@ -158,17 +124,10 @@ function App() {
   if (loading) {
     return <p>Loading...</p>;
   }
-  if (loggedInUser) {
+  if (user) {
     return (
       <div>
-        <p>Currently LoggedIn User: {loggedInUser.email}</p>
-      </div>
-    );
-  }
-  if (registeredUser) {
-    return (
-      <div>
-        <p>Currently Registered User: {loggedInUser.email}</p>
+        <p>Registered User: {user.email}</p>
       </div>
     );
   }
@@ -184,11 +143,86 @@ function App() {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
-      <button onClick={login}>SIGN IN</button>
-      <button onClick={register}>SIGN UP</button>
+      <button onClick={() => createUserWithEmailAndPassword(email, password)}>
+        Register
+      </button>
     </div>
   );
-}
+};
+```
 
-export default App;
+### useSignInWithEmailAndPassword
+
+```js
+const [
+  signInWithEmailAndPassword,
+  user,
+  loading,
+  error,
+] = useSignInWithEmailAndPassword(auth, email, password);
+```
+
+Login a user with email and password. Wraps the underlying `firebase.auth().signInWithEmailAndPassword` method and provides additional `loading` and `error` information.
+
+The `useSignInWithEmailAndPassword` hook takes the following parameters:
+
+- `auth`: `firebase.auth.Auth` instance for the app you would like to monitor
+
+Returns:
+
+- `signInWithEmailAndPassword(email: string, password: string)`: a function you can call to start the login
+- `user`: The `firebase.User` if the user was logged in or `undefined` if not
+- `loading`: A `boolean` to indicate whether the the user login is processing
+- `error`: Any `firebase.auth.Error` returned by Firebase when trying to login the user, or `undefined` if there is no error
+
+#### Full Example
+
+```jsx
+import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
+
+const SignIn = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [
+    signInWithEmailAndPassword,
+    user,
+    loading,
+    error,
+  ] = useSignInWithEmailAndPassword(auth);
+
+  if (error) {
+    return (
+      <div>
+        <p>Error: {error.message}</p>
+      </div>
+    );
+  }
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+  if (user) {
+    return (
+      <div>
+        <p>Signed In User: {user.email}</p>
+      </div>
+    );
+  }
+  return (
+    <div className="App">
+      <input
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <input
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
+      <button onClick={() => signInWithEmailAndPassword(email, password)}>
+        Sign In
+      </button>
+    </div>
+  );
+};
 ```

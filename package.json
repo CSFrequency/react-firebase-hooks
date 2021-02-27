@@ -1,6 +1,6 @@
 {
   "name": "react-firebase-hooks",
-  "version": "2.2.0",
+  "version": "3.0.0-alpha.3",
   "description": "React Hooks for Firebase",
   "author": "CS Frequency Limited (https://csfrequency.com)",
   "license": "Apache-2.0",
@@ -44,6 +44,7 @@
     "clean": "rimraf ./dist ./auth/dist ./auth/*.d.ts ./database/dist ./database/*.d.ts ./firestore/dist ./firestore/*.d.ts ./storage/dist ./storage/*.d.ts ./util/*.d.ts",
     "dev": "npm run clean && rollup -c -w",
     "prepublish": "npm run build",
+    "prettier": "prettier --check .",
     "start": "rollup -c -w"
   },
   "main": "dist/index.cjs.js",
