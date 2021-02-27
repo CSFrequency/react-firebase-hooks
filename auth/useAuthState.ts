@@ -21,9 +21,6 @@ export default (auth: firebase.auth.Auth): AuthStateHook => {
     };
   }, [auth]);
 
-  const resArray:AuthStateHook = [value, loading, error]
-  return useMemo<AuthStateHook>(
-    () => resArray,
-    resArray,
-  );
+  const resArray: AuthStateHook = [value, loading, error];
+  return useMemo<AuthStateHook>(() => resArray, resArray);
 };

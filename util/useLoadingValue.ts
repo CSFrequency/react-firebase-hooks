@@ -81,13 +81,7 @@ export default <T, E>(getDefaultValue?: () => T): LoadingValue<T, E> => {
       setError,
       setValue,
       value: state.value,
-    }), [
-      state.error,
-      state.loading,
-      reset,
-      setError,
-      setValue,
-      state.value,
-    ]
+    }),
+    [state.error, state.loading, reset, setError, setValue, state.value]
   );
 };
