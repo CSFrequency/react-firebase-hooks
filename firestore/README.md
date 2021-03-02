@@ -272,9 +272,7 @@ Returns:
 
 ## Transforming data
 
-Firestore allows a restricted number of data types in its store. The application, on the other hand, might require converting some of these types into whatever it really needs, `Date` types being a common case.
-
-Both `useCollectionData` and `useDocumentData` support an optional `transform` function which allows the transformation of the underlying Firestore data into whatever format the application requires.
+Firestore allows a restricted number of data types in its store, which may not be flexible enough for your application. Both `useCollectionData` and `useDocumentData` support an optional `transform` function which allows the transformation of the underlying Firestore data into whatever format the application requires, e.g. a `Date` type.
 
 ```js
 transform?: (val: any) => T;
@@ -283,3 +281,5 @@ transform?: (val: any) => T;
 The `transform` function is passed a single row of a data, so will be called once when used with `useDocumentData` and multiple times when used with `useCollectionData`.
 
 The `transform` function will not receive the `id` or `ref` values referenced in the properties named in the `idField` or `refField` options, nor it is expected to produce them. Either or both, if specified, will be merged afterwards.
+
+If the `transform` function is defined within your React component, it is recomended that you memoize the function to prevent unnecessry renders.
