@@ -27,7 +27,7 @@ This library explores how React Hooks can work to make integration with Firebase
 
 ## Upgrading from v2 to v3
 
-To upgrade your project from v2 to v3 check out the [Release Notes](https://github.com/CSFrequency/react-firebase-hooks/releases/tag/v3.0.0) which have full details of everything that needs to be changed.
+To upgrade your project from v2 to v3 check out the [Release Notes](https://github.com/CSFrequency/react-firebase-hooks/releases/tag/v3.0.1) which have full details of everything that needs to be changed.
 
 ## Documentation
 
