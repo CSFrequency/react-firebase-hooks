@@ -13,8 +13,12 @@ React Firebase Hooks v3 requires **React 16.8.0 or later** and **Firebase v8.0.0
 
 > Official support for Hooks was added to React Native in v0.59.0. React Firebase Hooks works with both the Firebase JS SDK and React Native Firebase, although some of the typings may be incorrect.
 
-```
+```bash
+# with npm
 npm install --save react-firebase-hooks
+
+# with yarn
+yarn add react-firebase-hooks
 ```
 
 This assumes that you’re using the [npm](https://npmjs.com) package manager with a module bundler like [Webpack](https://webpack.js.org/) or [Browserify](http://browserify.org/) to consume [CommonJS](http://webpack.github.io/docs/commonjs.html) modules.
