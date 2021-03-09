@@ -26,12 +26,19 @@ const plugins = [
   commonjs(),
 ];
 
-const external = Object.keys(pkg.peerDependencies || {});
+const peerDependencies = pkg.peerDependencies || {};
+const external = [
+  ...Object.keys(pkg.peerDependencies),
+  'firebase/auth',
+  'firebase/database',
+  'firebase/firestore',
+  'firebase/storage',
+];
 
 const components = ['auth', 'database', 'firestore', 'storage'];
 
 export default components
-  .map(component => {
+  .map((component) => {
     const pkg = pkgsByName[component];
     return [
       {
