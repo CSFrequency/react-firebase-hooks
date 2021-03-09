@@ -1,6 +1,5 @@
 import { useState, useMemo } from 'react';
 import firebase from 'firebase/app';
-import 'firebase/auth';
 import { EmailAndPasswordActionHook } from './types';
 
 export default (auth: firebase.auth.Auth): EmailAndPasswordActionHook => {
