@@ -1,5 +1,5 @@
 import firebase from 'firebase/app';
-import { useEffect, useMemo } from 'react';
+import { Ref, useEffect, useMemo } from 'react';
 import { snapshotToData } from './helpers';
 import {
   Data,
@@ -13,17 +13,17 @@ import {
 import { useIsEqualRef, useLoadingValue } from '../util';
 
 export const useDocument = <T = firebase.firestore.DocumentData>(
-  docRef?: firebase.firestore.DocumentReference<T> | null,
+  docRef?: firebase.firestore.DocumentReference | null,
   options?: Options
 ): DocumentHook<T> => {
-  return useDocumentInternal(true, docRef, options);
+  return useDocumentInternal<T>(true, docRef, options);
 };
 
 export const useDocumentOnce = <T = firebase.firestore.DocumentData>(
-  docRef?: firebase.firestore.DocumentReference<T> | null,
+  docRef?: firebase.firestore.DocumentReference | null,
   options?: OnceOptions
 ): DocumentHook<T> => {
-  return useDocumentInternal(false, docRef, options);
+  return useDocumentInternal<T>(false, docRef, options);
 };
 
 export const useDocumentData = <
@@ -31,10 +31,10 @@ export const useDocumentData = <
   IDField extends string = '',
   RefField extends string = ''
 >(
-  docRef?: firebase.firestore.DocumentReference<T> | null,
+  docRef?: firebase.firestore.DocumentReference | null,
   options?: DataOptions<T>
 ): DocumentDataHook<T, IDField, RefField> => {
-  return useDocumentDataInternal(true, docRef, options);
+  return useDocumentDataInternal<T, IDField, RefField>(true, docRef, options);
 };
 
 export const useDocumentDataOnce = <
@@ -42,15 +42,15 @@ export const useDocumentDataOnce = <
   IDField extends string = '',
   RefField extends string = ''
 >(
-  docRef?: firebase.firestore.DocumentReference<T> | null,
+  docRef?: firebase.firestore.DocumentReference | null,
   options?: OnceDataOptions<T>
 ): DocumentDataHook<T, IDField, RefField> => {
-  return useDocumentDataInternal(false, docRef, options);
+  return useDocumentDataInternal<T, IDField, RefField>(false, docRef, options);
 };
 
 const useDocumentInternal = <T = firebase.firestore.DocumentData>(
   listen: boolean,
-  docRef?: firebase.firestore.DocumentReference<T> | null,
+  docRef?: firebase.firestore.DocumentReference | null,
   options?: Options & OnceOptions
 ): DocumentHook<T> => {
   const { error, loading, reset, setError, setValue, value } = useLoadingValue<
@@ -99,7 +99,7 @@ const useDocumentDataInternal = <
   RefField extends string = ''
 >(
   listen: boolean,
-  docRef?: firebase.firestore.DocumentReference<T> | null,
+  docRef?: firebase.firestore.DocumentReference | null,
   options?: DataOptions<T>
 ): DocumentDataHook<T, IDField, RefField> => {
   const idField = options ? options.idField : undefined;

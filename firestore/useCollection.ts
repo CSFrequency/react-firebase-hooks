@@ -13,17 +13,17 @@ import {
 import { useIsEqualRef, useLoadingValue } from '../util';
 
 export const useCollection = <T = firebase.firestore.DocumentData>(
-  query?: firebase.firestore.Query<T> | null,
+  query?: firebase.firestore.Query | null,
   options?: Options
 ): CollectionHook<T> => {
-  return useCollectionInternal(true, query, options);
+  return useCollectionInternal<T>(true, query, options);
 };
 
 export const useCollectionOnce = <T = firebase.firestore.DocumentData>(
   query?: firebase.firestore.Query<T> | null,
   options?: OnceOptions
 ): CollectionHook<T> => {
-  return useCollectionInternal(false, query, options);
+  return useCollectionInternal<T>(false, query, options);
 };
 
 export const useCollectionData = <
@@ -31,10 +31,10 @@ export const useCollectionData = <
   IDField extends string = '',
   RefField extends string = ''
 >(
-  query?: firebase.firestore.Query<T> | null,
+  query?: firebase.firestore.Query | null,
   options?: DataOptions<T>
 ): CollectionDataHook<T, IDField, RefField> => {
-  return useCollectionDataInternal(true, query, options);
+  return useCollectionDataInternal<T, IDField, RefField>(true, query, options);
 };
 
 export const useCollectionDataOnce = <
@@ -42,15 +42,15 @@ export const useCollectionDataOnce = <
   IDField extends string = '',
   RefField extends string = ''
 >(
-  query?: firebase.firestore.Query<T> | null,
+  query?: firebase.firestore.Query | null,
   options?: OnceDataOptions<T>
 ): CollectionDataHook<T, IDField, RefField> => {
-  return useCollectionDataInternal(false, query, options);
+  return useCollectionDataInternal<T, IDField, RefField>(false, query, options);
 };
 
 const useCollectionInternal = <T = firebase.firestore.DocumentData>(
   listen: boolean,
-  query?: firebase.firestore.Query<T> | null,
+  query?: firebase.firestore.Query | null,
   options?: Options & OnceOptions
 ) => {
   const { error, loading, reset, setError, setValue, value } = useLoadingValue<
@@ -99,7 +99,7 @@ const useCollectionDataInternal = <
   RefField extends string = ''
 >(
   listen: boolean,
-  query?: firebase.firestore.Query<T> | null,
+  query?: firebase.firestore.Query | null,
   options?: DataOptions<T> & OnceDataOptions<T>
 ): CollectionDataHook<T, IDField, RefField> => {
   const idField = options ? options.idField : undefined;
