@@ -1,5 +1,5 @@
 import firebase from 'firebase/app';
-import { Ref, useEffect, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { snapshotToData } from './helpers';
 import {
   Data,
