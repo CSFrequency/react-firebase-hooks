@@ -5,7 +5,9 @@ export type Val<
   T,
   KeyField extends string = '',
   RefField extends string = ''
-> = T & Record<KeyField, string> & Record<RefField, string>;
+> = T &
+  Record<KeyField, string> &
+  Record<RefField, firebase.database.Reference>;
 
 export type ObjectHook = LoadingHook<
   firebase.database.DataSnapshot,
