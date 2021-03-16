@@ -1,6 +1,6 @@
 import firebase from 'firebase/app';
 
-export const snapshotToData = <T>(
+export const snapshotToData = <T = firebase.firestore.DocumentData>(
   snapshot: firebase.firestore.DocumentSnapshot,
   snapshotOptions?: firebase.firestore.SnapshotOptions,
   idField?: string,

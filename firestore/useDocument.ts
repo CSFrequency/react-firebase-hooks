@@ -114,7 +114,7 @@ const useDocumentDataInternal = <
   const value = useMemo(
     () =>
       (snapshot
-        ? snapshotToData(
+        ? snapshotToData<T>(
             snapshot,
             snapshotOptions,
             idField,
