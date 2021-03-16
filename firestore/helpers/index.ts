@@ -11,11 +11,16 @@ export const snapshotToData = <T>(
     return undefined;
   }
 
-  return {
-    ...(transform
-      ? transform(snapshot.data(snapshotOptions))
-      : snapshot.data(snapshotOptions)),
-    ...(idField ? { [idField]: snapshot.id } : null),
-    ...(refField ? { [refField]: snapshot.ref } : null),
-  };
+  let data = snapshot.data(snapshotOptions) as firebase.firestore.DocumentData;
+  if (transform) {
+    data = transform(data);
+  }
+  if (idField) {
+    data[idField] = snapshot.id;
+  }
+  if (refField) {
+    data[refField] = snapshot.ref;
+  }
+
+  return data;
 };
