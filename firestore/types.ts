@@ -19,7 +19,9 @@ export type Data<
   T = firebase.firestore.DocumentData,
   IDField extends string = '',
   RefField extends string = ''
-> = T & Record<IDField, string> & Record<RefField, string>;
+> = T &
+  Record<IDField, string> &
+  Record<RefField, firebase.firestore.DocumentReference<T>>;
 
 export type CollectionHook<T = firebase.firestore.DocumentData> = LoadingHook<
   firebase.firestore.QuerySnapshot<T>,
