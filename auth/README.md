@@ -32,7 +32,9 @@ Returns:
 - `loading`: A `boolean` to indicate whether the the authentication state is still being loaded
 - `error`: Any `firebase.auth.Error` returned by Firebase when trying to load the user, or `undefined` if there is no error
 
-#### If you are registering or signing in the user for the first time consider using [useCreateUserWithEmailAndPassword](#usecreateuserwithemailandpassword), [useSignInWithEmailAndPassword](#usesigninwithemailandpassword)
+> Note: If you use `firebase.auth().signInWithEmaillAndPassord()` or  `firebase.auth().createUserWithEmaillAndPassord()` you won't have access to `loading` and `error` since it comes from `firebase.auth().onAuthChanged`. Wrap firebase auth calls with a try/catch or use our hooks to handle those:
+
+#### [useCreateUserWithEmailAndPassword](#usecreateuserwithemailandpassword), [useSignInWithEmailAndPassword](#usesigninwithemailandpassword)
 
 #### Full Example
 
@@ -47,22 +49,8 @@ const logout = () => {
 };
 
 const CurrentUser = () => {
-  const [user, loading, error] = useAuthState(firebase.auth());
+  const [user] = useAuthState(firebase.auth());
 
-  if (loading) {
-    return (
-      <div>
-        <p>Initialising User...</p>
-      </div>
-    );
-  }
-  if (error) {
-    return (
-      <div>
-        <p>Error: {error}</p>
-      </div>
-    );
-  }
   if (user) {
     return (
       <div>
