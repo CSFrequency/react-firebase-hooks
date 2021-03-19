@@ -1,8 +1,11 @@
 import { useState, useMemo } from 'react';
 import firebase from 'firebase/app';
-import { EmailAndPasswordActionHook } from './types';
+import { CreateUserOptions, EmailAndPasswordActionHook } from './types';
 
-export default (auth: firebase.auth.Auth, options?:{sendEmailVerification?: boolean, emailVerificationOptions?: firebase.auth.ActionCodeSettings}): EmailAndPasswordActionHook => {
+export default (
+  auth: firebase.auth.Auth,
+  options?: CreateUserOptions
+): EmailAndPasswordActionHook => {
   const [error, setError] = useState<firebase.FirebaseError>();
   const [
     registeredUser,
@@ -17,8 +20,8 @@ export default (auth: firebase.auth.Auth, options?:{sendEmailVerification?: bool
     setLoading(true);
     try {
       const user = await auth.createUserWithEmailAndPassword(email, password);
-      if (options?.sendEmailVerification) {
-        await user.user.sendEmailVerification(emailVerificationOptions)   
+      if (options && options.sendEmailVerification && user.user) {
+        await user.user.sendEmailVerification(options.emailVerificationOptions);
       }
       setRegisteredUser(user);
       setLoading(false);

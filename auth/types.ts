@@ -6,6 +6,10 @@ type AuthActionHook<T, E> = [
   boolean,
   E | undefined
 ];
+export type CreateUserOptions = {
+  emailVerificationOptions?: firebase.auth.ActionCodeSettings;
+  sendEmailVerification?: boolean;
+};
 export type EmailAndPasswordActionHook = AuthActionHook<
   firebase.auth.UserCredential,
   firebase.FirebaseError
