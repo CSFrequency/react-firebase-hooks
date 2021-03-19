@@ -91,6 +91,9 @@ Create a user with email and password. Wraps the underlying `firebase.auth().cre
 The `useCreateUserWithEmailAndPassword` hook takes the following parameters:
 
 - `auth`: `firebase.auth.Auth` instance for the app you would like to monitor
+- `options`: (optional) `Object` with the following parameters:
+  - `emailVerificationOptions`: (optional) `firebase.auth.ActionCodeSettings` to customise the email verification
+  - `sendEmailVerification`: (optional) `boolean` to trigger sending of an email verification after the user has been created
 
 Returns:
 
