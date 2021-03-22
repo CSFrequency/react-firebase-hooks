@@ -1,7 +1,7 @@
 import firebase from 'firebase/app';
 import { LoadingHook } from '../util';
 
-type IDOptions<T> = {
+export type IDOptions<T> = {
   idField?: string;
   refField?: string;
   snapshotOptions?: firebase.firestore.SnapshotOptions;
