@@ -7,7 +7,7 @@ export type AuthStateHook = LoadingHook<
   firebase.auth.Error
 >;
 
-export default (auth: firebase.auth.Auth, options: {onUserChanged?: Promise<void>}): AuthStateHook => {
+export default (auth: firebase.auth.Auth, options: {onUserChanged?: (user?: firebase.User) => Promise<void>}): AuthStateHook => {
   const { error, loading, setError, setValue, value } = useLoadingValue<
     firebase.User | null,
     firebase.auth.Error
