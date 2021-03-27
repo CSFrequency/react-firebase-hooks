@@ -1,5 +1,5 @@
 import firebase from 'firebase/app';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { LoadingHook, useLoadingValue } from '../util';
 
 export type AuthStateHook = LoadingHook<
@@ -7,14 +7,20 @@ export type AuthStateHook = LoadingHook<
   firebase.auth.Error
 >;
 
-export default (auth: firebase.auth.Auth): AuthStateHook => {
+export default (auth: firebase.auth.Auth, options: {onUserChanged?: Promise<void>}): AuthStateHook => {
   const { error, loading, setError, setValue, value } = useLoadingValue<
     firebase.User | null,
     firebase.auth.Error
   >(() => auth.currentUser);
 
   useEffect(() => {
-    const listener = auth.onAuthStateChanged(setValue, setError);
+    const listener = auth.onAuthStateChanged(async (user) => {
+      if(typeof options?.onUserChanged === 'function') {
+         // onUserLoaded function to process custom claims on any other trigger function
+         await options.onUserChanged(user)
+      }
+      setValue(user);
+    }, setError);
 
     return () => {
       listener();
