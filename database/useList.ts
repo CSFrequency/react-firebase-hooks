@@ -81,7 +81,7 @@ export const useList = (query?: firebase.database.Query | null): ListHook => {
             return;
           }
 
-          onChildAdded(snapshot, previousKey);
+          onChildAdded(addedChild, previousKey);
         };
 
         childAddedHandler = ref.on(
