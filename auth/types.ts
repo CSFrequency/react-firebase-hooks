@@ -1,6 +1,6 @@
 import firebase from 'firebase/app';
 
-type AuthActionHook<T, E> = [
+export type AuthActionHook<T, E> = [
   (email: string, password: string) => void,
   T | undefined,
   boolean,
