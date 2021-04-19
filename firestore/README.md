@@ -293,6 +293,28 @@ Returns:
 - `onEndReached`: The callback that should be invoked when a new page should be fetched. This can
 be passed to `FlatListProps.onEndReached`.
 
+#### Usage:
+```ts
+const query = firestore()
+  .collection('...')
+  .orderBy('someField');
+
+// Listen to the first 20 documents then fetch pages of 5 after that
+const [docs, isLoading, error, onEndReached] = useFireScroll(query, 5, 20);
+
+return (
+  <FlatList<firebase.firestore.QueryDocumentSnapshot>
+    data={docs}
+    keyExtractor={(item) => item.ref.path}
+    renderItem={({ item }) => {
+      return <Text style={styles.listItem}>{item.ref.id}</Text>;
+    }}
+    onEndReachedThreshold={0.2}
+    onEndReached={onEndReached}
+/>
+);
+```
+
 ## Transforming data
 
 Firestore allows a restricted number of data types in its store, which may not be flexible enough for your application. Both `useCollectionData` and `useDocumentData` support an optional `transform` function which allows the transformation of the underlying Firestore data into whatever format the application requires, e.g. a `Date` type.
