@@ -28,6 +28,7 @@ List of Cloud Firestore hooks:
 - [useDocumentOnce](#usedocumentonce)
 - [useDocumentData](#usedocumentdata)
 - [useDocumentDataOnce](#usedocumentdataonce)
+- [useFireScroll](#usefirescroll)
 
 Additional functionality:
 
@@ -269,6 +270,28 @@ Returns:
 - `value`: `T`, or `undefined` if no query is supplied
 - `loading`: a `boolean` to indicate if the data is still being loaded
 - `error`: Any `Error` returned by Firebase when trying to load the data, or `undefined` if there is no error
+
+### useFireScroll
+
+```js
+const [value, loading, error, onEndReached] = useFireScroll < T > (query, defaultPageSize, firstPageSize);
+```
+
+Infinite scroll hook that listens to the first page and fetches static info for all other pages.
+
+The `useFireScroll` hook takes the following parameters:
+
+- `query`: `firebase.firestore.Query` for the data you would like to load
+- `defaultPageSize`: `number` number of documents to fetch for each page except the first if `firstPageSize` is provided
+- `firstPageSize`: (optional) `number` of documents that you would like to listen to for the first page
+
+Returns:
+
+- `values`: an array of `T`
+- `loading`: a `boolean` to indicate if the data is still being loaded
+- `error`: Any `Error` returned by Firebase when trying to load the data, or `undefined` if there is no error
+- `onEndReached`: The callback that should be invoked when a new page should be fetched. This can
+be passed to `FlatListProps.onEndReached`.
 
 ## Transforming data
 

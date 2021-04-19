@@ -10,6 +10,7 @@ export {
   useDocumentOnce,
   useDocumentDataOnce,
 } from './useDocument';
+export { useFireScroll } from './useFireScroll'
 export {
   CollectionHook,
   CollectionDataHook,
