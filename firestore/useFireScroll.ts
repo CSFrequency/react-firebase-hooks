@@ -67,11 +67,6 @@ class FireScrollState<T> {
 }
 
 /**
- * Type of {@link FlatListProps.onEndReached} callback.
- */
-export type OnEndReachedCallback = (info: { distanceFromEnd: number }) => void;
-
-/**
  * React hook return type.
  */
 export type FireScrollResult<T> = [
@@ -88,20 +83,19 @@ export type FireScrollResult<T> = [
    */
     Error | undefined,
   /**
-   * Callback handler to be passed into {@link FlatListProps.onEndReached}
+   * Callback to fetch the next page.
    */
-  OnEndReachedCallback
+  () => Promise<void>
 ];
 
 /**
  * Firestore infinite scroll hook.
  *
  * This begins by starting a realtime listener for the first page of results and handles
- * additions, deletions, and modifications to that result set {@link listenToFirstPage}.
+ * additions, deletions, and modifications to that result set {@see listenToFirstPage}.
  *
- * After the listener has initialized then more pages will be loaded automatically when the returned
- * {@link OnEndReachedCallback} is invoked. This callback should be passed by the hook user
- * into a {@link FlatListProps.onEndReached} prop.
+ * After the listener has initialized then more pages can be loaded by invoking the callback
+ * that is returned by the hook {@see fetchNextPage}.
  *
  * @param query the base Firestore query
  * @param defaultPageSize number of documents to fetch for all pages except possibly the first
@@ -266,7 +260,7 @@ export function useFireScroll<T>(
    * Fetch a new non-realtime page if one is available.
    * @return the new updated state
    */
-  async function fetchNewPage(): Promise<FireScrollState<T>> {
+  async function fetchNextStaticPage(): Promise<FireScrollState<T>> {
     if (!value) {
       throw new Error('Attempted to fetch page while state is undefined');
     }
@@ -280,12 +274,12 @@ export function useFireScroll<T>(
     }
 
     /*
-    TODO - Right now this can't be used to show a UI indicator because this function doesn't
+    Right now this can't be used to show a UI indicator because this function doesn't
     return the state until the fetch has completed and this is set back to false. We'd need
     to invoke the fetch query in a non-blocking manner and return from this function while the
     fetch is still in progress.
 
-    Right now it's used as an internal tracking mechanism to ensure that we don't fetch multiple
+    For now it's used as an internal tracking mechanism to ensure that we don't fetch multiple
     pages at the same time.
      */
     value.fetchInProgress = true;
@@ -322,11 +316,10 @@ export function useFireScroll<T>(
   }
 
   /**
-   * Callback to be invoked when the scroll index has passed the
-   * threshold to trigger a new page fetch.
+   * Fetch the next page.
    */
-  async function onEndReached() {
-    const newState = await fetchNewPage();
+  async function fetchNextPage() {
+    const newState = await fetchNextStaticPage();
     setValue(newState);
   }
 
@@ -339,7 +332,7 @@ export function useFireScroll<T>(
     return listenToFirstPage();
   }, [queryRef.current]);
 
-  return [(value && value.docs()) || [], loading, error || undefined, onEndReached];
+  return [(value && value.docs()) || [], loading, error || undefined, fetchNextPage];
 }
 
 
