@@ -136,14 +136,14 @@ Returns:
 import { useObject } from 'react-firebase-hooks/database';
 
 const DatabaseValue = () => {
-  const [value, loading, error] = useObject(firebase.database().ref('value'));
+  const [snapshot, loading, error] = useObject(firebase.database().ref('value'));
 
   return (
     <div>
       <p>
         {error && <strong>Error: {error}</strong>}
         {loading && <span>Value: Loading...</span>}
-        {value && <span>Value: {value.val()}</span>}
+        {snapshot && <span>Value: {snapshot.val()}</span>}
       </p>
     </div>
   );
