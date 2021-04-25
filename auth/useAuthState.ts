@@ -17,7 +17,11 @@ export default (auth: firebase.auth.Auth, options: {onUserChanged?: (user?: fire
     const listener = auth.onAuthStateChanged(async (user) => {
       if(typeof options?.onUserChanged === 'function') {
          // onUserLoaded function to process custom claims on any other trigger function
-         await options.onUserChanged(user)
+         try {
+           await options.onUserChanged(user)
+         } catch(e) {
+           setError(e)
+         }
       }
       setValue(user);
     }, setError);
