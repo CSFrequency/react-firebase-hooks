@@ -1,4 +1,4 @@
-import firebase from 'firebase/app';
+import firebase from 'firebase/compat/app';
 import { useEffect, useMemo } from 'react';
 import { snapshotToData } from './helpers';
 import {
@@ -55,7 +55,7 @@ const useCollectionInternal = <T = firebase.firestore.DocumentData>(
 ) => {
   const { error, loading, reset, setError, setValue, value } = useLoadingValue<
     firebase.firestore.QuerySnapshot,
-    firebase.FirebaseError
+    firebase.firestore.FirestoreError
   >();
   const ref = useIsEqualRef(query, reset);
 

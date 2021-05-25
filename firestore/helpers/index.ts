@@ -1,4 +1,4 @@
-import firebase from 'firebase/app';
+import firebase from 'firebase/compat/app';
 
 export const snapshotToData = <T = firebase.firestore.DocumentData>(
   snapshot: firebase.firestore.DocumentSnapshot,

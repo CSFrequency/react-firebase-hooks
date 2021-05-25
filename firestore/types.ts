@@ -1,4 +1,4 @@
-import firebase from 'firebase/app';
+import firebase from 'firebase/compat/app';
 import { LoadingHook } from '../util';
 
 export type IDOptions<T> = {
@@ -25,20 +25,20 @@ export type Data<
 
 export type CollectionHook<T = firebase.firestore.DocumentData> = LoadingHook<
   firebase.firestore.QuerySnapshot<T>,
-  firebase.FirebaseError
+  firebase.firestore.FirestoreError
 >;
 export type CollectionDataHook<
   T = firebase.firestore.DocumentData,
   IDField extends string = '',
   RefField extends string = ''
-> = LoadingHook<Data<T, IDField, RefField>[], firebase.FirebaseError>;
+> = LoadingHook<Data<T, IDField, RefField>[], firebase.firestore.FirestoreError>;
 
 export type DocumentHook<T = firebase.firestore.DocumentData> = LoadingHook<
   firebase.firestore.DocumentSnapshot<T>,
-  firebase.FirebaseError
+  firebase.firestore.FirestoreError
 >;
 export type DocumentDataHook<
   T = firebase.firestore.DocumentData,
   IDField extends string = '',
   RefField extends string = ''
-> = LoadingHook<Data<T, IDField, RefField>, firebase.FirebaseError>;
+> = LoadingHook<Data<T, IDField, RefField>, firebase.firestore.FirestoreError>;
