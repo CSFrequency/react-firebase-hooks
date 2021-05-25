@@ -1,4 +1,4 @@
-import firebase from 'firebase/app';
+import firebase from 'firebase/compat/app';
 import { useEffect, useMemo } from 'react';
 import { snapshotToData, ValOptions } from './helpers';
 import useListReducer from './helpers/useListReducer';
