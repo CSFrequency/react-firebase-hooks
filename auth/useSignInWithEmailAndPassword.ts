@@ -1,13 +1,13 @@
 import { useState, useMemo } from 'react';
-import firebase from 'firebase/app';
+import { Auth, UserCredential, signInWithEmailAndPassword as _signInWithEmailAndPassword, AuthError } from 'firebase/auth';
 import { EmailAndPasswordActionHook } from './types';
 
-export default (auth: firebase.auth.Auth): EmailAndPasswordActionHook => {
-  const [error, setError] = useState<firebase.FirebaseError>();
+export default (auth: Auth): EmailAndPasswordActionHook => {
+  const [error, setError] = useState<AuthError>();
   const [
     loggedInUser,
     setLoggedInUser,
-  ] = useState<firebase.auth.UserCredential>();
+  ] = useState<UserCredential>();
   const [loading, setLoading] = useState<boolean>(false);
 
   const signInWithEmailAndPassword = async (
@@ -16,7 +16,7 @@ export default (auth: firebase.auth.Auth): EmailAndPasswordActionHook => {
   ) => {
     setLoading(true);
     try {
-      const user = await auth.signInWithEmailAndPassword(email, password);
+      const user = await _signInWithEmailAndPassword(auth, email, password);
       setLoggedInUser(user);
       setLoading(false);
     } catch (err) {

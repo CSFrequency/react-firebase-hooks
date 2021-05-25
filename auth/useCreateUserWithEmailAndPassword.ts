@@ -1,16 +1,16 @@
 import { useState, useMemo } from 'react';
-import firebase from 'firebase/app';
 import { CreateUserOptions, EmailAndPasswordActionHook } from './types';
+import { Auth, UserCredential, createUserWithEmailAndPassword as _createUserWithEmailAndPassword, sendEmailVerification, AuthError } from 'firebase/auth';
 
 export default (
-  auth: firebase.auth.Auth,
+  auth: Auth,
   options?: CreateUserOptions
 ): EmailAndPasswordActionHook => {
-  const [error, setError] = useState<firebase.FirebaseError>();
+  const [error, setError] = useState<AuthError>();
   const [
     registeredUser,
     setRegisteredUser,
-  ] = useState<firebase.auth.UserCredential>();
+  ] = useState<UserCredential>();
   const [loading, setLoading] = useState<boolean>(false);
 
   const createUserWithEmailAndPassword = async (
@@ -19,9 +19,9 @@ export default (
   ) => {
     setLoading(true);
     try {
-      const user = await auth.createUserWithEmailAndPassword(email, password);
+      const user = await _createUserWithEmailAndPassword(auth, email, password);
       if (options && options.sendEmailVerification && user.user) {
-        await user.user.sendEmailVerification(options.emailVerificationOptions);
+        await sendEmailVerification(user.user, options.emailVerificationOptions);
       }
       setRegisteredUser(user);
       setLoading(false);
