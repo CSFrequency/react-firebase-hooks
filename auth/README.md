@@ -105,7 +105,7 @@ Returns:
 #### Full Example
 
 ```jsx
-import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
+import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
 
 const SignIn = () => {
   const [email, setEmail] = useState('');
