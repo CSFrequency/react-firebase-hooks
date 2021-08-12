@@ -24,9 +24,9 @@ export default (
         await user.user.sendEmailVerification(options.emailVerificationOptions);
       }
       setRegisteredUser(user);
-      setLoading(false);
     } catch (error) {
       setError(error);
+    } finally {
       setLoading(false);
     }
   };
