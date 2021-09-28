@@ -65,7 +65,7 @@ const useCollectionInternal = <T = DocumentData>(
   options?: Options & OnceOptions
 ) => {
   const { error, loading, reset, setError, setValue, value } = useLoadingValue<
-    QuerySnapshot,
+    QuerySnapshot<T>,
     FirestoreError
   >();
   const ref = useIsEqualFirestoreQuery<Query<T>>(query, reset);
