@@ -90,7 +90,7 @@ const useCollectionInternal = <T = DocumentData>(
         listener();
       };
     } else {
-      const get = getDocsFnFromGetOptions(options?.getOptions);
+      const get = getDocsFnFromGetOptions(options ? options.getOptions : undefined);
       get(ref.current).then(setValue).catch(setError);
     }
   }, [ref.current]);
