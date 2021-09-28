@@ -5,7 +5,7 @@ import {
 } from 'firebase/firestore';
 
 export const snapshotToData = <T = DocumentData>(
-  snapshot: DocumentSnapshot,
+  snapshot: DocumentSnapshot<T>,
   snapshotOptions?: SnapshotOptions,
   idField?: string,
   refField?: string,
