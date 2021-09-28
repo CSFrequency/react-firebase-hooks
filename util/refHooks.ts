@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-type RefHook<T> = {
+export type RefHook<T> = {
   current: T;
 };
 
