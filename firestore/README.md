@@ -1,3 +1,5 @@
+Temporary package to migrate `react-firebase-hooks` to Firebase v9.
+
 # React Firebase Hooks - Cloud Firestore
 
 React Firebase Hooks provides convenience listeners for Collections and Documents stored with
@@ -20,14 +22,18 @@ import { useCollection } from 'react-firebase-hooks/firestore';
 
 List of Cloud Firestore hooks:
 
-- [useCollection](#usecollection)
-- [useCollectionOnce](#usecollectiononce)
-- [useCollectionData](#usecollectiondata)
-- [useCollectionDataOnce](#usecollectiondataonce)
-- [useDocument](#usedocument)
-- [useDocumentOnce](#usedocumentonce)
-- [useDocumentData](#usedocumentdata)
-- [useDocumentDataOnce](#usedocumentdataonce)
+- [React Firebase Hooks - Cloud Firestore](#react-firebase-hooks---cloud-firestore)
+    - [useCollection](#usecollection)
+      - [Full example](#full-example)
+    - [useCollectionOnce](#usecollectiononce)
+    - [useCollectionData](#usecollectiondata)
+    - [useCollectionDataOnce](#usecollectiondataonce)
+    - [useDocument](#usedocument)
+      - [Full example](#full-example-1)
+    - [useDocumentOnce](#usedocumentonce)
+    - [useDocumentData](#usedocumentdata)
+    - [useDocumentDataOnce](#usedocumentdataonce)
+  - [Transforming data](#transforming-data)
 
 Additional functionality:
 
