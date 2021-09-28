@@ -1,8 +1,12 @@
-import firebase from 'firebase/app';
+import {
+  DocumentData,
+  DocumentSnapshot,
+  SnapshotOptions,
+} from 'firebase/firestore';
 
-export const snapshotToData = <T = firebase.firestore.DocumentData>(
-  snapshot: firebase.firestore.DocumentSnapshot,
-  snapshotOptions?: firebase.firestore.SnapshotOptions,
+export const snapshotToData = <T = DocumentData>(
+  snapshot: DocumentSnapshot,
+  snapshotOptions?: SnapshotOptions,
   idField?: string,
   refField?: string,
   transform?: (val: any) => T
@@ -11,7 +15,7 @@ export const snapshotToData = <T = firebase.firestore.DocumentData>(
     return undefined;
   }
 
-  let data = snapshot.data(snapshotOptions) as firebase.firestore.DocumentData;
+  let data = snapshot.data(snapshotOptions) as DocumentData;
   if (transform) {
     data = transform(data);
   }
