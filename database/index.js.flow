@@ -1,8 +1,7 @@
 // @flow
-import typeof { FirebaseError } from 'firebase';
 import type { DataSnapshot, Query } from 'firebase/database';
 
-type LoadingHook<T> = [T | void, boolean, FirebaseError | void];
+type LoadingHook<T> = [T | void, boolean, Error | void];
 
 export type ListHook = LoadingHook<DataSnapshot[]>;
 export type ListKeysHook = LoadingHook<string[]>;
