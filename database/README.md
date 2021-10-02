@@ -1,7 +1,7 @@
 # React Firebase Hooks - Realtime Database
 
 React Firebase Hooks provides convenience listeners for lists and values stored within the
-Firebase Realtime Database. The hooks wrap around the `onX(ref(firebase, 'path'), ...)` method.
+Firebase Realtime Database. The hooks wrap around the `onX(...)` method.
 
 In addition to returning the list or value, the hooks provide an `error` and `loading` property
 to give a complete lifecycle for loading and listening to the Realtime Database.

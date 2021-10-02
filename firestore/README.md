@@ -1,7 +1,6 @@
 # React Firebase Hooks - Cloud Firestore
 
-React Firebase Hooks provides convenience listeners for Collections and Documents stored with Cloud Firestore. The hooks wrap around the `onSnapshot(collection(...))`
-and `firestore.onSnapshot(firestore.doc(...))` methods.
+React Firebase Hooks provides convenience listeners for Collections and Documents stored with Cloud Firestore. The hooks wrap around the `firestore.onSnapshot(...)` method.
 
 In addition to returning the snapshot value, the hooks provide an `error` and `loading` property
 to give a complete lifecycle for loading and listening to Cloud Firestore.
