@@ -1,5 +1,3 @@
-Temporary package to migrate `react-firebase-hooks` to Firebase v9.
-
 # React Firebase Hooks
 
 A set of reusable [React Hooks](https://reactjs.org/docs/hooks-intro.html) for [Firebase](https://firebase.google.com/).
