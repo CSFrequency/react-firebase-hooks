@@ -1,15 +1,13 @@
-import firebase from 'firebase/app';
 import { useEffect, useMemo } from 'react';
 import { snapshotToData, ValOptions } from './helpers';
 import { ObjectHook, ObjectValHook, Val } from './types';
 import { useIsEqualRef, useLoadingValue } from '../util';
+import { DataSnapshot, off, onValue, Query } from 'firebase/database';
 
-export const useObject = (
-  query?: firebase.database.Query | null
-): ObjectHook => {
+export const useObject = (query?: Query | null): ObjectHook => {
   const { error, loading, reset, setError, setValue, value } = useLoadingValue<
-    firebase.database.DataSnapshot,
-    firebase.FirebaseError
+    DataSnapshot,
+    Error
   >();
   const ref = useIsEqualRef(query, reset);
 
@@ -20,10 +18,10 @@ export const useObject = (
       return;
     }
 
-    query.on('value', setValue, setError);
+    onValue(query, setValue, setError);
 
     return () => {
-      query.off('value', setValue);
+      off(query, 'value', setValue);
     };
   }, [ref.current]);
 
@@ -36,7 +34,7 @@ export const useObjectVal = <
   KeyField extends string = '',
   RefField extends string = ''
 >(
-  query?: firebase.database.Query | null,
+  query?: Query | null,
   options?: ValOptions<T>
 ): ObjectValHook<T, KeyField, RefField> => {
   const keyField = options ? options.keyField : undefined;
