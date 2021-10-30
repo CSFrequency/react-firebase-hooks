@@ -7,7 +7,7 @@ A set of reusable [React Hooks](https://reactjs.org/docs/hooks-intro.html) for [
 
 This documentation is for v4 of React Firebase Hooks which makes the package compatible with Firebase v9 and drops support for previous versions of Firebase - more details [here](https://github.com/CSFrequency/react-firebase-hooks/releases/tag/v4.0.0).
 
-- For v3 documentation (Firebase v8), see [here](https://github.com/CSFrequency/react-firebase-hooks/tree/v3.0.0).
+- For v3 documentation (Firebase v8), see [here](https://github.com/CSFrequency/react-firebase-hooks/tree/v3.0.4).
 - For v2 documentation, see [here](https://github.com/CSFrequency/react-firebase-hooks/tree/v2.2.0).
 
 ## Installation

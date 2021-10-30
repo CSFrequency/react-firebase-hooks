@@ -10,7 +10,7 @@ import {
 } from 'firebase/firestore';
 import { useEffect, useMemo } from 'react';
 import { useLoadingValue } from '../util';
-import { snapshotToData } from './helpers';
+import { snapshotToData, useIsFirestoreQueryEqual } from './helpers';
 import {
   CollectionDataHook,
   CollectionHook,
@@ -21,7 +21,6 @@ import {
   OnceOptions,
   Options,
 } from './types';
-import { useIsEqualFirestoreQuery } from './util';
 
 export const useCollection = <T = DocumentData>(
   query?: Query<T> | null,
@@ -68,7 +67,7 @@ const useCollectionInternal = <T = DocumentData>(
     QuerySnapshot<T>,
     FirestoreError
   >();
-  const ref = useIsEqualFirestoreQuery<Query<T>>(query, reset);
+  const ref = useIsFirestoreQueryEqual<Query<T>>(query, reset);
 
   useEffect(() => {
     if (!ref.current) {
@@ -90,7 +89,9 @@ const useCollectionInternal = <T = DocumentData>(
         listener();
       };
     } else {
-      const get = getDocsFnFromGetOptions(options ? options.getOptions : undefined);
+      const get = getDocsFnFromGetOptions(
+        options ? options.getOptions : undefined
+      );
       get(ref.current).then(setValue).catch(setError);
     }
   }, [ref.current]);

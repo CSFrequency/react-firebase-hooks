@@ -10,7 +10,7 @@ import {
 } from 'firebase/firestore';
 import { useEffect, useMemo } from 'react';
 import { useLoadingValue } from '../util';
-import { snapshotToData } from './helpers';
+import { snapshotToData, useIsFirestoreRefEqual } from './helpers';
 import {
   Data,
   DataOptions,
@@ -21,8 +21,6 @@ import {
   OnceOptions,
   Options,
 } from './types';
-import { useIsEqualFirestoreRef } from './util';
-
 export const useDocument = <T = DocumentData>(
   docRef?: DocumentReference<T> | null,
   options?: Options
@@ -68,7 +66,7 @@ const useDocumentInternal = <T = DocumentData>(
     DocumentSnapshot<T>,
     FirestoreError
   >();
-  const ref = useIsEqualFirestoreRef<DocumentReference<T>>(docRef, reset);
+  const ref = useIsFirestoreRefEqual<DocumentReference<T>>(docRef, reset);
 
   useEffect(() => {
     if (!ref.current) {
