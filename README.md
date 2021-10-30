@@ -15,10 +15,10 @@ React Firebase Hooks v3 requires **React 16.8.0 or later** and **Firebase v8.0.0
 
 ```bash
 # with npm
-npm install --save react-firebase-hooks
+npm install --save react-firebase-hooks@3.0.4
 
 # with yarn
-yarn add react-firebase-hooks
+yarn add react-firebase-hooks@3.0.4
 ```
 
 This assumes that you’re using the [npm](https://npmjs.com) or [yarn](https://yarnpkg.com/) package managers with a module bundler like [Webpack](https://webpack.js.org/) or [Browserify](http://browserify.org/) to consume [CommonJS](http://webpack.github.io/docs/commonjs.html) modules.
