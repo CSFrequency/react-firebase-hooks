@@ -17,7 +17,7 @@ export const snapshotToData = <T = DocumentData>(
   refField?: string,
   transform?: (val: any) => T
 ) => {
-  if (!snapshot.exists) {
+  if (!snapshot.exists()) {
     return undefined;
   }
 
