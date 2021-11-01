@@ -32,9 +32,9 @@ There has been a **lot** of hype around React Hooks, but this hype merely reflec
 
 This library explores how React Hooks can work to make integration with Firebase even more straightforward than it already is. It takes inspiration for naming from RxFire and is based on an internal library that we had been using in a number of apps prior to the release of React Hooks. The implementation with hooks is 10x simpler than our previous implementation.
 
-## Upgrading from v2 to v3
+## Upgrading from v3 to v4
 
-To upgrade your project from v2 to v3 check out the [Release Notes](https://github.com/CSFrequency/react-firebase-hooks/releases/tag/v3.0.1) which have full details of everything that needs to be changed.
+To upgrade your project from v3 to v4 check out the [Release Notes](https://github.com/CSFrequency/react-firebase-hooks/releases/tag/v4.0.0) which have full details of everything that needs to be changed.
 
 ## Documentation
 
