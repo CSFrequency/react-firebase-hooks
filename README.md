@@ -14,7 +14,7 @@ This documentation is for v4 of React Firebase Hooks which makes the package com
 
 React Firebase Hooks v4 requires **React 16.8.0 or later** and **Firebase v9.0.0 or later**.
 
-> Official support for Hooks was added to React Native in v0.59.0. React Firebase Hooks works with both the Firebase JS SDK and React Native Firebase, although some of the typings may be incorrect.
+> Whilst previous versions of React Firebase Hooks had some support for React Native Firebase, the underlying changes to v9 of the Firebase Web library have meant this is no longer as straightforward. We will investigate if this is possible in another way as part of a future release.
 
 ```bash
 # with npm
