@@ -22,52 +22,52 @@ import {
   Options,
 } from './types';
 
-export const useCollection = <T>(
-  query?: Query | null,
+export const useCollection = <T = DocumentData>(
+  query?: Query<T> | null,
   options?: Options
 ): CollectionHook<T> => {
   return useCollectionInternal<T>(true, query, options);
 };
 
-export const useCollectionOnce = <T>(
-  query?: Query | null,
+export const useCollectionOnce = <T = DocumentData>(
+  query?: Query<T> | null,
   options?: OnceOptions
 ): CollectionHook<T> => {
   return useCollectionInternal<T>(false, query, options);
 };
 
 export const useCollectionData = <
-  T,
+  T = DocumentData,
   IDField extends string = '',
   RefField extends string = ''
 >(
-  query?: Query | null,
+  query?: Query<T> | null,
   options?: DataOptions<T>
 ): CollectionDataHook<T, IDField, RefField> => {
   return useCollectionDataInternal<T, IDField, RefField>(true, query, options);
 };
 
 export const useCollectionDataOnce = <
-  T,
+  T = DocumentData,
   IDField extends string = '',
   RefField extends string = ''
 >(
-  query?: Query | null,
+  query?: Query<T> | null,
   options?: OnceDataOptions<T>
 ): CollectionDataHook<T, IDField, RefField> => {
   return useCollectionDataInternal<T, IDField, RefField>(false, query, options);
 };
 
-const useCollectionInternal = <T>(
+const useCollectionInternal = <T = DocumentData>(
   listen: boolean,
-  query?: Query | null,
+  query?: Query<T> | null,
   options?: Options & OnceOptions
 ) => {
   const { error, loading, reset, setError, setValue, value } = useLoadingValue<
-    QuerySnapshot,
+    QuerySnapshot<T>,
     FirestoreError
   >();
-  const ref = useIsFirestoreQueryEqual<Query>(query, reset);
+  const ref = useIsFirestoreQueryEqual<Query<T>>(query, reset);
 
   useEffect(() => {
     if (!ref.current) {
@@ -105,12 +105,12 @@ const useCollectionInternal = <T>(
 };
 
 const useCollectionDataInternal = <
-  T,
+  T = DocumentData,
   IDField extends string = '',
   RefField extends string = ''
 >(
   listen: boolean,
-  query?: Query | null,
+  query?: Query<T> | null,
   options?: DataOptions<T> & OnceDataOptions<T>
 ): CollectionDataHook<T, IDField, RefField> => {
   const idField = options ? options.idField : undefined;
