@@ -1,7 +1,7 @@
 import { ActionCodeSettings, AuthError, UserCredential } from 'firebase/auth';
 
 export type AuthActionHook<T, E> = [
-  (email: string, password: string) => void,
+  (email: string, password: string) => Promise<void>,
   T | undefined,
   boolean,
   E | undefined
