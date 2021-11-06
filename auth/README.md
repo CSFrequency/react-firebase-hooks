@@ -28,7 +28,7 @@ The `useAuthState` hook takes the following parameters:
 
 Returns:
 
-- `user`: The `auth.User` if logged in, or `undefined` if not
+- `user`: The `auth.User` if logged in, or `null` if not
 - `loading`: A `boolean` to indicate whether the the authentication state is still being loaded
 - `error`: Any `AuthError` returned by Firebase when trying to load the user, or `undefined` if there is no error
 
