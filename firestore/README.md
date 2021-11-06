@@ -1,8 +1,6 @@
 # React Firebase Hooks - Cloud Firestore
 
-React Firebase Hooks provides convenience listeners for Collections and Documents stored with
-Cloud Firestore. The hooks wrap around the `firebase.firestore.collection().onSnapshot()`
-and `firebase.firestore().doc().onSnapshot()` methods.
+React Firebase Hooks provides convenience listeners for Collections and Documents stored with Cloud Firestore. The hooks wrap around the `firestore.onSnapshot(...)` method.
 
 In addition to returning the snapshot value, the hooks provide an `error` and `loading` property
 to give a complete lifecycle for loading and listening to Cloud Firestore.
@@ -20,14 +18,18 @@ import { useCollection } from 'react-firebase-hooks/firestore';
 
 List of Cloud Firestore hooks:
 
-- [useCollection](#usecollection)
-- [useCollectionOnce](#usecollectiononce)
-- [useCollectionData](#usecollectiondata)
-- [useCollectionDataOnce](#usecollectiondataonce)
-- [useDocument](#usedocument)
-- [useDocumentOnce](#usedocumentonce)
-- [useDocumentData](#usedocumentdata)
-- [useDocumentDataOnce](#usedocumentdataonce)
+- [React Firebase Hooks - Cloud Firestore](#react-firebase-hooks---cloud-firestore)
+    - [useCollection](#usecollection)
+      - [Full example](#full-example)
+    - [useCollectionOnce](#usecollectiononce)
+    - [useCollectionData](#usecollectiondata)
+    - [useCollectionDataOnce](#usecollectiondataonce)
+    - [useDocument](#usedocument)
+      - [Full example](#full-example-1)
+    - [useDocumentOnce](#usedocumentonce)
+    - [useDocumentData](#usedocumentdata)
+    - [useDocumentDataOnce](#usedocumentdataonce)
+  - [Transforming data](#transforming-data)
 
 Additional functionality:
 
@@ -41,28 +43,29 @@ const [snapshot, loading, error] = useCollection(query, options);
 
 Retrieve and monitor a collection value in Cloud Firestore.
 
-Returns a `firebase.firestore.QuerySnapshot` (if a query is specified), a `boolean` to indicate if the data is still being loaded and any `Error` returned by Firebase when trying to load the data.
+Returns a `firestore.QuerySnapshot` (if a query is specified), a `boolean` to indicate if the data is still being loaded and any `firestore.FirestoreError` returned by Firebase when trying to load the data.
 
 The `useCollection` hook takes the following parameters:
 
-- `query`: (optional) `firebase.firestore.Query` for the data you would like to load
+- `query`: (optional) `firestore.Query` for the data you would like to load
 - `options`: (optional) `Object` with the following parameters:
-  - `snapshotListenOptions`: (optional) `firebase.firestore.SnapshotListenOptions` to customise how the query is loaded
+  - `snapshotListenOptions`: (optional) `firestore.SnapshotListenOptions` to customise how the query is loaded
 
 Returns:
 
-- `snapshot`: a `firebase.firestore.QuerySnapshot`, or `undefined` if no query is supplied
+- `snapshot`: a `firestore.QuerySnapshot`, or `undefined` if no query is supplied
 - `loading`: a `boolean` to indicate if the data is still being loaded
-- `error`: Any `Error` returned by Firebase when trying to load the data, or `undefined` if there is no error
+- `error`: Any `firestore.FirestoreError` returned by Firebase when trying to load the data, or `undefined` if there is no error
 
 #### Full example
 
 ```js
+import { getFirestore, collection } from 'firebase/firestore';
 import { useCollection } from 'react-firebase-hooks/firestore';
 
 const FirestoreCollection = () => {
   const [value, loading, error] = useCollection(
-    firebase.firestore().collection('hooks'),
+    collection(getFirestore(firebaseApp), 'hooks'),
     {
       snapshotListenOptions: { includeMetadataChanges: true },
     }
@@ -94,68 +97,70 @@ const FirestoreCollection = () => {
 const [snapshot, loading, error] = useCollectionOnce(query, options);
 ```
 
-Retrieve the current value of the `firebase.firestore.Query`.
+Retrieve the current value of the `firestore.Query`.
 
 The `useCollectionOnce` hook takes the following parameters:
 
-- `query`: (optional) `firebase.firestore.Query` for the data you would like to load
+- `query`: (optional) `firestore.Query` for the data you would like to load
 - `options`: (optional) `Object` with the following parameters:
-  - `getOptions`: (optional) `firebase.firestore.GetOptions` to customise how the collection is loaded
+  - `getOptions`: (optional) `Object` to customise how the collection is loaded
+    - `source`: (optional): `'default' | 'server' | 'cache'` Describes whether we should get from server or cache.
 
 Returns:
 
-- `snapshot`: a `firebase.firestore.QuerySnapshot`, or `undefined` if no query is supplied
+- `snapshot`: a `firestore.QuerySnapshot`, or `undefined` if no query is supplied
 - `loading`: a `boolean` to indicate if the data is still being loaded
-- `error`: Any `Error` returned by Firebase when trying to load the data, or `undefined` if there is no error
+- `error`: Any `firestore.FirestoreError` returned by Firebase when trying to load the data, or `undefined` if there is no error
 
 ### useCollectionData
 
 ```js
-const [values, loading, error] = useCollectionData < T > (query, options);
+const [values, loading, error] = useCollectionData<T> (query, options);
 ```
 
-As `useCollection`, but this hook extracts a typed list of the `firebase.firestore.QuerySnapshot.docs` values, rather than the
-`firebase.firestore.QuerySnapshot` itself.
+As `useCollection`, but this hook extracts a typed list of the `firestore.QuerySnapshot.docs` values, rather than the
+`firestore.QuerySnapshot` itself.
 
 The `useCollectionData` hook takes the following parameters:
 
-- `query`: (optional) `firebase.firestore.Query` for the data you would like to load
+- `query`: (optional) `firestore.Query` for the data you would like to load
 - `options`: (optional) `Object` with the following parameters:
-  - `idField`: (optional) name of the field that should be populated with the `firebase.firestore.QuerySnapshot.id` property.
-  - `refField`: (optional) name of the field that should be populated with the `firebase.firestore.QuerySnapshot.ref` property.
-  - `snapshotListenOptions`: (optional) `firebase.firestore.SnapshotListenOptions` to customise how the collection is loaded
-  - `snapshotOptions`: (optional) `firebase.firestore.SnapshotOptions` to customise how data is retrieved from snapshots
-  - `transform`: (optional) a function that receives the raw `firebase.firestore.DocumentData` for each item in the collection to allow manual transformation of the data where required by the application. See [`Transforming data`](#transforming-data) below.
+  - `idField`: (optional) name of the field that should be populated with the `firestore.QuerySnapshot.id` property.
+  - `refField`: (optional) name of the field that should be populated with the `firestore.QuerySnapshot.ref` property.
+  - `snapshotListenOptions`: (optional) `firestore.SnapshotListenOptions` to customise how the collection is loaded
+  - `snapshotOptions`: (optional) `firestore.SnapshotOptions` to customise how data is retrieved from snapshots
+  - `transform`: (optional) a function that receives the raw `firestore.DocumentData` for each item in the collection to allow manual transformation of the data where required by the application. See [`Transforming data`](#transforming-data) below.
 
 Returns:
 
 - `values`: an array of `T`, or `undefined` if no query is supplied
 - `loading`: a `boolean` to indicate if the data is still being loaded
-- `error`: Any `Error` returned by Firebase when trying to load the data, or `undefined` if there is no error
+- `error`: Any `firestore.FirestoreError` returned by Firebase when trying to load the data, or `undefined` if there is no error
 
 ### useCollectionDataOnce
 
 ```js
-const [values, loading, error] = useCollectionDataOnce < T > (query, options);
+const [values, loading, error] = useCollectionDataOnce<T>(query, options);
 ```
 
-As `useCollectionData`, but this hook will only read the current value of the `firebase.firestore.Query`.
+As `useCollectionData`, but this hook will only read the current value of the `firestore.Query`.
 
 The `useCollectionDataOnce` hook takes the following parameters:
 
-- `query`: (optional) `firebase.firestore.Query` for the data you would like to load
+- `query`: (optional) `firestore.Query` for the data you would like to load
 - `options`: (optional) `Object` with the following parameters:
-  - `getOptions`: (optional) `firebase.firestore.GetOptions` to customise how the collection is loaded
-  - `idField`: (optional) name of the field that should be populated with the `firebase.firestore.QuerySnapshot.id` property.
-  - `refField`: (optional) name of the field that should be populated with the `firebase.firestore.QuerySnapshot.ref` property.
-  - `snapshotOptions`: (optional) `firebase.firestore.SnapshotOptions` to customise how data is retrieved from snapshots
-  - `transform`: (optional) a function that receives the raw `firebase.firestore.DocumentData` for each item in the collection to allow manual transformation of the data where required by the application. See [`Transforming data`](#transforming-data) below.
+  - `getOptions`: (optional) `Object` to customise how the collection is loaded
+    - `source`: (optional): `'default' | 'server' | 'cache'` Describes whether we should get from server or cache.
+  - `idField`: (optional) name of the field that should be populated with the `firestore.QuerySnapshot.id` property.
+  - `refField`: (optional) name of the field that should be populated with the `firestore.QuerySnapshot.ref` property.
+  - `snapshotOptions`: (optional) `firestore.SnapshotOptions` to customise how data is retrieved from snapshots
+  - `transform`: (optional) a function that receives the raw `firestore.DocumentData` for each item in the collection to allow manual transformation of the data where required by the application. See [`Transforming data`](#transforming-data) below.
 
 Returns:
 
 - `values`: an array of `T`, or `undefined` if no query is supplied
 - `loading`: a `boolean` to indicate if the data is still being loaded
-- `error`: Any `Error` returned by Firebase when trying to load the data, or `undefined` if there is no error
+- `error`: Any `firestore.FirestoreError` returned by Firebase when trying to load the data, or `undefined` if there is no error
 
 ### useDocument
 
@@ -167,24 +172,25 @@ Retrieve and monitor a document value in Cloud Firestore.
 
 The `useDocument` hook takes the following parameters:
 
-- `reference`: (optional) `firebase.firestore.DocumentReference` for the data you would like to load
+- `reference`: (optional) `firestore.DocumentReference` for the data you would like to load
 - `options`: (optional) `Object` with the following parameters:
-  - `snapshotListenOptions`: (optional) `firebase.firestore.SnapshotListenOptions` to customise how the query is loaded
+  - `snapshotListenOptions`: (optional) `firestore.SnapshotListenOptions` to customise how the query is loaded
 
 Returns:
 
-- `snapshot`: a `firebase.firestore.DocumentSnapshot`, or `undefined` if no query is supplied
+- `snapshot`: a `firestore.DocumentSnapshot`, or `undefined` if no query is supplied
 - `loading`: a `boolean` to indicate if the data is still being loaded
-- `error`: Any `Error` returned by Firebase when trying to load the data, or `undefined` if there is no error
+- `error`: Any `firestore.FirestoreError` returned by Firebase when trying to load the data, or `undefined` if there is no error
 
 #### Full example
 
 ```js
+import { getFirestore, doc } from 'firebase/firestore';
 import { useDocument } from 'react-firebase-hooks/firestore';
 
 const FirestoreDocument = () => {
   const [value, loading, error] = useDocument(
-    firebase.firestore().doc('hooks/nBShXiRGFAhuiPfBaGpt'),
+    doc(getFirestore(firebaseApp, 'hooks', 'nBShXiRGFAhuiPfBaGpt')),
     {
       snapshotListenOptions: { includeMetadataChanges: true },
     }
@@ -207,68 +213,70 @@ const FirestoreDocument = () => {
 const [snapshot, loading, error] = useDocumentOnce(reference, options);
 ```
 
-Retrieve the current value of the `firebase.firestore.DocumentReference`.
+Retrieve the current value of the `firestore.DocumentReference`.
 
 The `useDocumentOnce` hook takes the following parameters:
 
-- `reference`: (optional) `firebase.firestore.DocumentReference` for the data you would like to load
+- `reference`: (optional) `firestore.DocumentReference` for the data you would like to load
 - `options`: (optional) `Object` with the following parameters:
-  - `getOptions`: (optional) `firebase.firestore.GetOptions` to customise how the collection is loaded
+  - `getOptions`: (optional) `Object` to customise how the collection is loaded
+    - `source`: (optional): `'default' | 'server' | 'cache'` Describes whether we should get from server or cache.
 
 Returns:
 
-- `snapshot`: a `firebase.firestore.DocumentSnapshot`, or `undefined` if no reference is supplied
+- `snapshot`: a `firestore.DocumentSnapshot`, or `undefined` if no reference is supplied
 - `loading`: a `boolean` to indicate if the data is still being loaded
-- `error`: Any `Error` returned by Firebase when trying to load the data, or `undefined` if there is no error
+- `error`: Any `firestore.FirestoreError` returned by Firebase when trying to load the data, or `undefined` if there is no error
 
 ### useDocumentData
 
 ```js
-const [value, loading, error] = useDocumentData < T > (reference, options);
+const [value, loading, error] = useDocumentData<T>(reference, options);
 ```
 
-As `useDocument`, but this hook extracts the typed contents of `firebase.firestore.DocumentSnapshot.val()`, rather than the
-`firebase.firestore.DocumentSnapshot` itself.
+As `useDocument`, but this hook extracts the typed contents of `firestore.DocumentSnapshot.data()`, rather than the
+`firestore.DocumentSnapshot` itself.
 
 The `useDocumentData` hook takes the following parameters:
 
-- `reference`: (optional) `firebase.firestore.DocumentReference` for the data you would like to load
+- `reference`: (optional) `firestore.DocumentReference` for the data you would like to load
 - `options`: (optional) `Object` with the following parameters:
-  - `idField`: (optional) name of the field that should be populated with the `firebase.firestore.DocumentSnapshot.id` property.
-  - `refField`: (optional) name of the field that should be populated with the `firebase.firestore.QuerySnapshot.ref` property.
-  - `snapshotListenOptions`: (optional) `firebase.firestore.SnapshotListenOptions` to customise how the collection is loaded
-  - `snapshotOptions`: (optional) `firebase.firestore.SnapshotOptions` to customise how data is retrieved from snapshots
-  - `transform`: (optional) a function that receives the raw `firebase.firestore.DocumentData` to allow manual transformation of the data where required by the application. See [`Transforming data`](#transforming-data) below.
+  - `idField`: (optional) name of the field that should be populated with the `firestore.DocumentSnapshot.id` property.
+  - `refField`: (optional) name of the field that should be populated with the `firestore.QuerySnapshot.ref` property.
+  - `snapshotListenOptions`: (optional) `firestore.SnapshotListenOptions` to customise how the collection is loaded
+  - `snapshotOptions`: (optional) `firestore.SnapshotOptions` to customise how data is retrieved from snapshots
+  - `transform`: (optional) a function that receives the raw `firestore.DocumentData` to allow manual transformation of the data where required by the application. See [`Transforming data`](#transforming-data) below.
 
 Returns:
 
 - `value`: `T`, or `undefined` if no query is supplied
 - `loading`: a `boolean` to indicate if the data is still being loaded
-- `error`: Any `Error` returned by Firebase when trying to load the data, or `undefined` if there is no error
+- `error`: Any `firestore.FirestoreError` returned by Firebase when trying to load the data, or `undefined` if there is no error
 
 ### useDocumentDataOnce
 
 ```js
-const [value, loading, error] = useDocumentDataOnce < T > (reference, options);
+const [value, loading, error] = useDocumentDataOnce<T> (reference, options);
 ```
 
-As `useDocument`, but this hook will only read the current value of the `firebase.firestore.DocumentReference`.
+As `useDocument`, but this hook will only read the current value of the `firestore.DocumentReference`.
 
 The `useDocumentDataOnce` hook takes the following parameters:
 
-- `reference`: (optional) `firebase.firestore.DocumentReference` for the data you would like to load
+- `reference`: (optional) `firestore.DocumentReference` for the data you would like to load
 - `options`: (optional) `Object` with the following parameters:
-  - `getOptions`: (optional) `firebase.firestore.GetOptions` to customise how the collection is loaded
-  - `idField`: (optional) name of the field that should be populated with the `firebase.firestore.DocumentSnapshot.id` property.
-  - `refField`: (optional) name of the field that should be populated with the `firebase.firestore.QuerySnapshot.ref` property.
-  - `snapshotOptions`: (optional) `firebase.firestore.SnapshotOptions` to customise how data is retrieved from snapshots
-  - `transform`: (optional) a function that receives the raw `firebase.firestore.DocumentData` to allow manual transformation of the data where required by the application. See [`Transforming data`](#transforming-data) below.
+  - `getOptions`: (optional) `Object` to customise how the collection is loaded
+    - `source`: (optional): `'default' | 'server' | 'cache'` Describes whether we should get from server or cache.
+  - `idField`: (optional) name of the field that should be populated with the `firestore.DocumentSnapshot.id` property.
+  - `refField`: (optional) name of the field that should be populated with the `firestore.QuerySnapshot.ref` property.
+  - `snapshotOptions`: (optional) `firestore.SnapshotOptions` to customise how data is retrieved from snapshots
+  - `transform`: (optional) a function that receives the raw `firestore.DocumentData` to allow manual transformation of the data where required by the application. See [`Transforming data`](#transforming-data) below.
 
 Returns:
 
 - `value`: `T`, or `undefined` if no query is supplied
 - `loading`: a `boolean` to indicate if the data is still being loaded
-- `error`: Any `Error` returned by Firebase when trying to load the data, or `undefined` if there is no error
+- `error`: Any `firestore.FirestoreError` returned by Firebase when trying to load the data, or `undefined` if there is no error
 
 ## Transforming data
 

@@ -2,7 +2,6 @@
 import type {
   DocumentReference,
   DocumentSnapshot,
-  GetOptions,
   Query,
   QuerySnapshot,
   SnapshotListenOptions,
@@ -10,6 +9,9 @@ import type {
 
 type LoadingHook<T> = [T | void, boolean, Error | void];
 
+export type GetOptions = {
+  source?: 'default' | 'server' | 'cache';
+};
 export type CollectionHook = LoadingHook<QuerySnapshot>;
 export type CollectionDataHook<T> = LoadingHook<T[]>;
 export type DocumentHook = LoadingHook<DocumentSnapshot>;

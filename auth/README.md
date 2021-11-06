@@ -1,6 +1,6 @@
 # React Firebase Hooks - Auth
 
-React Firebase Hooks provides a convenience listener for Firebase Auth's auth state. The hook wraps around the `firebase.auth().onAuthStateChange()` method to ensure that it is always up to date.
+React Firebase Hooks provides a convenience listener for Firebase Auth's auth state. The hook wraps around the `auth.onAuthStateChange(...)` method to ensure that it is always up to date.
 
 All hooks can be imported from `react-firebase-hooks/auth`, e.g.
 
@@ -24,30 +24,33 @@ Retrieve and monitor the authentication state from Firebase.
 
 The `useAuthState` hook takes the following parameters:
 
-- `auth`: `firebase.auth.Auth` instance for the app you would like to monitor
+- `auth`: `auth.Auth` instance for the app you would like to monitor
 
 Returns:
 
-- `user`: The `firebase.User` if logged in, or `undefined` if not
+- `user`: The `auth.User` if logged in, or `null` if not
 - `loading`: A `boolean` to indicate whether the the authentication state is still being loaded
-- `error`: Any `firebase.auth.Error` returned by Firebase when trying to load the user, or `undefined` if there is no error
+- `error`: Any `AuthError` returned by Firebase when trying to load the user, or `undefined` if there is no error
 
 #### If you are registering or signing in the user for the first time consider using [useCreateUserWithEmailAndPassword](#usecreateuserwithemailandpassword), [useSignInWithEmailAndPassword](#usesigninwithemailandpassword)
 
 #### Full Example
 
 ```js
+import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { useAuthState } from 'react-firebase-hooks/auth';
 
+const auth = getAuth(firebaseApp)
+
 const login = () => {
-  firebase.auth().signInWithEmailAndPassword('test@test.com', 'password');
+  signInWithEmailAndPassword(auth, 'test@test.com', 'password');
 };
 const logout = () => {
-  firebase.auth().signOut();
+  signOut(auth)
 };
 
 const CurrentUser = () => {
-  const [user, loading, error] = useAuthState(firebase.auth());
+  const [user, loading, error] = useAuthState(auth);
 
   if (loading) {
     return (
@@ -90,17 +93,17 @@ Create a user with email and password. Wraps the underlying `firebase.auth().cre
 
 The `useCreateUserWithEmailAndPassword` hook takes the following parameters:
 
-- `auth`: `firebase.auth.Auth` instance for the app you would like to monitor
+- `auth`: `auth.Auth` instance for the app you would like to monitor
 - `options`: (optional) `Object` with the following parameters:
-  - `emailVerificationOptions`: (optional) `firebase.auth.ActionCodeSettings` to customise the email verification
+  - `emailVerificationOptions`: (optional) `auth.ActionCodeSettings` to customise the email verification
   - `sendEmailVerification`: (optional) `boolean` to trigger sending of an email verification after the user has been created
 
 Returns:
 
 - `createUserWithEmailAndPassword(email: string, password: string)`: a function you can call to start the registration
-- `user`: The `firebase.User` if the user was created or `undefined` if not
+- `user`: The `User` if the user was created or `undefined` if not
 - `loading`: A `boolean` to indicate whether the the user creation is processing
-- `error`: Any `firebase.auth.Error` returned by Firebase when trying to create the user, or `undefined` if there is no error
+- `error`: Any `Error` returned by Firebase when trying to create the user, or `undefined` if there is no error
 
 #### Full Example
 
@@ -165,18 +168,18 @@ const [
 ] = useSignInWithEmailAndPassword(auth, email, password);
 ```
 
-Login a user with email and password. Wraps the underlying `firebase.auth().signInWithEmailAndPassword` method and provides additional `loading` and `error` information.
+Login a user with email and password. Wraps the underlying `auth.signInWithEmailAndPassword` method and provides additional `loading` and `error` information.
 
 The `useSignInWithEmailAndPassword` hook takes the following parameters:
 
-- `auth`: `firebase.auth.Auth` instance for the app you would like to monitor
+- `auth`: `Auth` instance for the app you would like to monitor
 
 Returns:
 
 - `signInWithEmailAndPassword(email: string, password: string)`: a function you can call to start the login
-- `user`: The `firebase.User` if the user was logged in or `undefined` if not
+- `user`: The `auth.User` if the user was logged in or `undefined` if not
 - `loading`: A `boolean` to indicate whether the the user login is processing
-- `error`: Any `firebase.auth.Error` returned by Firebase when trying to login the user, or `undefined` if there is no error
+- `error`: Any `Error` returned by Firebase when trying to login the user, or `undefined` if there is no error
 
 #### Full Example
 
