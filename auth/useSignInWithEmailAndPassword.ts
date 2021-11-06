@@ -24,9 +24,9 @@ export default (auth: Auth): EmailAndPasswordActionHook => {
         password
       );
       setLoggedInUser(user);
-      setLoading(false);
     } catch (err) {
       setError(err as AuthError);
+    } finally {
       setLoading(false);
     }
   };

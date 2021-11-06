@@ -34,9 +34,9 @@ export default (
         );
       }
       setRegisteredUser(user);
-      setLoading(false);
     } catch (error) {
       setError(error as AuthError);
+    } finally {
       setLoading(false);
     }
   };
