@@ -1,7 +1,5 @@
 // @flow
-import type { FirebaseUser as User } from 'firebase';
-import type { Auth } from 'firebase/auth';
-import typeof { Error as AuthError } from 'firebase/auth';
+import type { Auth, AuthError, User } from 'firebase/auth';
 
 type LoadingHook<T> = [T | void, boolean, AuthError | void];
 

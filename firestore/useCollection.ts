@@ -1,63 +1,73 @@
-import firebase from 'firebase/app';
-import { useEffect, useMemo } from 'react';
-import { snapshotToData } from './helpers';
 import {
-  CollectionHook,
+  DocumentData,
+  FirestoreError,
+  getDocs,
+  getDocsFromCache,
+  getDocsFromServer,
+  onSnapshot,
+  Query,
+  QuerySnapshot,
+} from 'firebase/firestore';
+import { useEffect, useMemo } from 'react';
+import { useLoadingValue } from '../util';
+import { snapshotToData, useIsFirestoreQueryEqual } from './helpers';
+import {
   CollectionDataHook,
+  CollectionHook,
   Data,
   DataOptions,
-  OnceOptions,
+  GetOptions,
   OnceDataOptions,
+  OnceOptions,
   Options,
 } from './types';
-import { useIsEqualRef, useLoadingValue } from '../util';
 
-export const useCollection = <T = firebase.firestore.DocumentData>(
-  query?: firebase.firestore.Query | null,
+export const useCollection = <T>(
+  query?: Query | null,
   options?: Options
 ): CollectionHook<T> => {
   return useCollectionInternal<T>(true, query, options);
 };
 
-export const useCollectionOnce = <T = firebase.firestore.DocumentData>(
-  query?: firebase.firestore.Query<T> | null,
+export const useCollectionOnce = <T>(
+  query?: Query | null,
   options?: OnceOptions
 ): CollectionHook<T> => {
   return useCollectionInternal<T>(false, query, options);
 };
 
 export const useCollectionData = <
-  T = firebase.firestore.DocumentData,
+  T,
   IDField extends string = '',
   RefField extends string = ''
 >(
-  query?: firebase.firestore.Query | null,
+  query?: Query | null,
   options?: DataOptions<T>
 ): CollectionDataHook<T, IDField, RefField> => {
   return useCollectionDataInternal<T, IDField, RefField>(true, query, options);
 };
 
 export const useCollectionDataOnce = <
-  T = firebase.firestore.DocumentData,
+  T,
   IDField extends string = '',
   RefField extends string = ''
 >(
-  query?: firebase.firestore.Query | null,
+  query?: Query | null,
   options?: OnceDataOptions<T>
 ): CollectionDataHook<T, IDField, RefField> => {
   return useCollectionDataInternal<T, IDField, RefField>(false, query, options);
 };
 
-const useCollectionInternal = <T = firebase.firestore.DocumentData>(
+const useCollectionInternal = <T>(
   listen: boolean,
-  query?: firebase.firestore.Query | null,
+  query?: Query | null,
   options?: Options & OnceOptions
 ) => {
   const { error, loading, reset, setError, setValue, value } = useLoadingValue<
-    firebase.firestore.QuerySnapshot,
-    firebase.FirebaseError
+    QuerySnapshot,
+    FirestoreError
   >();
-  const ref = useIsEqualRef(query, reset);
+  const ref = useIsFirestoreQueryEqual<Query>(query, reset);
 
   useEffect(() => {
     if (!ref.current) {
@@ -67,26 +77,27 @@ const useCollectionInternal = <T = firebase.firestore.DocumentData>(
     if (listen) {
       const listener =
         options && options.snapshotListenOptions
-          ? ref.current.onSnapshot(
+          ? onSnapshot(
+              ref.current,
               options.snapshotListenOptions,
               setValue,
               setError
             )
-          : ref.current.onSnapshot(setValue, setError);
+          : onSnapshot(ref.current, setValue, setError);
 
       return () => {
         listener();
       };
     } else {
-      ref.current
-        .get(options ? options.getOptions : undefined)
-        .then(setValue)
-        .catch(setError);
+      const get = getDocsFnFromGetOptions(
+        options ? options.getOptions : undefined
+      );
+      get(ref.current).then(setValue).catch(setError);
     }
   }, [ref.current]);
 
   const resArray: CollectionHook<T> = [
-    value as firebase.firestore.QuerySnapshot<T>,
+    value as QuerySnapshot<T>,
     loading,
     error,
   ];
@@ -94,12 +105,12 @@ const useCollectionInternal = <T = firebase.firestore.DocumentData>(
 };
 
 const useCollectionDataInternal = <
-  T = firebase.firestore.DocumentData,
+  T,
   IDField extends string = '',
   RefField extends string = ''
 >(
   listen: boolean,
-  query?: firebase.firestore.Query | null,
+  query?: Query | null,
   options?: DataOptions<T> & OnceDataOptions<T>
 ): CollectionDataHook<T, IDField, RefField> => {
   const idField = options ? options.idField : undefined;
@@ -134,3 +145,17 @@ const useCollectionDataInternal = <
   ];
   return useMemo(() => resArray, resArray);
 };
+
+function getDocsFnFromGetOptions(
+  { source }: GetOptions = { source: 'default' }
+) {
+  switch (source) {
+    default:
+    case 'default':
+      return getDocs;
+    case 'cache':
+      return getDocsFromCache;
+    case 'server':
+      return getDocsFromServer;
+  }
+}
