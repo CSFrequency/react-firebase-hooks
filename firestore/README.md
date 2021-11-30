@@ -190,7 +190,7 @@ import { useDocument } from 'react-firebase-hooks/firestore';
 
 const FirestoreDocument = () => {
   const [value, loading, error] = useDocument(
-    doc(getFirestore(firebaseApp, 'hooks', 'nBShXiRGFAhuiPfBaGpt')),
+    doc(getFirestore(firebaseApp), 'hooks', 'nBShXiRGFAhuiPfBaGpt'),
     {
       snapshotListenOptions: { includeMetadataChanges: true },
     }
