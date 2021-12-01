@@ -165,7 +165,7 @@ const [
   user,
   loading,
   error,
-] = useSignInWithEmailAndPassword(auth, email, password);
+] = useSignInWithEmailAndPassword(auth);
 ```
 
 Login a user with email and password. Wraps the underlying `auth.signInWithEmailAndPassword` method and provides additional `loading` and `error` information.
