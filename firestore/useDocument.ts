@@ -9,6 +9,7 @@ import {
   OnceOptions,
   OnceDataOptions,
   Options,
+  InitialValueOptions,
 } from './types';
 import { useIsEqualRef, useLoadingValue } from '../util';
 
@@ -32,7 +33,7 @@ export const useDocumentData = <
   RefField extends string = ''
 >(
   docRef?: firebase.firestore.DocumentReference | null,
-  options?: DataOptions<T>
+  options?: DataOptions<T> & InitialValueOptions<T>
 ): DocumentDataHook<T, IDField, RefField> => {
   return useDocumentDataInternal<T, IDField, RefField>(true, docRef, options);
 };
@@ -43,7 +44,7 @@ export const useDocumentDataOnce = <
   RefField extends string = ''
 >(
   docRef?: firebase.firestore.DocumentReference | null,
-  options?: OnceDataOptions<T>
+  options?: OnceDataOptions<T> & InitialValueOptions<T>
 ): DocumentDataHook<T, IDField, RefField> => {
   return useDocumentDataInternal<T, IDField, RefField>(false, docRef, options);
 };
@@ -100,7 +101,7 @@ const useDocumentDataInternal = <
 >(
   listen: boolean,
   docRef?: firebase.firestore.DocumentReference | null,
-  options?: DataOptions<T>
+  options?: DataOptions<T> & InitialValueOptions<T>
 ): DocumentDataHook<T, IDField, RefField> => {
   const idField = options ? options.idField : undefined;
   const refField = options ? options.refField : undefined;
@@ -121,7 +122,7 @@ const useDocumentDataInternal = <
             refField,
             transform
           )
-        : undefined) as Data<T, IDField, RefField>,
+        : options && options.initialValue) as Data<T, IDField, RefField>,
     [snapshot, snapshotOptions, idField, refField, transform]
   );
 

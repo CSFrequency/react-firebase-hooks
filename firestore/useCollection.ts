@@ -9,6 +9,7 @@ import {
   OnceOptions,
   OnceDataOptions,
   Options,
+  InitialValueOptions,
 } from './types';
 import { useIsEqualRef, useLoadingValue } from '../util';
 
@@ -32,7 +33,7 @@ export const useCollectionData = <
   RefField extends string = ''
 >(
   query?: firebase.firestore.Query | null,
-  options?: DataOptions<T>
+  options?: DataOptions<T> & InitialValueOptions<T[]>
 ): CollectionDataHook<T, IDField, RefField> => {
   return useCollectionDataInternal<T, IDField, RefField>(true, query, options);
 };
@@ -43,7 +44,7 @@ export const useCollectionDataOnce = <
   RefField extends string = ''
 >(
   query?: firebase.firestore.Query | null,
-  options?: OnceDataOptions<T>
+  options?: OnceDataOptions<T> & InitialValueOptions<T[]>
 ): CollectionDataHook<T, IDField, RefField> => {
   return useCollectionDataInternal<T, IDField, RefField>(false, query, options);
 };
@@ -100,7 +101,7 @@ const useCollectionDataInternal = <
 >(
   listen: boolean,
   query?: firebase.firestore.Query | null,
-  options?: DataOptions<T> & OnceDataOptions<T>
+  options?: DataOptions<T> & OnceDataOptions<T> & InitialValueOptions<T[]>
 ): CollectionDataHook<T, IDField, RefField> => {
   const idField = options ? options.idField : undefined;
   const refField = options ? options.refField : undefined;
@@ -123,7 +124,7 @@ const useCollectionDataInternal = <
               transform
             )
           )
-        : undefined) as Data<T, IDField, RefField>[],
+        : options && options.initialValue) as Data<T, IDField, RefField>[],
     [snapshots, snapshotOptions, idField, refField, transform]
   );
 
