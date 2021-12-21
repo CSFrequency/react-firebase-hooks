@@ -10,11 +10,10 @@ import {
 } from 'firebase/firestore';
 import { useEffect, useMemo } from 'react';
 import { useLoadingValue } from '../util';
-import { snapshotToData, useIsFirestoreQueryEqual } from './helpers';
+import { useIsFirestoreQueryEqual } from './helpers';
 import {
   CollectionDataHook,
   CollectionHook,
-  Data,
   DataOptions,
   GetOptions,
   OnceDataOptions,
@@ -36,26 +35,18 @@ export const useCollectionOnce = <T = DocumentData>(
   return useCollectionInternal<T>(false, query, options);
 };
 
-export const useCollectionData = <
-  T = DocumentData,
-  IDField extends string = '',
-  RefField extends string = ''
->(
+export const useCollectionData = <T = DocumentData>(
   query?: Query<T> | null,
   options?: DataOptions<T>
-): CollectionDataHook<T, IDField, RefField> => {
-  return useCollectionDataInternal<T, IDField, RefField>(true, query, options);
+): CollectionDataHook<T> => {
+  return useCollectionDataInternal<T>(true, query, options);
 };
 
-export const useCollectionDataOnce = <
-  T = DocumentData,
-  IDField extends string = '',
-  RefField extends string = ''
->(
+export const useCollectionDataOnce = <T = DocumentData>(
   query?: Query<T> | null,
   options?: OnceDataOptions<T>
-): CollectionDataHook<T, IDField, RefField> => {
-  return useCollectionDataInternal<T, IDField, RefField>(false, query, options);
+): CollectionDataHook<T> => {
+  return useCollectionDataInternal<T>(false, query, options);
 };
 
 const useCollectionInternal = <T = DocumentData>(
@@ -104,19 +95,12 @@ const useCollectionInternal = <T = DocumentData>(
   return useMemo(() => resArray, resArray);
 };
 
-const useCollectionDataInternal = <
-  T = DocumentData,
-  IDField extends string = '',
-  RefField extends string = ''
->(
+const useCollectionDataInternal = <T = DocumentData>(
   listen: boolean,
   query?: Query<T> | null,
   options?: DataOptions<T> & OnceDataOptions<T>
-): CollectionDataHook<T, IDField, RefField> => {
-  const idField = options ? options.idField : undefined;
-  const refField = options ? options.refField : undefined;
+): CollectionDataHook<T> => {
   const snapshotOptions = options ? options.snapshotOptions : undefined;
-  const transform = options ? options.transform : undefined;
   const [snapshots, loading, error] = useCollectionInternal<T>(
     listen,
     query,
@@ -125,24 +109,12 @@ const useCollectionDataInternal = <
   const values = useMemo(
     () =>
       (snapshots
-        ? snapshots.docs.map((doc) =>
-            snapshotToData<T>(
-              doc,
-              snapshotOptions,
-              idField,
-              refField,
-              transform
-            )
-          )
-        : undefined) as Data<T, IDField, RefField>[],
-    [snapshots, snapshotOptions, idField, refField, transform]
+        ? snapshots.docs.map((doc) => doc.data(snapshotOptions))
+        : undefined) as T[],
+    [snapshots, snapshotOptions]
   );
 
-  const resArray: CollectionDataHook<T, IDField, RefField> = [
-    values,
-    loading,
-    error,
-  ];
+  const resArray: CollectionDataHook<T> = [values, loading, error];
   return useMemo(() => resArray, resArray);
 };
 

@@ -19,16 +19,16 @@ import { useCollection } from 'react-firebase-hooks/firestore';
 List of Cloud Firestore hooks:
 
 - [React Firebase Hooks - Cloud Firestore](#react-firebase-hooks---cloud-firestore)
-    - [useCollection](#usecollection)
-      - [Full example](#full-example)
-    - [useCollectionOnce](#usecollectiononce)
-    - [useCollectionData](#usecollectiondata)
-    - [useCollectionDataOnce](#usecollectiondataonce)
-    - [useDocument](#usedocument)
-      - [Full example](#full-example-1)
-    - [useDocumentOnce](#usedocumentonce)
-    - [useDocumentData](#usedocumentdata)
-    - [useDocumentDataOnce](#usedocumentdataonce)
+  - [useCollection](#usecollection)
+    - [Full example](#full-example)
+  - [useCollectionOnce](#usecollectiononce)
+  - [useCollectionData](#usecollectiondata)
+  - [useCollectionDataOnce](#usecollectiondataonce)
+  - [useDocument](#usedocument)
+    - [Full example](#full-example-1)
+  - [useDocumentOnce](#usedocumentonce)
+  - [useDocumentData](#usedocumentdata)
+  - [useDocumentDataOnce](#usedocumentdataonce)
   - [Transforming data](#transforming-data)
 
 Additional functionality:
@@ -115,7 +115,7 @@ Returns:
 ### useCollectionData
 
 ```js
-const [values, loading, error] = useCollectionData<T> (query, options);
+const [values, loading, error] = useCollectionData < T > (query, options);
 ```
 
 As `useCollection`, but this hook extracts a typed list of the `firestore.QuerySnapshot.docs` values, rather than the
@@ -125,11 +125,8 @@ The `useCollectionData` hook takes the following parameters:
 
 - `query`: (optional) `firestore.Query` for the data you would like to load
 - `options`: (optional) `Object` with the following parameters:
-  - `idField`: (optional) name of the field that should be populated with the `firestore.QuerySnapshot.id` property.
-  - `refField`: (optional) name of the field that should be populated with the `firestore.QuerySnapshot.ref` property.
   - `snapshotListenOptions`: (optional) `firestore.SnapshotListenOptions` to customise how the collection is loaded
   - `snapshotOptions`: (optional) `firestore.SnapshotOptions` to customise how data is retrieved from snapshots
-  - `transform`: (optional) a function that receives the raw `firestore.DocumentData` for each item in the collection to allow manual transformation of the data where required by the application. See [`Transforming data`](#transforming-data) below.
 
 Returns:
 
@@ -140,7 +137,7 @@ Returns:
 ### useCollectionDataOnce
 
 ```js
-const [values, loading, error] = useCollectionDataOnce<T>(query, options);
+const [values, loading, error] = useCollectionDataOnce < T > (query, options);
 ```
 
 As `useCollectionData`, but this hook will only read the current value of the `firestore.Query`.
@@ -151,10 +148,7 @@ The `useCollectionDataOnce` hook takes the following parameters:
 - `options`: (optional) `Object` with the following parameters:
   - `getOptions`: (optional) `Object` to customise how the collection is loaded
     - `source`: (optional): `'default' | 'server' | 'cache'` Describes whether we should get from server or cache.
-  - `idField`: (optional) name of the field that should be populated with the `firestore.QuerySnapshot.id` property.
-  - `refField`: (optional) name of the field that should be populated with the `firestore.QuerySnapshot.ref` property.
   - `snapshotOptions`: (optional) `firestore.SnapshotOptions` to customise how data is retrieved from snapshots
-  - `transform`: (optional) a function that receives the raw `firestore.DocumentData` for each item in the collection to allow manual transformation of the data where required by the application. See [`Transforming data`](#transforming-data) below.
 
 Returns:
 
@@ -231,7 +225,7 @@ Returns:
 ### useDocumentData
 
 ```js
-const [value, loading, error] = useDocumentData<T>(reference, options);
+const [value, loading, error] = useDocumentData < T > (reference, options);
 ```
 
 As `useDocument`, but this hook extracts the typed contents of `firestore.DocumentSnapshot.data()`, rather than the
@@ -241,11 +235,8 @@ The `useDocumentData` hook takes the following parameters:
 
 - `reference`: (optional) `firestore.DocumentReference` for the data you would like to load
 - `options`: (optional) `Object` with the following parameters:
-  - `idField`: (optional) name of the field that should be populated with the `firestore.DocumentSnapshot.id` property.
-  - `refField`: (optional) name of the field that should be populated with the `firestore.QuerySnapshot.ref` property.
   - `snapshotListenOptions`: (optional) `firestore.SnapshotListenOptions` to customise how the collection is loaded
   - `snapshotOptions`: (optional) `firestore.SnapshotOptions` to customise how data is retrieved from snapshots
-  - `transform`: (optional) a function that receives the raw `firestore.DocumentData` to allow manual transformation of the data where required by the application. See [`Transforming data`](#transforming-data) below.
 
 Returns:
 
@@ -256,7 +247,7 @@ Returns:
 ### useDocumentDataOnce
 
 ```js
-const [value, loading, error] = useDocumentDataOnce<T> (reference, options);
+const [value, loading, error] = useDocumentDataOnce < T > (reference, options);
 ```
 
 As `useDocument`, but this hook will only read the current value of the `firestore.DocumentReference`.
@@ -266,11 +257,8 @@ The `useDocumentDataOnce` hook takes the following parameters:
 - `reference`: (optional) `firestore.DocumentReference` for the data you would like to load
 - `options`: (optional) `Object` with the following parameters:
   - `getOptions`: (optional) `Object` to customise how the collection is loaded
-    - `source`: (optional): `'default' | 'server' | 'cache'` Describes whether we should get from server or cache.
-  - `idField`: (optional) name of the field that should be populated with the `firestore.DocumentSnapshot.id` property.
-  - `refField`: (optional) name of the field that should be populated with the `firestore.QuerySnapshot.ref` property.
+    - `source`: (optional): `'default' | 'server' | 'cache'` Describes whether we should get from server or cach
   - `snapshotOptions`: (optional) `firestore.SnapshotOptions` to customise how data is retrieved from snapshots
-  - `transform`: (optional) a function that receives the raw `firestore.DocumentData` to allow manual transformation of the data where required by the application. See [`Transforming data`](#transforming-data) below.
 
 Returns:
 
@@ -280,14 +268,6 @@ Returns:
 
 ## Transforming data
 
-Firestore allows a restricted number of data types in its store, which may not be flexible enough for your application. Both `useCollectionData` and `useDocumentData` support an optional `transform` function which allows the transformation of the underlying Firestore data into whatever format the application requires, e.g. a `Date` type.
+Firestore allows a restricted number of data types in its store, which may not be flexible enough for your application. As of Firebase 9, there is a built in FirestoreDataConverter which allows you to transform data as it leaves the Firestore database. This is described here: https://firebase.google.com/docs/reference/js/firestore_.firestoredataconverter
 
-```js
-transform?: (val: any) => T;
-```
-
-The `transform` function is passed a single row of a data, so will be called once when used with `useDocumentData` and multiple times when used with `useCollectionData`.
-
-The `transform` function will not receive the `id` or `ref` values referenced in the properties named in the `idField` or `refField` options, nor it is expected to produce them. Either or both, if specified, will be merged afterwards.
-
-If the `transform` function is defined within your React component, it is recomended that you memoize the function to prevent unnecessry renders.
+> This has replaced the `transform`, `idField` and `refField` options that were available in `react-firebase-hooks` v4 and earlier.
