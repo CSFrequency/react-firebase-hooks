@@ -53,7 +53,7 @@ const useCollectionInternal = <T = DocumentData>(
   listen: boolean,
   query?: Query<T> | null,
   options?: Options & OnceOptions
-) => {
+): CollectionHook<T> => {
   const { error, loading, reset, setError, setValue, value } = useLoadingValue<
     QuerySnapshot<T>,
     FirestoreError
@@ -66,23 +66,20 @@ const useCollectionInternal = <T = DocumentData>(
       return;
     }
     if (listen) {
-      const listener =
-        options && options.snapshotListenOptions
-          ? onSnapshot(
-              ref.current,
-              options.snapshotListenOptions,
-              setValue,
-              setError
-            )
-          : onSnapshot(ref.current, setValue, setError);
+      const listener = options?.snapshotListenOptions
+        ? onSnapshot(
+            ref.current,
+            options.snapshotListenOptions,
+            setValue,
+            setError
+          )
+        : onSnapshot(ref.current, setValue, setError);
 
       return () => {
         listener();
       };
     } else {
-      const get = getDocsFnFromGetOptions(
-        options ? options.getOptions : undefined
-      );
+      const get = getDocsFnFromGetOptions(options?.getOptions);
       get(ref.current).then(setValue).catch(setError);
     }
   }, [ref.current]);
@@ -100,17 +97,14 @@ const useCollectionDataInternal = <T = DocumentData>(
   query?: Query<T> | null,
   options?: DataOptions<T> & OnceDataOptions<T>
 ): CollectionDataHook<T> => {
-  const snapshotOptions = options ? options.snapshotOptions : undefined;
+  const snapshotOptions = options?.snapshotOptions;
   const [snapshots, loading, error] = useCollectionInternal<T>(
     listen,
     query,
     options
   );
   const values = useMemo(
-    () =>
-      (snapshots
-        ? snapshots.docs.map((doc) => doc.data(snapshotOptions))
-        : undefined) as T[],
+    () => snapshots?.docs.map((doc) => doc.data(snapshotOptions)) as T[],
     [snapshots, snapshotOptions]
   );
 
@@ -118,9 +112,9 @@ const useCollectionDataInternal = <T = DocumentData>(
   return useMemo(() => resArray, resArray);
 };
 
-function getDocsFnFromGetOptions(
+const getDocsFnFromGetOptions = (
   { source }: GetOptions = { source: 'default' }
-) {
+) => {
   switch (source) {
     default:
     case 'default':
@@ -130,4 +124,4 @@ function getDocsFnFromGetOptions(
     case 'server':
       return getDocsFromServer;
   }
-}
+};

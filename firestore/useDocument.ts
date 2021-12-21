@@ -65,23 +65,20 @@ const useDocumentInternal = <T = DocumentData>(
       return;
     }
     if (listen) {
-      const listener =
-        options && options.snapshotListenOptions
-          ? onSnapshot(
-              ref.current,
-              options.snapshotListenOptions,
-              setValue,
-              setError
-            )
-          : onSnapshot(ref.current, setValue, setError);
+      const listener = options?.snapshotListenOptions
+        ? onSnapshot(
+            ref.current,
+            options.snapshotListenOptions,
+            setValue,
+            setError
+          )
+        : onSnapshot(ref.current, setValue, setError);
 
       return () => {
         listener();
       };
     } else {
-      const get = getDocFnFromGetOptions(
-        options ? options.getOptions : undefined
-      );
+      const get = getDocFnFromGetOptions(options?.getOptions);
 
       get(ref.current).then(setValue).catch(setError);
     }
@@ -100,24 +97,24 @@ const useDocumentDataInternal = <T = DocumentData>(
   docRef?: DocumentReference<T> | null,
   options?: DataOptions<T>
 ): DocumentDataHook<T> => {
-  const snapshotOptions = options ? options.snapshotOptions : undefined;
+  const snapshotOptions = options?.snapshotOptions;
   const [snapshot, loading, error] = useDocumentInternal<T>(
     listen,
     docRef,
     options
   );
-  const value = useMemo(
-    () => (snapshot ? snapshot.data(snapshotOptions) : undefined) as T,
-    [snapshot, snapshotOptions]
-  );
+  const value = useMemo(() => snapshot?.data(snapshotOptions) as T, [
+    snapshot,
+    snapshotOptions,
+  ]);
 
   const resArray: DocumentDataHook<T> = [value, loading, error];
   return useMemo(() => resArray, resArray);
 };
 
-function getDocFnFromGetOptions(
+const getDocFnFromGetOptions = (
   { source }: GetOptions = { source: 'default' }
-) {
+) => {
   switch (source) {
     default:
     case 'default':
@@ -127,4 +124,4 @@ function getDocFnFromGetOptions(
     case 'server':
       return getDocFromServer;
   }
-}
+};
