@@ -126,6 +126,7 @@ The `useCollectionData` hook takes the following parameters:
   - `snapshotListenOptions`: (optional) `firebase.firestore.SnapshotListenOptions` to customise how the collection is loaded
   - `snapshotOptions`: (optional) `firebase.firestore.SnapshotOptions` to customise how data is retrieved from snapshots
   - `transform`: (optional) a function that receives the raw `firebase.firestore.DocumentData` for each item in the collection to allow manual transformation of the data where required by the application. See [`Transforming data`](#transforming-data) below.
+  - `initialValue`: (optional) the initial value returned by the hook, until data from the firestore query has loaded
 
 Returns:
 
@@ -150,6 +151,7 @@ The `useCollectionDataOnce` hook takes the following parameters:
   - `refField`: (optional) name of the field that should be populated with the `firebase.firestore.QuerySnapshot.ref` property.
   - `snapshotOptions`: (optional) `firebase.firestore.SnapshotOptions` to customise how data is retrieved from snapshots
   - `transform`: (optional) a function that receives the raw `firebase.firestore.DocumentData` for each item in the collection to allow manual transformation of the data where required by the application. See [`Transforming data`](#transforming-data) below.
+  - `initialValue`: (optional) the initial value returned by the hook, until data from the firestore query has loaded
 
 Returns:
 
@@ -239,6 +241,7 @@ The `useDocumentData` hook takes the following parameters:
   - `snapshotListenOptions`: (optional) `firebase.firestore.SnapshotListenOptions` to customise how the collection is loaded
   - `snapshotOptions`: (optional) `firebase.firestore.SnapshotOptions` to customise how data is retrieved from snapshots
   - `transform`: (optional) a function that receives the raw `firebase.firestore.DocumentData` to allow manual transformation of the data where required by the application. See [`Transforming data`](#transforming-data) below.
+  - `initialValue`: (optional) the initial value returned by the hook, until data from the firestore query has loaded
 
 Returns:
 
@@ -263,6 +266,7 @@ The `useDocumentDataOnce` hook takes the following parameters:
   - `refField`: (optional) name of the field that should be populated with the `firebase.firestore.QuerySnapshot.ref` property.
   - `snapshotOptions`: (optional) `firebase.firestore.SnapshotOptions` to customise how data is retrieved from snapshots
   - `transform`: (optional) a function that receives the raw `firebase.firestore.DocumentData` to allow manual transformation of the data where required by the application. See [`Transforming data`](#transforming-data) below.
+  - `initialValue`: (optional) the initial value returned by the hook, until data from the firestore query has loaded
 
 Returns:
 

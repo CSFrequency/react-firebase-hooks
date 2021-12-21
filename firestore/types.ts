@@ -11,6 +11,9 @@ export type Options = {
   snapshotListenOptions?: firebase.firestore.SnapshotListenOptions;
 };
 export type DataOptions<T> = Options & IDOptions<T>;
+export type InitialValueOptions<T> = {
+  initialValue?: T;
+};
 export type OnceOptions = {
   getOptions?: firebase.firestore.GetOptions;
 };
