@@ -14,7 +14,7 @@ import {
 import { useIsEqualRef, useLoadingValue } from '../util';
 
 export const useCollection = <T = firebase.firestore.DocumentData>(
-  query?: firebase.firestore.Query | null,
+  query?: firebase.firestore.Query<T> | null,
   options?: Options
 ): CollectionHook<T> => {
   return useCollectionInternal<T>(true, query, options);
@@ -32,7 +32,7 @@ export const useCollectionData = <
   IDField extends string = '',
   RefField extends string = ''
 >(
-  query?: firebase.firestore.Query | null,
+  query?: firebase.firestore.Query<T> | null,
   options?: DataOptions<T> & InitialValueOptions<T[]>
 ): CollectionDataHook<T, IDField, RefField> => {
   return useCollectionDataInternal<T, IDField, RefField>(true, query, options);
@@ -43,7 +43,7 @@ export const useCollectionDataOnce = <
   IDField extends string = '',
   RefField extends string = ''
 >(
-  query?: firebase.firestore.Query | null,
+  query?: firebase.firestore.Query<T> | null,
   options?: OnceDataOptions<T> & InitialValueOptions<T[]>
 ): CollectionDataHook<T, IDField, RefField> => {
   return useCollectionDataInternal<T, IDField, RefField>(false, query, options);

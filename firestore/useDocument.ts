@@ -14,14 +14,14 @@ import {
 import { useIsEqualRef, useLoadingValue } from '../util';
 
 export const useDocument = <T = firebase.firestore.DocumentData>(
-  docRef?: firebase.firestore.DocumentReference | null,
+  docRef?: firebase.firestore.DocumentReference<T> | null,
   options?: Options
 ): DocumentHook<T> => {
   return useDocumentInternal<T>(true, docRef, options);
 };
 
 export const useDocumentOnce = <T = firebase.firestore.DocumentData>(
-  docRef?: firebase.firestore.DocumentReference | null,
+  docRef?: firebase.firestore.DocumentReference<T> | null,
   options?: OnceOptions
 ): DocumentHook<T> => {
   return useDocumentInternal<T>(false, docRef, options);
@@ -32,7 +32,7 @@ export const useDocumentData = <
   IDField extends string = '',
   RefField extends string = ''
 >(
-  docRef?: firebase.firestore.DocumentReference | null,
+  docRef?: firebase.firestore.DocumentReference<T> | null,
   options?: DataOptions<T> & InitialValueOptions<T>
 ): DocumentDataHook<T, IDField, RefField> => {
   return useDocumentDataInternal<T, IDField, RefField>(true, docRef, options);
@@ -43,7 +43,7 @@ export const useDocumentDataOnce = <
   IDField extends string = '',
   RefField extends string = ''
 >(
-  docRef?: firebase.firestore.DocumentReference | null,
+  docRef?: firebase.firestore.DocumentReference<T> | null,
   options?: OnceDataOptions<T> & InitialValueOptions<T>
 ): DocumentDataHook<T, IDField, RefField> => {
   return useDocumentDataInternal<T, IDField, RefField>(false, docRef, options);
