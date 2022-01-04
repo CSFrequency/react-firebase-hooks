@@ -1,4 +1,13 @@
 export { default as useAuthState, AuthStateHook } from './useAuthState';
+export { default as useCreateUserWithEmailAndPassword } from './useCreateUserWithEmailAndPassword';
+export {
+  default as useSendEmailVerification,
+  SendEmailVerificationHook,
+} from './useSendEmailVerification';
+export {
+  default as useSendPasswordResetEmail,
+  SendPasswordResetEmailHook,
+} from './useSendPasswordResetEmail';
 export { default as useSignInWithEmailAndPassword } from './useSignInWithEmailAndPassword';
 export {
   useSignInWithApple,
@@ -9,6 +18,13 @@ export {
   useSignInWithTwitter,
   useSignInWithYahoo,
 } from './useSignInWithPopup';
-export { default as useCreateUserWithEmailAndPassword } from './useCreateUserWithEmailAndPassword';
+export {
+  useUpdateEmail,
+  useUpdatePassword,
+  useUpdateProfile,
+  UpdateEmailHook,
+  UpdatePasswordHook,
+  UpdateProfileHook,
+} from './useUpdateUser';
 
-export { EmailAndPasswordActionHook } from './types';
+export { EmailAndPasswordActionHook, SignInWithPopupHook } from './types';

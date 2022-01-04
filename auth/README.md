@@ -20,6 +20,11 @@ List of Auth hooks:
 - [useSignInWithMicrosoft](#usesigninwithmicrosoft)
 - [useSignInWithTwitter](#usesigninwithtwitter)
 - [useSignInWithYahoo](#usesigninwithyahoo)
+- [useUpdateEmail](#useupdateemail)
+- [useUpdatePassword](#useupdatepassword)
+- [useUpdateProfile](#useupdateprofile)
+- [useSendPasswordResetEmaili](#usesendpasswordresetemail)
+- [useSendEmailVerification](#usesendemailverification)
 
 ### useAuthState
 
@@ -443,6 +448,298 @@ const SignIn = () => {
         onChange={(e) => setPassword(e.target.value)}
       />
       <button onClick={() => signInWithXXX()}>Sign In</button>
+    </div>
+  );
+};
+```
+
+### useUpdateEmail
+
+```js
+const [updateEmail, updating, error] = useUpdateEmail(auth);
+```
+
+Update the current user's email address. Wraps the underlying `auth.updateEmail` method and provides additional `updating` and `error` information.
+
+The `useUpdateEmail` hook takes the following parameters:
+
+- `auth`: `Auth` instance for the app you would like to monitor
+
+Returns:
+
+- `updateEmail(email: string)`: a function you can call to update the current user's email addres
+- `updating`: A `boolean` to indicate whether the user update is processing
+- `error`: Any `Error` returned by Firebase when trying to update the user, or `undefined` if there is no error
+
+#### Full Example
+
+```jsx
+import { useUpdateEmail } from 'react-firebase-hooks/auth';
+
+const UpdateEmail = () => {
+  const [email, setEmail] = useState('');
+  const [updateEmail, updating, error] = useUpdateEmail(auth);
+
+  if (error) {
+    return (
+      <div>
+        <p>Error: {error.message}</p>
+      </div>
+    );
+  }
+  if (updating) {
+    return <p>Updating...</p>;
+  }
+  return (
+    <div className="App">
+      <input
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <button
+        onClick={async () => {
+          updateEmail(email);
+          alert('Updated email address');
+        }}
+      >
+        Update email
+      </button>
+    </div>
+  );
+};
+```
+
+### useUpdatePassword
+
+```js
+const [updatePassword, updating, error] = useUpdatePassword(auth);
+```
+
+Update the current user's password. Wraps the underlying `auth.updatePassword` method and provides additional `updating` and `error` information.
+
+The `useUpdatePassword` hook takes the following parameters:
+
+- `auth`: `Auth` instance for the app you would like to monitor
+
+Returns:
+
+- `updatePassword(password: string)`: a function you can call to update the current user's password
+- `updating`: A `boolean` to indicate whether the user update is processing
+- `error`: Any `Error` returned by Firebase when trying to update the user, or `undefined` if there is no error
+
+#### Full Example
+
+```jsx
+import { useUpdatePassword } from 'react-firebase-hooks/auth';
+
+const UpdatePassword = () => {
+  const [password, setPassword] = useState('');
+  const [updatePassword, updating, error] = useUpdatePassword(auth);
+
+  if (error) {
+    return (
+      <div>
+        <p>Error: {error.message}</p>
+      </div>
+    );
+  }
+  if (updating) {
+    return <p>Updating...</p>;
+  }
+  return (
+    <div className="App">
+      <input
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
+      <button
+        onClick={async () => {
+          updatePassword(email);
+          alert('Updated password');
+        }}
+      >
+        Update password
+      </button>
+    </div>
+  );
+};
+```
+
+### useUpdateProfile
+
+```js
+const [updateProfile, updating, error] = useUpdateProfile(auth);
+```
+
+Update the current user's profile. Wraps the underlying `auth.updateProfile` method and provides additional `updating` and `error` information.
+
+The `useUpdateProfile` hook takes the following parameters:
+
+- `auth`: `Auth` instance for the app you would like to monitor
+
+Returns:
+
+- `updateProfile({ displayName: string, photoURL: string })`: a function you can call to update the current user's profile
+- `updating`: A `boolean` to indicate whether the user update is processing
+- `error`: Any `Error` returned by Firebase when trying to update the user, or `undefined` if there is no error
+
+#### Full Example
+
+```jsx
+import { useUpdateProfile } from 'react-firebase-hooks/auth';
+
+const UpdateProfile = () => {
+  const [displayName, setDisplayName] = useState('');
+  const [photoURL, setPhotoURL] = useState('');
+  const [updateProfile, updating, error] = useUpdateProfile(auth);
+
+  if (error) {
+    return (
+      <div>
+        <p>Error: {error.message}</p>
+      </div>
+    );
+  }
+  if (updating) {
+    return <p>Updating...</p>;
+  }
+  return (
+    <div className="App">
+      <input
+        type="displayName"
+        value={displayName}
+        onChange={(e) => setDisplayName(e.target.value)}
+      />
+      <input
+        type="photoURL"
+        value={photoURL}
+        onChange={(e) => setPhotoURL(e.target.value)}
+      />
+      <button
+        onClick={async () => {
+          updateProfile({ displayName, photoURL });
+          alert('Updated profile');
+        }}
+      >
+        Update profile
+      </button>
+    </div>
+  );
+};
+```
+
+### useSendPasswordResetEmail
+
+```js
+const [sendPasswordResetEmail, sending, error] = useSendPasswordResetEmail(
+  auth
+);
+```
+
+Send a password reset email to the specified email address. Wraps the underlying `auth.sendPasswordResetEmail` method and provides additional `sending` and `error` information.
+
+The `useSendPasswordResetEmail` hook takes the following parameters:
+
+- `auth`: `Auth` instance for the app you would like to monitor
+
+Returns:
+
+- `sendPasswordResetEmail(email: string)`: a function you can call to send a password reset emaail
+- `sending`: A `boolean` to indicate whether the email is being sent
+- `error`: Any `Error` returned by Firebase when trying to send the email, or `undefined` if there is no error
+
+#### Full Example
+
+```jsx
+import { useSendPasswordResetEmail } from 'react-firebase-hooks/auth';
+
+const SendPasswordReset = () => {
+  const [email, setEmail] = useState('');
+  const [sendPasswordResetEmail, sending, error] = useSendPasswordResetEmail(
+    auth
+  );
+
+  if (error) {
+    return (
+      <div>
+        <p>Error: {error.message}</p>
+      </div>
+    );
+  }
+  if (sending) {
+    return <p>Sending...</p>;
+  }
+  return (
+    <div className="App">
+      <input
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <button
+        onClick={async () => {
+          sendPasswordResetEmail(email);
+          alert('Sent email');
+        }}
+      >
+        Reset password
+      </button>
+    </div>
+  );
+};
+```
+
+### useSendEmailVerification
+
+```js
+const [sendEmailVerification, sending, error] = useSendEmailVerification(auth);
+```
+
+Send a verification email to the current user. Wraps the underlying `auth.sendEmailVerification` method and provides additional `sending` and `error` information.
+
+The `useSendEmailVerification` hook takes the following parameters:
+
+- `auth`: `Auth` instance for the app you would like to monitor
+
+Returns:
+
+- `sendEmailVerification()`: a function you can call to send a password reset emaail
+- `sending`: A `boolean` to indicate whether the email is being sent
+- `error`: Any `Error` returned by Firebase when trying to send the email, or `undefined` if there is no error
+
+#### Full Example
+
+```jsx
+import { useSendEmailVerification } from 'react-firebase-hooks/auth';
+
+const SendEmailVerification = () => {
+  const [email, setEmail] = useState('');
+  const [sendEmailVerification, sending, error] = useSendEmailVerification(
+    auth
+  );
+
+  if (error) {
+    return (
+      <div>
+        <p>Error: {error.message}</p>
+      </div>
+    );
+  }
+  if (sending) {
+    return <p>Sending...</p>;
+  }
+  return (
+    <div className="App">
+      <button
+        onClick={async () => {
+          sendEmailVerification();
+          alert('Sent email');
+        }}
+      >
+        Verify email
+      </button>
     </div>
   );
 };
