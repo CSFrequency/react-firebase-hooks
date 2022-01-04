@@ -14,3 +14,10 @@ export type EmailAndPasswordActionHook = AuthActionHook<
   UserCredential,
   AuthError
 >;
+
+export type GoogleActionHook = [
+  () => void,
+  firebase.auth.UserCredential | undefined,
+  boolean,
+  firebase.FirebaseError | undefined
+];
