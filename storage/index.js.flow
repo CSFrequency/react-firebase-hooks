@@ -1,8 +1,7 @@
 // @flow
-import typeof { FirebaseError } from 'firebase';
-import type { Reference } from 'firebase/storage';
+import type { Reference, StorageError } from 'firebase/storage';
 
-type LoadingHook<T> = [T | void, boolean, FirebaseError | void];
+type LoadingHook<T> = [T | void, boolean, StorageError | void];
 
 export type DownloadURLHook = LoadingHook<string>;
 declare export function useDownloadURL(ref?: Reference | null): DownloadURLHook;

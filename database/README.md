@@ -1,7 +1,7 @@
 # React Firebase Hooks - Realtime Database
 
 React Firebase Hooks provides convenience listeners for lists and values stored within the
-Firebase Realtime Database. The hooks wrap around the `firebase.database().ref().on()` method.
+Firebase Realtime Database. The hooks wrap around the `onX(...)` method.
 
 In addition to returning the list or value, the hooks provide an `error` and `loading` property
 to give a complete lifecycle for loading and listening to the Realtime Database.
@@ -14,11 +14,16 @@ import { useList } from 'react-firebase-hooks/database';
 
 List of Realtime Database hooks:
 
-- [useList](#uselist)
-- [useListKeys](#uselistkeys)
-- [useListVals](#uselistvals)
-- [useObject](#useobject)
-- [useObjectVal](#useobjectval)
+- [React Firebase Hooks - Realtime Database](#react-firebase-hooks---realtime-database)
+    - [useList](#uselist)
+      - [Full Example](#full-example)
+    - [useListKeys](#uselistkeys)
+    - [useListVals](#uselistvals)
+    - [useObject](#useobject)
+      - [Full Example](#full-example-1)
+    - [useObjectVal](#useobjectval)
+  - [Transforming data](#transforming-data)
+      - [Full Example](#full-example-2)
 
 Additional functionality:
 
@@ -34,21 +39,24 @@ Retrieve and monitor a list value in the Firebase Realtime Database.
 
 The `useList` hook takes the following parameters:
 
-- `reference`: (optional) `firebase.database.Reference` for the data you would like to load
+- `reference`: (optional) `database.Reference` for the data you would like to load
 
 Returns:
 
-- `snapshots`: an array of `firebase.database.DataSnapshot`, or `undefined` if no reference is supplied
+- `snapshots`: an array of `database.DataSnapshot`, or `undefined` if no reference is supplied
 - `loading`: a `boolean` to indicate if the data is still being loaded
-- `error`: Any `firebase.FirebaseError` returned by Firebase when trying to load the data, or `undefined` if there is no error
+- `error`: Any `Error` returned by Firebase when trying to load the data, or `undefined` if there is no error
 
 #### Full Example
 
 ```js
+import { ref, getDatabase } from 'firebase/database';
 import { useList } from 'react-firebase-hooks/database';
 
+const database = getDatabase(firebaseApp);
+
 const DatabaseList = () => {
-  const [snapshots, loading, error] = useList(firebase.database().ref('list'));
+  const [snapshots, loading, error] = useList(ref(database, 'list'));
 
   return (
     <div>
@@ -77,40 +85,40 @@ const DatabaseList = () => {
 const [keys, loading, error] = useListKeys(reference);
 ```
 
-As `useList`, but this hooks extracts the `firebase.database.DataSnapshot.key` values, rather than the the `firebase.database.DataSnapshot`s themselves.
+As `useList`, but this hooks extracts the `database.DataSnapshot.key` values, rather than the the `database.DataSnapshot`s themselves.
 
 The `useListKeys` hook takes the following parameters:
 
-- `reference`: (optional) `firebase.database.Reference` for the data you would like to load
+- `reference`: (optional) `database.Reference` for the data you would like to load
 
 Returns:
 
 - `keys`: an array of `string`, or `undefined` if no reference is supplied
 - `loading`: a `boolean` to indicate if the data is still being loaded
-- `error`: Any `firebase.FirebaseError` returned by Firebase when trying to load the data, or `undefined` if there is no error
+- `error`: Any `Error` returned by Firebase when trying to load the data, or `undefined` if there is no error
 
 ### useListVals
 
 ```js
-const [values, loading, error] = useListVals < T > (reference, options);
+const [values, loading, error] = useListVals<T> (reference, options);
 ```
 
-As `useList`, but this hook extracts a typed list of the `firebase.database.DataSnapshot.val()` values, rather than the the
-`firebase.database.DataSnapshot`s themselves.
+As `useList`, but this hook extracts a typed list of the `database.DataSnapshot.val()` values, rather than the the
+`database.DataSnapshot`s themselves.
 
 The `useListVals` hook takes the following parameters:
 
-- `reference`: (optional) `firebase.database.Reference` for the data you would like to load
+- `reference`: (optional) `database.Reference` for the data you would like to load
 - `options`: (optional) `Object` with the following parameters:
-  - `keyField`: (optional) `string` field name that should be populated with the `firebase.database.DataSnapshot.id` property in the returned values.
-  - `refField`: (optional) `string` field name that should be populated with the `firebase.database.DataSnapshot.ref` property.
-  - `transform`: (optional) a function that receives the raw `firebase.database.DataSnapshot.val()` for each item in the list to allow manual transformation of the data where required by the application. See [`Transforming data`](#transforming-data) below.
+  - `keyField`: (optional) `string` field name that should be populated with the `database.DataSnapshot.id` property in the returned values.
+  - `refField`: (optional) `string` field name that should be populated with the `database.DataSnapshot.ref` property.
+  - `transform`: (optional) a function that receives the raw `database.DataSnapshot.val()` for each item in the list to allow manual transformation of the data where required by the application. See [`Transforming data`](#transforming-data) below.
 
 Returns:
 
 - `values`: an array of `T`, or `undefined` if no reference is supplied
 - `loading`: a `boolean` to indicate if the data is still being loaded
-- `error`: Any `firebase.FirebaseError` returned by Firebase when trying to load the data, or `undefined` if there is no error
+- `error`: Any `Error` returned by Firebase when trying to load the data, or `undefined` if there is no error
 
 ### useObject
 
@@ -122,28 +130,31 @@ Retrieve and monitor an object or primitive value in the Firebase Realtime Datab
 
 The `useObject` hook takes the following parameters:
 
-- `reference`: (optional) `firebase.database.Reference` for the data you would like to load
+- `reference`: (optional) `database.Reference` for the data you would like to load
 
 Returns:
 
-- `snapshot`: a `firebase.database.DataSnapshot`, or `undefined` if no reference is supplied
+- `snapshot`: a `database.DataSnapshot`, or `undefined` if no reference is supplied
 - `loading`: a `boolean` to indicate if the data is still being loaded
-- `error`: Any `firebase.FirebaseError` returned by Firebase when trying to load the data, or `undefined` if there is no error
+- `error`: Any `Error` returned by Firebase when trying to load the data, or `undefined` if there is no error
 
 #### Full Example
 
 ```js
+import { ref, getDatabase } from 'firebase/database';
 import { useObject } from 'react-firebase-hooks/database';
 
+const database = getDatabase(firebaseApp);
+
 const DatabaseValue = () => {
-  const [value, loading, error] = useObject(firebase.database().ref('value'));
+  const [snapshot, loading, error] = useObject(ref(database, 'value'));
 
   return (
     <div>
       <p>
         {error && <strong>Error: {error}</strong>}
         {loading && <span>Value: Loading...</span>}
-        {value && <span>Value: {value.val()}</span>}
+        {snapshot && <span>Value: {snapshot.val()}</span>}
       </p>
     </div>
   );
@@ -153,25 +164,25 @@ const DatabaseValue = () => {
 ### useObjectVal
 
 ```js
-const [value, loading, error] = useObjectVal < T > (reference, options);
+const [value, loading, error] = useObjectVal<T> (reference, options);
 ```
 
-As `useObject`, but this hook returns the typed contents of `firebase.database.DataSnapshot.val()`, rather than the the
-`firebase.database.DataSnapshot` itself.
+As `useObject`, but this hook returns the typed contents of `database.DataSnapshot.val()`, rather than the the
+`database.DataSnapshot` itself.
 
 The `useObjectVal` hook takes the following parameters:
 
-- `reference`: (optional) `firebase.database.Reference` for the data you would like to load
+- `reference`: (optional) `database.Reference` for the data you would like to load
 - `options`: (optional) `Object` with the following parameters:
-  - `keyField`: (optional) `string` field name that should be populated with the `firebase.database.DataSnapshot.key` property in the returned value.
-  - `refField`: (optional) `string` field name that should be populated with the `firebase.database.DataSnapshot.ref` property.
-  - `transform`: (optional) a function that receives the raw `firebase.database.DataSnapshot.val()` to allow manual transformation of the data where required by the application. See [`Transforming data`](#transforming-data) below.
+  - `keyField`: (optional) `string` field name that should be populated with the `database.DataSnapshot.key` property in the returned value.
+  - `refField`: (optional) `string` field name that should be populated with the `database.DataSnapshot.ref` property.
+  - `transform`: (optional) a function that receives the raw `database.DataSnapshot.val()` to allow manual transformation of the data where required by the application. See [`Transforming data`](#transforming-data) below.
 
 Returns:
 
 - `value`: a `T`, or `undefined` if no reference is supplied
 - `loading`: a `boolean` to indicate if the data is still being loaded
-- `error`: Any `firebase.FirebaseError` returned by Firebase when trying to load the data, or `undefined` if there is no error
+- `error`: Any `FirebaseError` returned by Firebase when trying to load the data, or `undefined` if there is no error
 
 ## Transforming data
 

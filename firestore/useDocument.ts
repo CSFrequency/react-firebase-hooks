@@ -1,63 +1,63 @@
-import firebase from 'firebase/app';
-import { useEffect, useMemo } from 'react';
-import { snapshotToData } from './helpers';
 import {
-  Data,
+  DocumentData,
+  DocumentReference,
+  DocumentSnapshot,
+  FirestoreError,
+  getDoc,
+  getDocFromCache,
+  getDocFromServer,
+  onSnapshot,
+} from 'firebase/firestore';
+import { useEffect, useMemo } from 'react';
+import { useLoadingValue } from '../util';
+import { useIsFirestoreRefEqual } from './helpers';
+import {
   DataOptions,
-  DocumentHook,
   DocumentDataHook,
-  OnceOptions,
+  DocumentHook,
+  GetOptions,
   OnceDataOptions,
+  OnceOptions,
   Options,
 } from './types';
-import { useIsEqualRef, useLoadingValue } from '../util';
-
-export const useDocument = <T = firebase.firestore.DocumentData>(
-  docRef?: firebase.firestore.DocumentReference | null,
+export const useDocument = <T = DocumentData>(
+  docRef?: DocumentReference<T> | null,
   options?: Options
 ): DocumentHook<T> => {
   return useDocumentInternal<T>(true, docRef, options);
 };
 
-export const useDocumentOnce = <T = firebase.firestore.DocumentData>(
-  docRef?: firebase.firestore.DocumentReference | null,
+export const useDocumentOnce = <T = DocumentData>(
+  docRef?: DocumentReference<T> | null,
   options?: OnceOptions
 ): DocumentHook<T> => {
   return useDocumentInternal<T>(false, docRef, options);
 };
 
-export const useDocumentData = <
-  T = firebase.firestore.DocumentData,
-  IDField extends string = '',
-  RefField extends string = ''
->(
-  docRef?: firebase.firestore.DocumentReference | null,
+export const useDocumentData = <T = DocumentData>(
+  docRef?: DocumentReference<T> | null,
   options?: DataOptions<T>
-): DocumentDataHook<T, IDField, RefField> => {
-  return useDocumentDataInternal<T, IDField, RefField>(true, docRef, options);
+): DocumentDataHook<T> => {
+  return useDocumentDataInternal<T>(true, docRef, options);
 };
 
-export const useDocumentDataOnce = <
-  T = firebase.firestore.DocumentData,
-  IDField extends string = '',
-  RefField extends string = ''
->(
-  docRef?: firebase.firestore.DocumentReference | null,
+export const useDocumentDataOnce = <T = DocumentData>(
+  docRef?: DocumentReference<T> | null,
   options?: OnceDataOptions<T>
-): DocumentDataHook<T, IDField, RefField> => {
-  return useDocumentDataInternal<T, IDField, RefField>(false, docRef, options);
+): DocumentDataHook<T> => {
+  return useDocumentDataInternal<T>(false, docRef, options);
 };
 
-const useDocumentInternal = <T = firebase.firestore.DocumentData>(
+const useDocumentInternal = <T = DocumentData>(
   listen: boolean,
-  docRef?: firebase.firestore.DocumentReference | null,
+  docRef?: DocumentReference<T> | null,
   options?: Options & OnceOptions
 ): DocumentHook<T> => {
   const { error, loading, reset, setError, setValue, value } = useLoadingValue<
-    firebase.firestore.DocumentSnapshot,
-    firebase.FirebaseError
+    DocumentSnapshot<T>,
+    FirestoreError
   >();
-  const ref = useIsEqualRef(docRef, reset);
+  const ref = useIsFirestoreRefEqual<DocumentReference<T>>(docRef, reset);
 
   useEffect(() => {
     if (!ref.current) {
@@ -65,70 +65,63 @@ const useDocumentInternal = <T = firebase.firestore.DocumentData>(
       return;
     }
     if (listen) {
-      const listener =
-        options && options.snapshotListenOptions
-          ? ref.current.onSnapshot(
-              options.snapshotListenOptions,
-              setValue,
-              setError
-            )
-          : ref.current.onSnapshot(setValue, setError);
+      const listener = options?.snapshotListenOptions
+        ? onSnapshot(
+            ref.current,
+            options.snapshotListenOptions,
+            setValue,
+            setError
+          )
+        : onSnapshot(ref.current, setValue, setError);
 
       return () => {
         listener();
       };
     } else {
-      ref.current
-        .get(options ? options.getOptions : undefined)
-        .then(setValue)
-        .catch(setError);
+      const get = getDocFnFromGetOptions(options?.getOptions);
+
+      get(ref.current).then(setValue).catch(setError);
     }
   }, [ref.current]);
 
   const resArray: DocumentHook<T> = [
-    value as firebase.firestore.DocumentSnapshot<T>,
+    value as DocumentSnapshot<T>,
     loading,
     error,
   ];
   return useMemo(() => resArray, resArray);
 };
 
-const useDocumentDataInternal = <
-  T = firebase.firestore.DocumentData,
-  IDField extends string = '',
-  RefField extends string = ''
->(
+const useDocumentDataInternal = <T = DocumentData>(
   listen: boolean,
-  docRef?: firebase.firestore.DocumentReference | null,
+  docRef?: DocumentReference<T> | null,
   options?: DataOptions<T>
-): DocumentDataHook<T, IDField, RefField> => {
-  const idField = options ? options.idField : undefined;
-  const refField = options ? options.refField : undefined;
-  const snapshotOptions = options ? options.snapshotOptions : undefined;
-  const transform = options ? options.transform : undefined;
+): DocumentDataHook<T> => {
+  const snapshotOptions = options?.snapshotOptions;
   const [snapshot, loading, error] = useDocumentInternal<T>(
     listen,
     docRef,
     options
   );
-  const value = useMemo(
-    () =>
-      (snapshot
-        ? snapshotToData<T>(
-            snapshot,
-            snapshotOptions,
-            idField,
-            refField,
-            transform
-          )
-        : undefined) as Data<T, IDField, RefField>,
-    [snapshot, snapshotOptions, idField, refField, transform]
-  );
+  const value = useMemo(() => snapshot?.data(snapshotOptions) as T, [
+    snapshot,
+    snapshotOptions,
+  ]);
 
-  const resArray: DocumentDataHook<T, IDField, RefField> = [
-    value,
-    loading,
-    error,
-  ];
+  const resArray: DocumentDataHook<T> = [value, loading, error];
   return useMemo(() => resArray, resArray);
+};
+
+const getDocFnFromGetOptions = (
+  { source }: GetOptions = { source: 'default' }
+) => {
+  switch (source) {
+    default:
+    case 'default':
+      return getDoc;
+    case 'cache':
+      return getDocFromCache;
+    case 'server':
+      return getDocFromServer;
+  }
 };
