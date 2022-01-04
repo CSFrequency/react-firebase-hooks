@@ -80,7 +80,11 @@ const useCollectionInternal = <T = DocumentData>(
           ? onSnapshot(
               ref.current,
               options.snapshotListenOptions,
-              setValue,
+              (snapshot) => {
+                if (!snapshot.metadata.fromCache) {
+                  setValue(snapshot);
+                }
+              },
               setError
             )
           : onSnapshot(ref.current, setValue, setError);
