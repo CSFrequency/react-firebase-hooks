@@ -1,23 +1,24 @@
-import { ActionCodeSettings, AuthError, UserCredential } from 'firebase/auth';
+import {
+  ActionCodeSettings,
+  AuthError,
+  CustomParameters,
+  UserCredential,
+} from 'firebase/auth';
 
-export type AuthActionHook<T, E> = [
-  (email: string, password: string) => Promise<void>,
-  T | undefined,
+export type AuthActionHook<M> = [
+  M,
+  UserCredential | undefined,
   boolean,
-  E | undefined
+  AuthError | undefined
 ];
 export type CreateUserOptions = {
   emailVerificationOptions?: ActionCodeSettings;
   sendEmailVerification?: boolean;
 };
 export type EmailAndPasswordActionHook = AuthActionHook<
-  UserCredential,
-  AuthError
+  (email: string, password: string) => Promise<void>
 >;
 
-export type GoogleActionHook = [
-  () => void,
-  firebase.auth.UserCredential | undefined,
-  boolean,
-  firebase.FirebaseError | undefined
-];
+export type SignInWithPopupHook = AuthActionHook<
+  (scopes?: string[], customOAuthParameters?: CustomParameters) => Promise<void>
+>;

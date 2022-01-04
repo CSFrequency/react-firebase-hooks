@@ -13,7 +13,13 @@ List of Auth hooks:
 - [useAuthState](#useauthstate)
 - [useCreateUserWithEmailAndPassword](#usecreateuserwithemailandpassword)
 - [useSignInWithEmailAndPassword](#usesigninwithemailandpassword)
+- [useSignInWithApple](#usesigninwithapple)
+- [useSignInWithFacebook](#usesigninwithfacebook)
+- [useSignInWithGithub](#usesigninwithgithub)
 - [useSignInWithGoogle](#usesigninwithgoogle)
+- [useSignInWithMicrosoft](#usesigninwithmicrosoft)
+- [useSignInWithTwitter](#usesigninwithtwitter)
+- [useSignInWithYahoo](#usesigninwithyahoo)
 
 ### useAuthState
 
@@ -236,6 +242,75 @@ const SignIn = () => {
 };
 ```
 
+### useSignInWithApple
+
+```js
+const [signInWithApple, user, loading, error] = useSignInWithApple(auth);
+```
+
+Login a user with Apple Authenticatiton. Wraps the underlying `auth.signInWithPopup` method with the `auth.OAuthProvider` and provides additional `loading` and `error` information.
+
+The `useSignInWithApple` hook takes the following parameters:
+
+- `auth`: `Auth` instance for the app you would like to monitor
+
+Returns:
+
+- `signInWithApple(scopes: string[], customOAuthParameters: auth.CustomParameters)`: a function you can call to start the login
+- `user`: The `auth.User` if the user was logged in or `undefined` if not
+- `loading`: A `boolean` to indicate whether the the user login is processing
+- `error`: Any `Error` returned by Firebase when trying to login the user, or `undefined` if there is no error
+
+#### Full example
+
+See [social login example](#social-login-example)
+
+### useSignInWithFacebook
+
+```js
+const [signInWithFacebook, user, loading, error] = useSignInWithFacebook(auth);
+```
+
+Login a user with Facebook Authenticatiton. Wraps the underlying `auth.signInWithPopup` method with the `auth.OAuthProvider` and provides additional `loading` and `error` information.
+
+The `useSignInWithApple` hook takes the following parameters:
+
+- `auth`: `Auth` instance for the app you would like to monitor
+
+Returns:
+
+- `signInWithFacebook(scopes: string[], customOAuthParameters: auth.CustomParameters)`: a function you can call to start the login
+- `user`: The `auth.User` if the user was logged in or `undefined` if not
+- `loading`: A `boolean` to indicate whether the the user login is processing
+- `error`: Any `Error` returned by Firebase when trying to login the user, or `undefined` if there is no error
+
+#### Full example
+
+See [social login example](#social-login-example)
+
+### useSignInWithGithub
+
+```js
+const [signInWithGithub, user, loading, error] = useSignInWithGithub(auth);
+```
+
+Login a user with Github Authenticatiton. Wraps the underlying `auth.signInWithPopup` method with the `auth.OAuthProvider` and provides additional `loading` and `error` information.
+
+The `useSignInWithGithub` hook takes the following parameters:
+
+- `auth`: `Auth` instance for the app you would like to monitor
+
+Returns:
+
+- `signInWithGithub(scopes: string[], customOAuthParameters: auth.CustomParameters)`: a function you can call to start the login
+- `user`: The `auth.User` if the user was logged in or `undefined` if not
+- `loading`: A `boolean` to indicate whether the the user login is processing
+- `error`: Any `Error` returned by Firebase when trying to login the user, or `undefined` if there is no error
+
+#### Full example
+
+See [social login example](#social-login-example)
+
 ### useSignInWithGoogle
 
 ```js
@@ -255,13 +330,88 @@ Returns:
 - `loading`: A `boolean` to indicate whether the the user login is processing
 - `error`: Any `Error` returned by Firebase when trying to login the user, or `undefined` if there is no error
 
-#### Full Example
+#### Full example
+
+See [social login example](#social-login-example)
+
+### useSignInWithMicrosoft
+
+```js
+const [signInWithMicrosoft, user, loading, error] = useSignInWithMicrosoft(
+  auth
+);
+```
+
+Login a user with Microsoftt Authenticatiton. Wraps the underlying `auth.signInWithPopup` method with the `auth.OAuthProvider` and provides additional `loading` and `error` information.
+
+The `useSignInWithMicrosoft` hook takes the following parameters:
+
+- `auth`: `Auth` instance for the app you would like to monitor
+
+Returns:
+
+- `signInWithMicrosoft(scopes: string[], customOAuthParameters: auth.CustomParameters)`: a function you can call to start the login
+- `user`: The `auth.User` if the user was logged in or `undefined` if not
+- `loading`: A `boolean` to indicate whether the the user login is processing
+- `error`: Any `Error` returned by Firebase when trying to login the user, or `undefined` if there is no error
+
+#### Full example
+
+See [social login example](#social-login-example)
+
+### useSignInWithTwittter
+
+```js
+const [signInWithTwitter, user, loading, error] = useSignInWithTwitter(auth);
+```
+
+Login a user with Twitter Authenticatiton. Wraps the underlying `auth.signInWithPopup` method with the `auth.OAuthProvider` and provides additional `loading` and `error` information.
+
+The `useSignInWithTwitter` hook takes the following parameters:
+
+- `auth`: `Auth` instance for the app you would like to monitor
+
+Returns:
+
+- `signInWithTwitter(scopes: string[], customOAuthParameters: auth.CustomParameters)`: a function you can call to start the login
+- `user`: The `auth.User` if the user was logged in or `undefined` if not
+- `loading`: A `boolean` to indicate whether the the user login is processing
+- `error`: Any `Error` returned by Firebase when trying to login the user, or `undefined` if there is no error
+
+#### Full example
+
+See [social login example](#social-login-example)
+
+### useSignInWithYahoo
+
+```js
+const [signInWithYahoo, user, loading, error] = useSignInWithYahoo(auth);
+```
+
+Login a user with Yahoo Authenticatiton. Wraps the underlying `auth.signInWithPopup` method with the `auth.OAuthProvider` and provides additional `loading` and `error` information.
+
+The `useSignInWithYahoo` hook takes the following parameters:
+
+- `auth`: `Auth` instance for the app you would like to monitor
+
+Returns:
+
+- `signInWithYahoo(scopes: string[], customOAuthParameters: auth.CustomParameters)`: a function you can call to start the login
+- `user`: The `auth.User` if the user was logged in or `undefined` if not
+- `loading`: A `boolean` to indicate whether the the user login is processing
+- `error`: Any `Error` returned by Firebase when trying to login the user, or `undefined` if there is no error
+
+#### Full example
+
+See [social login example](#social-login-example)
+
+### Social Login Example
 
 ```jsx
-import { useSignInWithGoogle } from 'react-firebase-hooks/auth';
+import { useSignInWithXXX } from 'react-firebase-hooks/auth';
 
 const SignIn = () => {
-  const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth);
+  const [signInWithXXX, user, loading, error] = useSignInWithXXX(auth);
 
   if (error) {
     return (
@@ -292,7 +442,7 @@ const SignIn = () => {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
-      <button onClick={() => signInWithGoogle()}>Sign In</button>
+      <button onClick={() => signInWithXXX()}>Sign In</button>
     </div>
   );
 };
