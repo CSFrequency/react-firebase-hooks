@@ -17,7 +17,7 @@ List of Auth hooks:
 ### useAuthState
 
 ```js
-const [user, loading, error] = useAuthState(auth);
+const [user, loading, error] = useAuthState(auth, options);
 ```
 
 Retrieve and monitor the authentication state from Firebase.
@@ -25,6 +25,8 @@ Retrieve and monitor the authentication state from Firebase.
 The `useAuthState` hook takes the following parameters:
 
 - `auth`: `auth.Auth` instance for the app you would like to monitor
+- `options`: (optional) `Object with the following parameters:
+  - `onUserChanged`: (optional) function to be called with `auth.User` each time the user changes. This allows you to do things like load custom claims.
 
 Returns:
 
@@ -40,13 +42,13 @@ Returns:
 import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { useAuthState } from 'react-firebase-hooks/auth';
 
-const auth = getAuth(firebaseApp)
+const auth = getAuth(firebaseApp);
 
 const login = () => {
   signInWithEmailAndPassword(auth, 'test@test.com', 'password');
 };
 const logout = () => {
-  signOut(auth)
+  signOut(auth);
 };
 
 const CurrentUser = () => {
