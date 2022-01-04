@@ -13,6 +13,7 @@ List of Auth hooks:
 - [useAuthState](#useauthstate)
 - [useCreateUserWithEmailAndPassword](#usecreateuserwithemailandpassword)
 - [useSignInWithEmailAndPassword](#usesigninwithemailandpassword)
+- [useSignInWithGoogle](#usesigninwithgoogle)
 
 ### useAuthState
 
@@ -230,6 +231,68 @@ const SignIn = () => {
       <button onClick={() => signInWithEmailAndPassword(email, password)}>
         Sign In
       </button>
+    </div>
+  );
+};
+```
+
+### useSignInWithGoogle
+
+```js
+const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth);
+```
+
+Login a user with Google Authenticatiton. Wraps the underlying `auth.signInWithPopup` method with the `auth.GoogleProvider` and provides additional `loading` and `error` information.
+
+The `useSignInWithGoogle` hook takes the following parameters:
+
+- `auth`: `Auth` instance for the app you would like to monitor
+
+Returns:
+
+- `signInWithGoogle(scopes: string[], customOAuthParameters: auth.CustomParameters)`: a function you can call to start the login
+- `user`: The `auth.User` if the user was logged in or `undefined` if not
+- `loading`: A `boolean` to indicate whether the the user login is processing
+- `error`: Any `Error` returned by Firebase when trying to login the user, or `undefined` if there is no error
+
+#### Full Example
+
+```jsx
+import { useSignInWithGoogle } from 'react-firebase-hooks/auth';
+
+const SignIn = () => {
+  const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth);
+
+  if (error) {
+    return (
+      <div>
+        <p>Error: {error.message}</p>
+      </div>
+    );
+  }
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+  if (user) {
+    return (
+      <div>
+        <p>Signed In User: {user.email}</p>
+      </div>
+    );
+  }
+  return (
+    <div className="App">
+      <input
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <input
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
+      <button onClick={() => signInWithGoogle()}>Sign In</button>
     </div>
   );
 };

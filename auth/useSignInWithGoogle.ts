@@ -1,27 +1,37 @@
 import { useState, useMemo } from 'react';
-import firebase from 'firebase/app';
+import {
+  Auth,
+  AuthError,
+  CustomParameters,
+  GoogleAuthProvider,
+  signInWithPopup,
+  UserCredential,
+} from 'firebase/auth';
 import { GoogleActionHook } from './types';
 
-export default (
-  auth: firebase.auth.Auth,
-  extraScopes: Array<string> = []
-): GoogleActionHook => {
-  const [error, setError] = useState<firebase.FirebaseError>();
-  const [
-    loggedInUser,
-    setLoggedInUser,
-  ] = useState<firebase.auth.UserCredential>();
+export default (auth: Auth): GoogleActionHook => {
+  const [error, setError] = useState<AuthError>();
+  const [loggedInUser, setLoggedInUser] = useState<UserCredential>();
   const [loading, setLoading] = useState<boolean>(false);
 
-  const signInWithGoogle = async () => {
+  const signInWithGoogle = async (
+    scopes?: string[],
+    customOAuthParameters?: CustomParameters
+  ) => {
     setLoading(true);
     try {
-      const provider = new firebase.auth.GoogleAuthProvider();
-      extraScopes.forEach((extraScope) => provider.addScope(extraScope));
-      await auth.signInWithPopup(provider).then(setLoggedInUser);
-      setLoading(false);
+      const provider = new GoogleAuthProvider();
+      if (scopes) {
+        scopes.forEach((scope) => provider.addScope(scope));
+      }
+      if (customOAuthParameters) {
+        provider.setCustomParameters(customOAuthParameters);
+      }
+      const user = await signInWithPopup(auth, provider);
+      setLoggedInUser(user);
     } catch (err) {
-      setError(err);
+      setError(err as AuthError);
+    } finally {
       setLoading(false);
     }
   };
