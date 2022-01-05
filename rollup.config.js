@@ -1,20 +1,22 @@
 import { resolve } from 'path';
-import commonjs from 'rollup-plugin-commonjs';
+import commonjs from '@rollup/plugin-commonjs';
 import copy from 'rollup-plugin-copy';
-import resolveModule from 'rollup-plugin-node-resolve';
+import resolveModule from '@rollup/plugin-node-resolve';
 import typescript from 'rollup-plugin-typescript2';
-import uglify from 'rollup-plugin-uglify';
+import { uglify } from 'rollup-plugin-uglify';
 
 import pkg from './package.json';
 import authPkg from './auth/package.json';
 import databasePkg from './database/package.json';
 import firestorePkg from './firestore/package.json';
+import functionsPkg from './functions/package.json';
 import storagePkg from './storage/package.json';
 
 const pkgsByName = {
   auth: authPkg,
   database: databasePkg,
   firestore: firestorePkg,
+  functions: functionsPkg,
   storage: storagePkg,
 };
 
@@ -32,10 +34,11 @@ const external = [
   'firebase/auth',
   'firebase/database',
   'firebase/firestore',
+  'firebase/functions',
   'firebase/storage',
 ];
 
-const components = ['auth', 'database', 'firestore', 'storage'];
+const components = ['auth', 'database', 'firestore', 'functions', 'storage'];
 
 export default components
   .map((component) => {

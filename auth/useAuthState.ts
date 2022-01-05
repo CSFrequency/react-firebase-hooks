@@ -19,7 +19,7 @@ export default (auth: Auth, options?: AuthStateOptions): AuthStateHook => {
       auth,
       async (user) => {
         if (options?.onUserChanged) {
-          // onUserLoaded function to process custom claims on any other trigger function
+          // onUserChanged function to process custom claims on any other trigger function
           try {
             await options.onUserChanged(user);
           } catch (e) {

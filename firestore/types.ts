@@ -1,6 +1,5 @@
 import {
   DocumentData,
-  DocumentReference,
   DocumentSnapshot,
   FirestoreError,
   QuerySnapshot,
