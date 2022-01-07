@@ -34,7 +34,7 @@ export default (auth: Auth, options?: AuthStateOptions): AuthStateHook => {
     return () => {
       listener();
     };
-  }, [auth]);
+  }, [auth, options]);
 
   const resArray: AuthStateHook = [value, loading, error];
   return useMemo<AuthStateHook>(() => resArray, resArray);

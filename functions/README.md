@@ -9,9 +9,9 @@ All hooks can be imported from `react-firebase-hooks/functions`, e.g.
 import { useHttpsCallable } from 'react-firebase-hooks/functions';
 ```
 
-List of Cloud Firestore hooks:
+List of Cloud Functions hooks:
 
-- [React Firebase Hooks - Cloud Firestore](#react-firebase-hooks---cloud-firestore)
+- [React Firebase Hooks - Cloud Functions](#react-firebase-hooks---cloud-functions)
   - [useHttpsCallable](#usehttpscallable)
     - [Full example](#full-example)
 

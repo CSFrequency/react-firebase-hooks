@@ -10,6 +10,7 @@ import authPkg from './auth/package.json';
 import databasePkg from './database/package.json';
 import firestorePkg from './firestore/package.json';
 import functionsPkg from './functions/package.json';
+import messagingPkg from './messaging/package.json';
 import storagePkg from './storage/package.json';
 
 const pkgsByName = {
@@ -17,6 +18,7 @@ const pkgsByName = {
   database: databasePkg,
   firestore: firestorePkg,
   functions: functionsPkg,
+  messaging: messagingPkg,
   storage: storagePkg,
 };
 
@@ -35,10 +37,18 @@ const external = [
   'firebase/database',
   'firebase/firestore',
   'firebase/functions',
+  'firebase/messaging',
   'firebase/storage',
 ];
 
-const components = ['auth', 'database', 'firestore', 'functions', 'storage'];
+const components = [
+  'auth',
+  'database',
+  'firestore',
+  'functions',
+  'messaging',
+  'storage',
+];
 
 export default components
   .map((component) => {
