@@ -74,7 +74,7 @@ const useDocumentInternal = <T = DocumentData>(
       return;
     }
     if (listen) {
-      const listener =
+      const unsubscribe =
         options && options.snapshotListenOptions
           ? onSnapshot(
               ref.current,
@@ -85,14 +85,30 @@ const useDocumentInternal = <T = DocumentData>(
           : onSnapshot(ref.current, setValue, setError);
 
       return () => {
-        listener();
+        unsubscribe();
       };
     } else {
+      let effectActive = true;
+
       const get = getDocFnFromGetOptions(
         options ? options.getOptions : undefined
       );
 
-      get(ref.current).then(setValue).catch(setError);
+      get(ref.current)
+        .then((doc) => {
+          if (effectActive) {
+            setValue(doc);
+          }
+        })
+        .catch((error) => {
+          if (effectActive) {
+            setError(error);
+          }
+        });
+
+      return () => {
+        effectActive = false;
+      };
     }
   }, [ref.current]);
 
