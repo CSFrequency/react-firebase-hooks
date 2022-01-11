@@ -125,7 +125,7 @@ const useCollectionDataInternal = <T = DocumentData>(
     [snapshots, snapshotOptions]
   );
 
-  const resArray: CollectionDataHook<T> = [values, loading, error];
+  const resArray: CollectionDataHook<T> = [values, loading, error, snapshots];
   return useMemo(() => resArray, resArray);
 };
 

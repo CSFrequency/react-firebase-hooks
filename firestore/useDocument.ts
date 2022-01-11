@@ -124,7 +124,7 @@ const useDocumentDataInternal = <T = DocumentData>(
     snapshotOptions,
   ]);
 
-  const resArray: DocumentDataHook<T> = [value, loading, error];
+  const resArray: DocumentDataHook<T> = [value, loading, error, snapshot];
   return useMemo(() => resArray, resArray);
 };
 

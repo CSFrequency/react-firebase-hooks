@@ -115,7 +115,8 @@ Returns:
 ### useCollectionData
 
 ```js
-const [values, loading, error] = useCollectionData < T > (query, options);
+const [values, loading, error, snapshot] =
+  useCollectionData < T > (query, options);
 ```
 
 As `useCollection`, but this hook extracts a typed list of the `firestore.QuerySnapshot.docs` values, rather than the
@@ -133,11 +134,13 @@ Returns:
 - `values`: an array of `T`, or `undefined` if no query is supplied
 - `loading`: a `boolean` to indicate if the data is still being loaded
 - `error`: Any `firestore.FirestoreError` returned by Firebase when trying to load the data, or `undefined` if there is no error
+- `snapshot`: a `firestore.QuerySnapshot`, or `undefined` if no query is supplied. This allows access to the underlying snapshot if needed for any reason, e.g. to view the snapshot metadata
 
 ### useCollectionDataOnce
 
 ```js
-const [values, loading, error] = useCollectionDataOnce < T > (query, options);
+const [values, loading, error, snapshot] =
+  useCollectionDataOnce < T > (query, options);
 ```
 
 As `useCollectionData`, but this hook will only read the current value of the `firestore.Query`.
@@ -155,6 +158,7 @@ Returns:
 - `values`: an array of `T`, or `undefined` if no query is supplied
 - `loading`: a `boolean` to indicate if the data is still being loaded
 - `error`: Any `firestore.FirestoreError` returned by Firebase when trying to load the data, or `undefined` if there is no error
+- `snapshot`: a `firestore.QuerySnapshot`, or `undefined` if no query is supplied. This allows access to the underlying snapshot if needed for any reason, e.g. to view the snapshot metadata
 
 ### useDocument
 
@@ -225,7 +229,8 @@ Returns:
 ### useDocumentData
 
 ```js
-const [value, loading, error] = useDocumentData < T > (reference, options);
+const [value, loading, error, snapshot] =
+  useDocumentData < T > (reference, options);
 ```
 
 As `useDocument`, but this hook extracts the typed contents of `firestore.DocumentSnapshot.data()`, rather than the
@@ -243,11 +248,13 @@ Returns:
 - `value`: `T`, or `undefined` if no query is supplied
 - `loading`: a `boolean` to indicate if the data is still being loaded
 - `error`: Any `firestore.FirestoreError` returned by Firebase when trying to load the data, or `undefined` if there is no error
+- `snapshot`: a `firestore.DocumentSnapshot`, or `undefined` if no query is supplied. This allows access to the underlying snapshot if needed for any reason, e.g. to view the snapshot metadata
 
 ### useDocumentDataOnce
 
 ```js
-const [value, loading, error] = useDocumentDataOnce < T > (reference, options);
+const [value, loading, error, snapshot] =
+  useDocumentDataOnce < T > (reference, options);
 ```
 
 As `useDocument`, but this hook will only read the current value of the `firestore.DocumentReference`.
@@ -265,6 +272,7 @@ Returns:
 - `value`: `T`, or `undefined` if no query is supplied
 - `loading`: a `boolean` to indicate if the data is still being loaded
 - `error`: Any `firestore.FirestoreError` returned by Firebase when trying to load the data, or `undefined` if there is no error
+- `snapshot`: a `firestore.DocumentSnapshot`, or `undefined` if no query is supplied. This allows access to the underlying snapshot if needed for any reason, e.g. to view the snapshot metadata
 
 ## Transforming data
 

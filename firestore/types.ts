@@ -27,13 +27,20 @@ export type CollectionHook<T = DocumentData> = LoadingHook<
   QuerySnapshot<T>,
   FirestoreError
 >;
-export type CollectionDataHook<T = DocumentData> = LoadingHook<
-  T[],
-  FirestoreError
->;
+export type CollectionDataHook<T = DocumentData> = [
+  T[] | undefined,
+  boolean,
+  FirestoreError | undefined,
+  QuerySnapshot<T> | undefined
+];
 
 export type DocumentHook<T = DocumentData> = LoadingHook<
   DocumentSnapshot<T>,
   FirestoreError
 >;
-export type DocumentDataHook<T = DocumentData> = LoadingHook<T, FirestoreError>;
+export type DocumentDataHook<T = DocumentData> = [
+  T | undefined,
+  boolean,
+  FirestoreError | undefined,
+  DocumentSnapshot<T> | undefined
+];
