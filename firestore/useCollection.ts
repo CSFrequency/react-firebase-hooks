@@ -66,7 +66,7 @@ const useCollectionInternal = <T = DocumentData>(
       return;
     }
     if (listen) {
-      const listener = options?.snapshotListenOptions
+      const unsubscribe = options?.snapshotListenOptions
         ? onSnapshot(
             ref.current,
             options.snapshotListenOptions,
@@ -76,11 +76,28 @@ const useCollectionInternal = <T = DocumentData>(
         : onSnapshot(ref.current, setValue, setError);
 
       return () => {
-        listener();
+        unsubscribe();
       };
     } else {
+      let effectActive = true;
+
       const get = getDocsFnFromGetOptions(options?.getOptions);
-      get(ref.current).then(setValue).catch(setError);
+
+      get(ref.current)
+        .then((result) => {
+          if (effectActive) {
+            setValue(result);
+          }
+        })
+        .catch((error) => {
+          if (effectActive) {
+            setError(error);
+          }
+        });
+
+      return () => {
+        effectActive = false;
+      };
     }
   }, [ref.current]);
 
