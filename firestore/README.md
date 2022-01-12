@@ -208,7 +208,7 @@ const FirestoreDocument = () => {
 ### useDocumentOnce
 
 ```js
-const [snapshot, loading, error] = useDocumentOnce(reference, options);
+const [snapshot, loading, error, reload] = useDocumentOnce(reference, options);
 ```
 
 Retrieve the current value of the `firestore.DocumentReference`.
@@ -225,6 +225,7 @@ Returns:
 - `snapshot`: a `firestore.DocumentSnapshot`, or `undefined` if no reference is supplied
 - `loading`: a `boolean` to indicate if the data is still being loaded
 - `error`: Any `firestore.FirestoreError` returned by Firebase when trying to load the data, or `undefined` if there is no error
+- `reload()`: a function that can be called to trigger a reload of the data
 
 ### useDocumentData
 
@@ -253,7 +254,7 @@ Returns:
 ### useDocumentDataOnce
 
 ```js
-const [value, loading, error, snapshot] =
+const [value, loading, error, snapshot, reload] =
   useDocumentDataOnce < T > (reference, options);
 ```
 
@@ -273,6 +274,7 @@ Returns:
 - `loading`: a `boolean` to indicate if the data is still being loaded
 - `error`: Any `firestore.FirestoreError` returned by Firebase when trying to load the data, or `undefined` if there is no error
 - `snapshot`: a `firestore.DocumentSnapshot`, or `undefined` if no query is supplied. This allows access to the underlying snapshot if needed for any reason, e.g. to view the snapshot metadata
+- `reload()`: a function that can be called to trigger a reload of the data
 
 ## Transforming data
 

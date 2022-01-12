@@ -7,13 +7,16 @@ import {
   onSnapshot,
   Query,
   QuerySnapshot,
+  SnapshotOptions,
 } from 'firebase/firestore';
 import { useEffect, useMemo } from 'react';
 import { useLoadingValue } from '../util';
 import { useIsFirestoreQueryEqual } from './helpers';
 import {
   CollectionDataHook,
+  CollectionDataOnceHook,
   CollectionHook,
+  CollectionOnceHook,
   DataOptions,
   GetOptions,
   OnceDataOptions,
@@ -24,35 +27,6 @@ import {
 export const useCollection = <T = DocumentData>(
   query?: Query<T> | null,
   options?: Options
-): CollectionHook<T> => {
-  return useCollectionInternal<T>(true, query, options);
-};
-
-export const useCollectionOnce = <T = DocumentData>(
-  query?: Query<T> | null,
-  options?: OnceOptions
-): CollectionHook<T> => {
-  return useCollectionInternal<T>(false, query, options);
-};
-
-export const useCollectionData = <T = DocumentData>(
-  query?: Query<T> | null,
-  options?: DataOptions<T>
-): CollectionDataHook<T> => {
-  return useCollectionDataInternal<T>(true, query, options);
-};
-
-export const useCollectionDataOnce = <T = DocumentData>(
-  query?: Query<T> | null,
-  options?: OnceDataOptions<T>
-): CollectionDataHook<T> => {
-  return useCollectionDataInternal<T>(false, query, options);
-};
-
-const useCollectionInternal = <T = DocumentData>(
-  listen: boolean,
-  query?: Query<T> | null,
-  options?: Options & OnceOptions
 ): CollectionHook<T> => {
   const { error, loading, reset, setError, setValue, value } = useLoadingValue<
     QuerySnapshot<T>,
@@ -65,41 +39,19 @@ const useCollectionInternal = <T = DocumentData>(
       setValue(undefined);
       return;
     }
-    if (listen) {
-      const unsubscribe = options?.snapshotListenOptions
-        ? onSnapshot(
-            ref.current,
-            options.snapshotListenOptions,
-            setValue,
-            setError
-          )
-        : onSnapshot(ref.current, setValue, setError);
+    const unsubscribe = options?.snapshotListenOptions
+      ? onSnapshot(
+          ref.current,
+          options.snapshotListenOptions,
+          setValue,
+          setError
+        )
+      : onSnapshot(ref.current, setValue, setError);
 
-      return () => {
-        unsubscribe();
-      };
-    } else {
-      let effectActive = true;
-
-      const get = getDocsFnFromGetOptions(options?.getOptions);
-
-      get(ref.current)
-        .then((result) => {
-          if (effectActive) {
-            setValue(result);
-          }
-        })
-        .catch((error) => {
-          if (effectActive) {
-            setError(error);
-          }
-        });
-
-      return () => {
-        effectActive = false;
-      };
-    }
-  }, [ref.current]);
+    return () => {
+      unsubscribe();
+    };
+  }, [ref.current, options]);
 
   const resArray: CollectionHook<T> = [
     value as QuerySnapshot<T>,
@@ -109,24 +61,95 @@ const useCollectionInternal = <T = DocumentData>(
   return useMemo(() => resArray, resArray);
 };
 
-const useCollectionDataInternal = <T = DocumentData>(
-  listen: boolean,
+export const useCollectionOnce = <T = DocumentData>(
   query?: Query<T> | null,
-  options?: DataOptions<T> & OnceDataOptions<T>
+  options?: OnceOptions
+): CollectionOnceHook<T> => {
+  const { error, loading, reset, setError, setValue, value } = useLoadingValue<
+    QuerySnapshot<T>,
+    FirestoreError
+  >();
+  let effectActive = true;
+  const ref = useIsFirestoreQueryEqual<Query<T>>(query, reset);
+
+  const loadData = async (
+    query?: Query<T> | null,
+    options?: Options & OnceOptions
+  ) => {
+    if (!query) {
+      setValue(undefined);
+      return;
+    }
+    const get = getDocsFnFromGetOptions(options?.getOptions);
+
+    try {
+      const result = await get(query);
+      if (effectActive) {
+        setValue(result);
+      }
+    } catch (error) {
+      if (effectActive) {
+        setError(error as FirestoreError);
+      }
+    }
+  };
+
+  useEffect(() => {
+    loadData(ref.current, options);
+
+    return () => {
+      effectActive = false;
+    };
+  }, [ref.current, options]);
+
+  const resArray: CollectionOnceHook<T> = [
+    value as QuerySnapshot<T>,
+    loading,
+    error,
+    () => loadData(ref.current, options),
+  ];
+  return useMemo(() => resArray, resArray);
+};
+
+export const useCollectionData = <T = DocumentData>(
+  query?: Query<T> | null,
+  options?: DataOptions<T>
 ): CollectionDataHook<T> => {
   const snapshotOptions = options?.snapshotOptions;
-  const [snapshots, loading, error] = useCollectionInternal<T>(
-    listen,
+  const [snapshots, loading, error] = useCollection<T>(query, options);
+  const values = getValuesFromSnapshots<T>(snapshots, snapshotOptions);
+  const resArray: CollectionDataHook<T> = [values, loading, error, snapshots];
+  return useMemo(() => resArray, resArray);
+};
+
+export const useCollectionDataOnce = <T = DocumentData>(
+  query?: Query<T> | null,
+  options?: OnceDataOptions<T>
+): CollectionDataOnceHook<T> => {
+  const snapshotOptions = options?.snapshotOptions;
+  const [snapshots, loading, error, loadData] = useCollectionOnce<T>(
     query,
     options
   );
-  const values = useMemo(
-    () => snapshots?.docs.map((doc) => doc.data(snapshotOptions)) as T[],
-    [snapshots, snapshotOptions]
-  );
-
-  const resArray: CollectionDataHook<T> = [values, loading, error, snapshots];
+  const values = getValuesFromSnapshots<T>(snapshots, snapshotOptions);
+  const resArray: CollectionDataOnceHook<T> = [
+    values,
+    loading,
+    error,
+    snapshots,
+    loadData,
+  ];
   return useMemo(() => resArray, resArray);
+};
+
+const getValuesFromSnapshots = <T>(
+  snapshots?: QuerySnapshot<T>,
+  options?: SnapshotOptions
+) => {
+  return useMemo(() => snapshots?.docs.map((doc) => doc.data(options)) as T[], [
+    snapshots,
+    options,
+  ]);
 };
 
 const getDocsFnFromGetOptions = (
