@@ -1,7 +1,0 @@
-// @flow
-import type { Reference, StorageError } from 'firebase/storage';
-
-type LoadingHook<T> = [T | void, boolean, StorageError | void];
-
-export type DownloadURLHook = LoadingHook<string>;
-declare export function useDownloadURL(ref?: Reference | null): DownloadURLHook;
