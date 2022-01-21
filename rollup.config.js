@@ -2,8 +2,8 @@ import { resolve } from 'path';
 import commonjs from '@rollup/plugin-commonjs';
 import copy from 'rollup-plugin-copy';
 import resolveModule from '@rollup/plugin-node-resolve';
+import { terser } from 'rollup-plugin-terser';
 import typescript from 'rollup-plugin-typescript2';
-import { uglify } from 'rollup-plugin-uglify';
 
 import pkg from './package.json';
 import authPkg from './auth/package.json';
@@ -80,7 +80,7 @@ export default components
         },
         plugins: [
           ...plugins,
-          uglify(),
+          terser(),
           // Copy flow files
           copy({
             [`${component}/index.js.flow`]: `${component}/dist/index.cjs.js.flow`,
