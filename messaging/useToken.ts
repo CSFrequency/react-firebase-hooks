@@ -4,14 +4,14 @@ import { LoadingHook, useLoadingValue } from '../util';
 
 export type TokenHook = LoadingHook<string | null, Error>;
 
-export default (messaging: Messaging): TokenHook => {
+export default (messaging: Messaging, vapidKey?: string): TokenHook => {
   const { error, loading, setError, setValue, value } = useLoadingValue<
     string | null,
     Error
   >();
 
   useEffect(() => {
-    getToken(messaging).then(setValue).catch(setError);
+    getToken(messaging, { vapidKey }).then(setValue).catch(setError);
   }, [messaging]);
 
   const resArray: TokenHook = [value, loading, error];

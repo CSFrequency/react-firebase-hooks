@@ -18,7 +18,7 @@ List of Cloud Messaging hooks:
 ### useToken
 
 ```js
-const [token, loading, error] = useToken(messaging);
+const [token, loading, error] = useToken(messaging, vapidKey);
 ```
 
 Get a token from Firebase Cloud Messaging
@@ -26,6 +26,7 @@ Get a token from Firebase Cloud Messaging
 The `useToken` hook takes the following parameters:
 
 - `messaging`: `messaging.Messaging` instance for your Firebase app
+- `vapidKey`: a `string` representing the VAPID key credential needed for Cloud Messaging
 
 Returns:
 
