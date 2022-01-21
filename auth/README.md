@@ -499,7 +499,7 @@ const UpdateEmail = () => {
       />
       <button
         onClick={async () => {
-          updateEmail(email);
+          await updateEmail(email);
           alert('Updated email address');
         }}
       >
@@ -556,7 +556,7 @@ const UpdatePassword = () => {
       />
       <button
         onClick={async () => {
-          updatePassword(email);
+          await updatePassword(email);
           alert('Updated password');
         }}
       >
@@ -619,7 +619,7 @@ const UpdateProfile = () => {
       />
       <button
         onClick={async () => {
-          updateProfile({ displayName, photoURL });
+          await updateProfile({ displayName, photoURL });
           alert('Updated profile');
         }}
       >
@@ -680,7 +680,7 @@ const SendPasswordReset = () => {
       />
       <button
         onClick={async () => {
-          sendPasswordResetEmail(email);
+          await sendPasswordResetEmail(email);
           alert('Sent email');
         }}
       >
@@ -734,7 +734,7 @@ const SendEmailVerification = () => {
     <div className="App">
       <button
         onClick={async () => {
-          sendEmailVerification();
+          await sendEmailVerification();
           alert('Sent email');
         }}
       >

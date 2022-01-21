@@ -24,7 +24,7 @@ export default <RequestData = unknown, ResponseData = unknown>(
     const callable = httpsCallable<RequestData, ResponseData>(functions, name);
     setLoading(true);
     try {
-      return callable(data);
+      return await callable(data);
     } catch (err) {
       setError(err as Error);
     } finally {

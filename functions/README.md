@@ -52,7 +52,7 @@ const HttpsCallable = () => {
         {executing && <span>Function executing...</span>}
         <button
           onClick={async () => {
-            executeCallable();
+            await executeCallable();
             alert('Executed function');
           }}
         >
