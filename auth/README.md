@@ -23,7 +23,7 @@ List of Auth hooks:
 - [useUpdateEmail](#useupdateemail)
 - [useUpdatePassword](#useupdatepassword)
 - [useUpdateProfile](#useupdateprofile)
-- [useSendPasswordResetEmaili](#usesendpasswordresetemail)
+- [useSendPasswordResetEmail](#usesendpasswordresetemail)
 - [useSendEmailVerification](#usesendemailverification)
 
 ### useAuthState

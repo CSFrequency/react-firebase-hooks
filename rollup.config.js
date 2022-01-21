@@ -12,6 +12,7 @@ import firestorePkg from './firestore/package.json';
 import functionsPkg from './functions/package.json';
 import messagingPkg from './messaging/package.json';
 import storagePkg from './storage/package.json';
+import utilPkg from './util/package.json';
 
 const pkgsByName = {
   auth: authPkg,
@@ -20,6 +21,7 @@ const pkgsByName = {
   functions: functionsPkg,
   messaging: messagingPkg,
   storage: storagePkg,
+  util: utilPkg,
 };
 
 const plugins = [
@@ -30,7 +32,6 @@ const plugins = [
   commonjs(),
 ];
 
-const peerDependencies = pkg.peerDependencies || {};
 const external = [
   ...Object.keys(pkg.peerDependencies),
   'firebase/auth',
@@ -39,6 +40,7 @@ const external = [
   'firebase/functions',
   'firebase/messaging',
   'firebase/storage',
+  'firebase/util',
 ];
 
 const components = [
@@ -48,6 +50,7 @@ const components = [
   'functions',
   'messaging',
   'storage',
+  'util',
 ];
 
 export default components

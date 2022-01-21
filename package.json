@@ -1,6 +1,6 @@
 {
   "name": "react-firebase-hooks",
-  "version": "5.0.0-alpha.1",
+  "version": "5.0.0-alpha.3",
   "description": "React Hooks for Firebase",
   "author": "CS Frequency Limited (https://csfrequency.com)",
   "license": "Apache-2.0",
@@ -35,7 +35,7 @@
     "functions/dist/*.js.flow",
     "functions/package.json",
     "messaging/dist/*.js",
-    "messaging/dist/functions",
+    "messaging/dist/messaging",
     "messaging/dist/util",
     "messaging/dist/*.js.flow",
     "messaging/package.json",
@@ -43,7 +43,10 @@
     "storage/dist/storage",
     "storage/dist/util",
     "storage/dist/*.js.flow",
-    "storage/package.json"
+    "storage/package.json",
+    "util/dist/*.js",
+    "util/dist/util",
+    "util/package.json"
   ],
   "repository": {
     "type": "git",
