@@ -60,7 +60,7 @@
     "@rollup/plugin-commonjs": "^21.0.1",
     "@rollup/plugin-node-resolve": "^13.1.2",
     "@types/react": "^17.0.0",
-    "firebase": "9.1.0",
+    "firebase": "^9.6.5",
     "path": "^0.12.7",
     "prettier": "2.2.1",
     "react": "^17.0.1",
