@@ -18,11 +18,7 @@ export default (auth: Auth): SendPasswordResetEmailHook => {
   const sendPasswordResetEmail = async (email: string) => {
     setLoading(true);
     try {
-      if (auth.currentUser) {
-        await fbSendPasswordResetEmail(auth, email);
-      } else {
-        setError(new Error('No user is logged in') as AuthError);
-      }
+      await fbSendPasswordResetEmail(auth, email);
     } catch (err) {
       setError(err as AuthError);
     } finally {
