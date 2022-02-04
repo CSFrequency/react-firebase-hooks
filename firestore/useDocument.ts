@@ -50,7 +50,7 @@ export const useDocument = <T = DocumentData>(
     return () => {
       unsubscribe();
     };
-  }, [ref.current, options]);
+  }, [ref.current]);
 
   const resArray: DocumentHook<T> = [
     value as DocumentSnapshot<T>,
@@ -104,7 +104,7 @@ export const useDocumentOnce = <T = DocumentData>(
     return () => {
       effectActive = false;
     };
-  }, [ref.current, options]);
+  }, [ref.current]);
 
   const resArray: DocumentOnceHook<T> = [
     value as DocumentSnapshot<T>,

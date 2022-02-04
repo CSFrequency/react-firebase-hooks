@@ -51,7 +51,7 @@ export const useCollection = <T = DocumentData>(
     return () => {
       unsubscribe();
     };
-  }, [ref.current, options]);
+  }, [ref.current]);
 
   const resArray: CollectionHook<T> = [
     value as QuerySnapshot<T>,
@@ -100,7 +100,7 @@ export const useCollectionOnce = <T = DocumentData>(
     return () => {
       effectActive = false;
     };
-  }, [ref.current, options]);
+  }, [ref.current]);
 
   const resArray: CollectionOnceHook<T> = [
     value as QuerySnapshot<T>,
