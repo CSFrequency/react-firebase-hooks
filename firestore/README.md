@@ -136,6 +136,8 @@ Returns:
 - `error`: Any `firestore.FirestoreError` returned by Firebase when trying to load the data, or `undefined` if there is no error
 - `snapshot`: a `firestore.QuerySnapshot`, or `undefined` if no query is supplied. This allows access to the underlying snapshot if needed for any reason, e.g. to view the snapshot metadata
 
+See [Transforming data](#transforming-data) for how to transform data as it leaves Firestore and access the underlying `id` and `ref` fields of the snapshot.
+
 ### useCollectionDataOnce
 
 ```js
@@ -159,6 +161,8 @@ Returns:
 - `loading`: a `boolean` to indicate if the data is still being loaded
 - `error`: Any `firestore.FirestoreError` returned by Firebase when trying to load the data, or `undefined` if there is no error
 - `snapshot`: a `firestore.QuerySnapshot`, or `undefined` if no query is supplied. This allows access to the underlying snapshot if needed for any reason, e.g. to view the snapshot metadata
+
+See [Transforming data](#transforming-data) for how to transform data as it leaves Firestore and access the underlying `id` and `ref` fields of the snapshot.
 
 ### useDocument
 
@@ -251,6 +255,8 @@ Returns:
 - `error`: Any `firestore.FirestoreError` returned by Firebase when trying to load the data, or `undefined` if there is no error
 - `snapshot`: a `firestore.DocumentSnapshot`, or `undefined` if no query is supplied. This allows access to the underlying snapshot if needed for any reason, e.g. to view the snapshot metadata
 
+See [Transforming data](#transforming-data) for how to transform data as it leaves Firestore and access the underlying `id` and `ref` fields of the snapshot.
+
 ### useDocumentDataOnce
 
 ```js
@@ -276,8 +282,42 @@ Returns:
 - `snapshot`: a `firestore.DocumentSnapshot`, or `undefined` if no query is supplied. This allows access to the underlying snapshot if needed for any reason, e.g. to view the snapshot metadata
 - `reload()`: a function that can be called to trigger a reload of the data
 
+See [Transforming data](#transforming-data) for how to transform data as it leaves Firestore and access the underlying `id` and `ref` fields of the snapshot.
+
 ## Transforming data
 
-Firestore allows a restricted number of data types in its store, which may not be flexible enough for your application. As of Firebase 9, there is a built in FirestoreDataConverter which allows you to transform data as it leaves the Firestore database. This is described here: https://firebase.google.com/docs/reference/js/firestore_.firestoredataconverter
+Firestore allows a restricted number of data types in its store, which may not be flexible enough for your application. As of Firebase 9, there is a built in FirestoreDataConverter which allows you to transform data as it leaves the Firestore database, as well as access the `id` and `ref` fields of the underlying snapshot. This is described here: https://firebase.google.com/docs/reference/js/firestore_.firestoredataconverter
 
-> This has replaced the `transform`, `idField` and `refField` options that were available in `react-firebase-hooks` v4 and earlier.
+> NOTE: This replaces the `transform`, `idField` and `refField` options that were available in `react-firebase-hooks` v4 and earlier.
+
+### Example
+
+```js
+type Post = {
+  author: string,
+  id: string,
+  ref: DocumentReference<DocumentData>,
+  title: string,
+};
+
+const postConverter: FirestoreDataConverter<Post> = {
+  toFirestore(post: WithFieldValue<Post>): DocumentData {
+    return { author: post.author, title: post.title };
+  },
+  fromFirestore(
+    snapshot: QueryDocumentSnapshot,
+    options: SnapshotOptions
+  ): Post {
+    const data = snapshot.data(options);
+    return {
+      author: data.author,
+      id: snapshot.id,
+      ref: snapshot.ref,
+      title: data.title,
+    };
+  },
+};
+
+const ref = collection(firestore, 'posts').withConverter(postConverter);
+const [data, loading, error] = useCollectionData(ref);
+```
