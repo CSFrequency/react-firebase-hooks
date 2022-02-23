@@ -1,4 +1,3 @@
-import { useState, useMemo } from 'react';
 import {
   Auth,
   AuthError,
@@ -8,10 +7,11 @@ import {
   GithubAuthProvider,
   GoogleAuthProvider,
   OAuthProvider,
-  TwitterAuthProvider,
   signInWithPopup,
+  TwitterAuthProvider,
   UserCredential,
 } from 'firebase/auth';
+import { useMemo, useState } from 'react';
 import { SignInWithPopupHook } from './types';
 
 export const useSignInWithApple = (auth: Auth): SignInWithPopupHook => {
@@ -130,6 +130,7 @@ const useSignInWithPopup = (
     customOAuthParameters?: CustomParameters
   ) => {
     setLoading(true);
+    setError(undefined);
     try {
       const provider = createProvider(scopes, customOAuthParameters);
       const user = await signInWithPopup(auth, provider);

@@ -23,6 +23,7 @@ export default <RequestData = unknown, ResponseData = unknown>(
   ): Promise<HttpsCallableResult<ResponseData> | undefined> => {
     const callable = httpsCallable<RequestData, ResponseData>(functions, name);
     setLoading(true);
+    setError(undefined);
     try {
       return await callable(data);
     } catch (err) {

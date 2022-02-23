@@ -1,11 +1,11 @@
 import {
   Auth,
-  UserCredential,
+  AuthError,
   createUserWithEmailAndPassword as firebaseCreateUserWithEmailAndPassword,
   sendEmailVerification,
-  AuthError,
+  UserCredential,
 } from 'firebase/auth';
-import { useState, useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { CreateUserOptions, EmailAndPasswordActionHook } from './types';
 
 export default (
@@ -21,6 +21,7 @@ export default (
     password: string
   ) => {
     setLoading(true);
+    setError(undefined);
     try {
       const user = await firebaseCreateUserWithEmailAndPassword(
         auth,

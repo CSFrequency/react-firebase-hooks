@@ -17,6 +17,7 @@ export default (auth: Auth): SendEmailVerificationHook => {
 
   const sendEmailVerification = async () => {
     setLoading(true);
+    setError(undefined);
     try {
       if (auth.currentUser) {
         await fbSendEmailVerification(auth.currentUser);

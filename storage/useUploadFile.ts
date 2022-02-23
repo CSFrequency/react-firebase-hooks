@@ -31,6 +31,7 @@ export default (): UploadFileHook => {
   ): Promise<UploadResult | undefined> => {
     return new Promise((resolve, reject) => {
       setUploading(true);
+      setError(undefined);
       const uploadTask = uploadBytesResumable(storageRef, data, metadata);
       uploadTask.on(
         'state_changed',

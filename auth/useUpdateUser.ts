@@ -28,6 +28,7 @@ export const useUpdateEmail = (auth: Auth): UpdateEmailHook => {
 
   const updateEmail = async (email: string) => {
     setLoading(true);
+    setError(undefined);
     try {
       if (auth.currentUser) {
         await fbUpdateEmail(auth.currentUser, email);
@@ -51,6 +52,7 @@ export const useUpdatePassword = (auth: Auth): UpdatePasswordHook => {
 
   const updatePassword = async (password: string) => {
     setLoading(true);
+    setError(undefined);
     try {
       if (auth.currentUser) {
         await fbUpdatePassword(auth.currentUser, password);
@@ -74,6 +76,7 @@ export const useUpdateProfile = (auth: Auth): UpdateProfileHook => {
 
   const updateProfile = async (profile: Profile) => {
     setLoading(true);
+    setError(undefined);
     try {
       if (auth.currentUser) {
         await fbUpdateProfile(auth.currentUser, profile);
