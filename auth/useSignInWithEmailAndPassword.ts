@@ -17,6 +17,7 @@ export default (auth: Auth): EmailAndPasswordActionHook => {
     password: string
   ) => {
     setLoading(true);
+    setError(undefined);
     try {
       const user = await firebaseSignInWithEmailAndPassword(
         auth,
