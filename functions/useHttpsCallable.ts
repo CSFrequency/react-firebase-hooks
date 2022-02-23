@@ -6,7 +6,9 @@ import {
 import { useMemo, useState } from 'react';
 
 export type HttpsCallableHook<RequestData = unknown, ResponseData = unknown> = [
-  (data?: RequestData) => Promise<HttpsCallableResult<ResponseData> | undefined>,
+  (
+    data?: RequestData
+  ) => Promise<HttpsCallableResult<ResponseData> | undefined>,
   boolean,
   Error | undefined
 ];
