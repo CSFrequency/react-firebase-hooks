@@ -393,7 +393,7 @@ See [social login example](#social-login-example)
 const [signInWithYahoo, user, loading, error] = useSignInWithYahoo(auth);
 ```
 
-Login a user with Yahoo Authenticatiton. Wraps the underlying `auth.signInWithPopup` method with the `auth.OAuthProvider` and provides additional `loading` and `error` information.
+Login a user with Yahoo Authentication. Wraps the underlying `auth.signInWithPopup` method with the `auth.OAuthProvider` and provides additional `loading` and `error` information.
 
 The `useSignInWithYahoo` hook takes the following parameters:
 
