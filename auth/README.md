@@ -278,7 +278,7 @@ const [signInWithFacebook, user, loading, error] = useSignInWithFacebook(auth);
 
 Login a user with Facebook Authenticatiton. Wraps the underlying `auth.signInWithPopup` method with the `auth.OAuthProvider` and provides additional `loading` and `error` information.
 
-The `useSignInWithApple` hook takes the following parameters:
+The `useSignInWithFacebook` hook takes the following parameters:
 
 - `auth`: `Auth` instance for the app you would like to monitor
 
@@ -347,7 +347,7 @@ const [signInWithMicrosoft, user, loading, error] = useSignInWithMicrosoft(
 );
 ```
 
-Login a user with Microsoftt Authenticatiton. Wraps the underlying `auth.signInWithPopup` method with the `auth.OAuthProvider` and provides additional `loading` and `error` information.
+Login a user with Microsoft Authenticatiton. Wraps the underlying `auth.signInWithPopup` method with the `auth.OAuthProvider` and provides additional `loading` and `error` information.
 
 The `useSignInWithMicrosoft` hook takes the following parameters:
 
