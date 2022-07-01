@@ -556,7 +556,7 @@ const UpdatePassword = () => {
       />
       <button
         onClick={async () => {
-          await updatePassword(email);
+          await updatePassword(password);
           alert('Updated password');
         }}
       >
