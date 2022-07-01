@@ -253,7 +253,7 @@ const SignIn = () => {
 const [signInWithApple, user, loading, error] = useSignInWithApple(auth);
 ```
 
-Login a user with Apple Authenticatiton. Wraps the underlying `auth.signInWithPopup` method with the `auth.OAuthProvider` and provides additional `loading` and `error` information.
+Login a user with Apple Authentication. Wraps the underlying `auth.signInWithPopup` method with the `auth.OAuthProvider` and provides additional `loading` and `error` information.
 
 The `useSignInWithApple` hook takes the following parameters:
 
@@ -276,7 +276,7 @@ See [social login example](#social-login-example)
 const [signInWithFacebook, user, loading, error] = useSignInWithFacebook(auth);
 ```
 
-Login a user with Facebook Authenticatiton. Wraps the underlying `auth.signInWithPopup` method with the `auth.OAuthProvider` and provides additional `loading` and `error` information.
+Login a user with Facebook Authentication. Wraps the underlying `auth.signInWithPopup` method with the `auth.OAuthProvider` and provides additional `loading` and `error` information.
 
 The `useSignInWithApple` hook takes the following parameters:
 
@@ -299,7 +299,7 @@ See [social login example](#social-login-example)
 const [signInWithGithub, user, loading, error] = useSignInWithGithub(auth);
 ```
 
-Login a user with Github Authenticatiton. Wraps the underlying `auth.signInWithPopup` method with the `auth.OAuthProvider` and provides additional `loading` and `error` information.
+Login a user with Github Authentication. Wraps the underlying `auth.signInWithPopup` method with the `auth.OAuthProvider` and provides additional `loading` and `error` information.
 
 The `useSignInWithGithub` hook takes the following parameters:
 
@@ -322,7 +322,7 @@ See [social login example](#social-login-example)
 const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth);
 ```
 
-Login a user with Google Authenticatiton. Wraps the underlying `auth.signInWithPopup` method with the `auth.GoogleProvider` and provides additional `loading` and `error` information.
+Login a user with Google Authentication. Wraps the underlying `auth.signInWithPopup` method with the `auth.GoogleProvider` and provides additional `loading` and `error` information.
 
 The `useSignInWithGoogle` hook takes the following parameters:
 
@@ -347,7 +347,7 @@ const [signInWithMicrosoft, user, loading, error] = useSignInWithMicrosoft(
 );
 ```
 
-Login a user with Microsoftt Authenticatiton. Wraps the underlying `auth.signInWithPopup` method with the `auth.OAuthProvider` and provides additional `loading` and `error` information.
+Login a user with Microsoftt Authentication. Wraps the underlying `auth.signInWithPopup` method with the `auth.OAuthProvider` and provides additional `loading` and `error` information.
 
 The `useSignInWithMicrosoft` hook takes the following parameters:
 
@@ -370,7 +370,7 @@ See [social login example](#social-login-example)
 const [signInWithTwitter, user, loading, error] = useSignInWithTwitter(auth);
 ```
 
-Login a user with Twitter Authenticatiton. Wraps the underlying `auth.signInWithPopup` method with the `auth.OAuthProvider` and provides additional `loading` and `error` information.
+Login a user with Twitter Authentication. Wraps the underlying `auth.signInWithPopup` method with the `auth.OAuthProvider` and provides additional `loading` and `error` information.
 
 The `useSignInWithTwitter` hook takes the following parameters:
 
@@ -393,7 +393,7 @@ See [social login example](#social-login-example)
 const [signInWithYahoo, user, loading, error] = useSignInWithYahoo(auth);
 ```
 
-Login a user with Yahoo Authenticatiton. Wraps the underlying `auth.signInWithPopup` method with the `auth.OAuthProvider` and provides additional `loading` and `error` information.
+Login a user with Yahoo Authentication. Wraps the underlying `auth.signInWithPopup` method with the `auth.OAuthProvider` and provides additional `loading` and `error` information.
 
 The `useSignInWithYahoo` hook takes the following parameters:
 
