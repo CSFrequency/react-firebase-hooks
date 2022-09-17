@@ -25,6 +25,8 @@ List of Auth hooks:
 - [useUpdateProfile](#useupdateprofile)
 - [useSendPasswordResetEmail](#usesendpasswordresetemail)
 - [useSendEmailVerification](#usesendemailverification)
+- [useSignOut](#usesignout)
+- [useDeleteUser](#usedeleteuser)
 
 ### useAuthState
 
@@ -739,6 +741,108 @@ const SendEmailVerification = () => {
         }}
       >
         Verify email
+      </button>
+    </div>
+  );
+};
+```
+
+### useSignOut
+
+```js
+const [signOut, loading, error] = useSignOut(auth);
+```
+
+Sign out current user. Wraps the underlying `auth.signOut` method and provides additional `loading` and `error` information.
+
+The `useSignOut` hook takes the following parameters:
+
+- `auth`: `Auth` instance for the app you would like to monitor
+
+Returns:
+
+- `signOut()`: A `() => Promise<void>` function you can call to sign out current user
+- `loading`: A `boolean` to indicate whether operation is loading
+- `error`: Any `Error` returned by Firebase when trying to sign out user, or `undefined` if there is no error
+
+#### Full Example
+
+```jsx
+import { useSignOut } from 'react-firebase-hooks/auth';
+
+const SignOut = () => {
+  const [signOut, loading, error] = useSignOut(auth);
+
+  if (error) {
+    return (
+      <div>
+        <p>Error: {error.message}</p>
+      </div>
+    );
+  }
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+  return (
+    <div className="App">
+      <button
+        onClick={async () => {
+          await signOut();
+          alert('You are sign out');
+        }}
+      >
+        Sign out
+      </button>
+    </div>
+  );
+};
+```
+
+### useDeleteUser
+
+```js
+const [deleteUser, loading, error] = useDeleteUser(auth);
+```
+
+Delete current user. Wraps the underlying `auth.currrentUser.signOut` method and provides additional `loading` and `error` information.
+
+The `useDeleteUser` hook takes the following parameters:
+
+- `auth`: `Auth` instance for the app you would like to monitor
+
+Returns:
+
+- `deleteUser()`: A `() => Promise<void>` function you can call to sign out current user
+- `loading`: A `boolean` to indicate whether operation is loading
+- `error`: Any `Error` returned by Firebase when trying to delete user, or `undefined` if there is no error
+
+#### Full Example
+
+```jsx
+import { useDeleteUser } from 'react-firebase-hooks/auth';
+
+const DeleteUser = () => {
+  const [deleteUser, loading, error] = useDeleteUser(auth);
+
+  if (error) {
+    return (
+      <div>
+        <p>Error: {error.message}</p>
+      </div>
+    );
+  }
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+  return (
+    <div className="App">
+      <button
+        onClick={async () => {
+          await deleteUser();
+          alert('You have been deleted');
+        }}
+      >
+        Delete current user
       </button>
     </div>
   );

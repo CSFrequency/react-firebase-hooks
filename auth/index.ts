@@ -8,6 +8,8 @@ export {
   default as useSendPasswordResetEmail,
   SendPasswordResetEmailHook,
 } from './useSendPasswordResetEmail';
+export { default as useSignOut, SignOutHook } from './useSignOut';
+export { default as useDeleteUser, DeleteUserHook } from './useDeleteUser';
 export { default as useSignInWithEmailAndPassword } from './useSignInWithEmailAndPassword';
 export {
   useSignInWithApple,
