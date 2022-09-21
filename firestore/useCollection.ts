@@ -146,10 +146,14 @@ const getValuesFromSnapshots = <T>(
   snapshots?: QuerySnapshot<T>,
   options?: SnapshotOptions
 ) => {
-  return useMemo(() => snapshots?.docs.map((doc) => doc.data(options)) as T[], [
-    snapshots,
-    options,
-  ]);
+  return useMemo(
+    () =>
+      snapshots?.docs.map((doc) => ({
+        ...doc.data(options),
+        id: doc.id,
+      })) as T[],
+    [snapshots, options]
+  );
 };
 
 const getDocsFnFromGetOptions = (
