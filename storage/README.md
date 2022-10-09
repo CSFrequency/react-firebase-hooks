@@ -38,13 +38,13 @@ Returns:
 #### Full example
 
 ```js
-import { getStorage, storageRef } from 'firebase/storage';
+import { getStorage, ref as storageRef } from 'firebase/storage';
 import { useDownloadURL } from 'react-firebase-hooks/storage';
 
 const storage = getStorage(firebaseApp);
 
 const DownloadURL = () => {
-  const [value, loading, error] = useDownloadURL(ref(storage, 'path/to/file'));
+  const [value, loading, error] = useDownloadURL(storageRef(storage, 'path/to/file'));
 
   return (
     <div>
