@@ -18,6 +18,7 @@ import {
   DocumentHook,
   DocumentOnceHook,
   GetOptions,
+  InitialValueOptions,
   OnceDataOptions,
   OnceOptions,
   Options,
@@ -117,14 +118,16 @@ export const useDocumentOnce = <T = DocumentData>(
 
 export const useDocumentData = <T = DocumentData>(
   docRef?: DocumentReference<T> | null,
-  options?: DataOptions<T>
+  options?: DataOptions<T> & InitialValueOptions<T>
 ): DocumentDataHook<T> => {
   const snapshotOptions = options?.snapshotOptions;
   const [snapshot, loading, error] = useDocument<T>(docRef, options);
-  const value = useMemo(() => snapshot?.data(snapshotOptions) as T, [
-    snapshot,
-    snapshotOptions,
-  ]);
+
+  const initialValue = options?.initialValue;
+  const value = useMemo(
+    () => (snapshot?.data(snapshotOptions) ?? initialValue) as T | undefined,
+    [snapshot, snapshotOptions, initialValue]
+  );
 
   const resArray: DocumentDataHook<T> = [value, loading, error, snapshot];
   return useMemo(() => resArray, resArray);
@@ -132,17 +135,19 @@ export const useDocumentData = <T = DocumentData>(
 
 export const useDocumentDataOnce = <T = DocumentData>(
   docRef?: DocumentReference<T> | null,
-  options?: OnceDataOptions<T>
+  options?: OnceDataOptions<T> & InitialValueOptions<T>
 ): DocumentDataOnceHook<T> => {
   const snapshotOptions = options?.snapshotOptions;
   const [snapshot, loading, error, loadData] = useDocumentOnce<T>(
     docRef,
     options
   );
-  const value = useMemo(() => snapshot?.data(snapshotOptions) as T, [
-    snapshot,
-    snapshotOptions,
-  ]);
+
+  const initialValue = options?.initialValue;
+  const value = useMemo(
+    () => (snapshot?.data(snapshotOptions) ?? initialValue) as T | undefined,
+    [snapshot, snapshotOptions, initialValue]
+  );
 
   const resArray: DocumentDataOnceHook<T> = [
     value,
