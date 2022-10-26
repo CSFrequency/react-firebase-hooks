@@ -646,7 +646,7 @@ The `useSendPasswordResetEmail` hook takes the following parameters:
 
 Returns:
 
-- `sendPasswordResetEmail(email: string, actionCodeSettings?:ActionCodeSettings)`: a function you can call to send a password reset email. Optionally accepts an [actionCodeSettings](https://firebase.google.com/docs/reference/js/auth.actioncodesettings.md#actioncodesettings_interface) object as well.
+- `sendPasswordResetEmail(email: string, actionCodeSettings?: ActionCodeSettings)`: a function you can call to send a password reset email. Optionally accepts an [actionCodeSettings](https://firebase.google.com/docs/reference/js/auth.actioncodesettings.md#actioncodesettings_interface) object.
 - `sending`: A `boolean` to indicate whether the email is being sent
 - `error`: Any `Error` returned by Firebase when trying to send the email, or `undefined` if there is no error
 
@@ -660,10 +660,10 @@ const SendPasswordReset = () => {
   const [sendPasswordResetEmail, sending, error] = useSendPasswordResetEmail(
     auth
   );
-  
+
   const actionCodeSettings = {
-  url: 'https://www.example.com/login'
-}
+    url: 'https://www.example.com/login',
+  };
 
   if (error) {
     return (
