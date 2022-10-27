@@ -14,6 +14,9 @@ export type IDOptions<T> = {
 export type Options = {
   snapshotListenOptions?: SnapshotListenOptions;
 };
+export type InitialValueOptions<T> = {
+  initialValue?: T;
+};
 export type DataOptions<T> = Options & IDOptions<T>;
 export type OnceOptions = {
   getOptions?: GetOptions;

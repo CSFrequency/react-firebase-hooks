@@ -19,6 +19,7 @@ import {
   CollectionOnceHook,
   DataOptions,
   GetOptions,
+  InitialValueOptions,
   OnceDataOptions,
   OnceOptions,
   Options,
@@ -113,25 +114,39 @@ export const useCollectionOnce = <T = DocumentData>(
 
 export const useCollectionData = <T = DocumentData>(
   query?: Query<T> | null,
-  options?: DataOptions<T>
+  options?: DataOptions<T> & InitialValueOptions<T[]>
 ): CollectionDataHook<T> => {
   const snapshotOptions = options?.snapshotOptions;
   const [snapshots, loading, error] = useCollection<T>(query, options);
-  const values = getValuesFromSnapshots<T>(snapshots, snapshotOptions);
+
+  const initialValue = options?.initialValue;
+  const values = getValuesFromSnapshots<T>(
+    snapshots,
+    snapshotOptions,
+    initialValue
+  );
+
   const resArray: CollectionDataHook<T> = [values, loading, error, snapshots];
   return useMemo(() => resArray, resArray);
 };
 
 export const useCollectionDataOnce = <T = DocumentData>(
   query?: Query<T> | null,
-  options?: OnceDataOptions<T>
+  options?: OnceDataOptions<T> & InitialValueOptions<T[]>
 ): CollectionDataOnceHook<T> => {
   const snapshotOptions = options?.snapshotOptions;
   const [snapshots, loading, error, loadData] = useCollectionOnce<T>(
     query,
     options
   );
-  const values = getValuesFromSnapshots<T>(snapshots, snapshotOptions);
+
+  const initialValue = options?.initialValue;
+  const values = getValuesFromSnapshots<T>(
+    snapshots,
+    snapshotOptions,
+    initialValue
+  );
+
   const resArray: CollectionDataOnceHook<T> = [
     values,
     loading,
@@ -143,13 +158,17 @@ export const useCollectionDataOnce = <T = DocumentData>(
 };
 
 const getValuesFromSnapshots = <T>(
-  snapshots?: QuerySnapshot<T>,
-  options?: SnapshotOptions
-) => {
-  return useMemo(() => snapshots?.docs.map((doc) => doc.data(options)) as T[], [
-    snapshots,
-    options,
-  ]);
+  snapshots: QuerySnapshot<T> | undefined,
+  options?: SnapshotOptions,
+  initialValue?: T[]
+): T[] | undefined => {
+  return useMemo(
+    () =>
+      (snapshots?.docs.map((doc) => doc.data(options)) ?? initialValue) as
+        | T[]
+        | undefined,
+    [snapshots, options]
+  );
 };
 
 const getDocsFnFromGetOptions = (

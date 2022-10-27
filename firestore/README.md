@@ -128,6 +128,7 @@ The `useCollectionData` hook takes the following parameters:
 - `options`: (optional) `Object` with the following parameters:
   - `snapshotListenOptions`: (optional) `firestore.SnapshotListenOptions` to customise how the collection is loaded
   - `snapshotOptions`: (optional) `firestore.SnapshotOptions` to customise how data is retrieved from snapshots
+  - `initialValue`: (optional) the initial value returned by the hook, until data from the firestore query has loaded
 
 Returns:
 
@@ -154,6 +155,7 @@ The `useCollectionDataOnce` hook takes the following parameters:
   - `getOptions`: (optional) `Object` to customise how the collection is loaded
     - `source`: (optional): `'default' | 'server' | 'cache'` Describes whether we should get from server or cache.
   - `snapshotOptions`: (optional) `firestore.SnapshotOptions` to customise how data is retrieved from snapshots
+  - `initialValue`: (optional) the initial value returned by the hook, until data from the firestore query has loaded
 
 Returns:
 
@@ -247,6 +249,7 @@ The `useDocumentData` hook takes the following parameters:
 - `options`: (optional) `Object` with the following parameters:
   - `snapshotListenOptions`: (optional) `firestore.SnapshotListenOptions` to customise how the collection is loaded
   - `snapshotOptions`: (optional) `firestore.SnapshotOptions` to customise how data is retrieved from snapshots
+  - `initialValue`: (optional) the initial value returned by the hook, until data from the firestore query has loaded
 
 Returns:
 
@@ -273,6 +276,7 @@ The `useDocumentDataOnce` hook takes the following parameters:
   - `getOptions`: (optional) `Object` to customise how the collection is loaded
     - `source`: (optional): `'default' | 'server' | 'cache'` Describes whether we should get from server or cache
   - `snapshotOptions`: (optional) `firestore.SnapshotOptions` to customise how data is retrieved from snapshots
+  - `initialValue`: (optional) the initial value returned by the hook, until data from the firestore query has loaded
 
 Returns:
 
