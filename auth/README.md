@@ -762,7 +762,7 @@ The `useSignOut` hook takes the following parameters:
 Returns:
 
 - `signOut()`: A `() => Promise<void>` function you can call to sign out current user
-- `loading`: A `boolean` to indicate whether operation is loading
+- `loading`: A `boolean` to indicate whether the user is being signed out
 - `error`: Any `Error` returned by Firebase when trying to sign out user, or `undefined` if there is no error
 
 #### Full Example
@@ -804,7 +804,7 @@ const SignOut = () => {
 const [deleteUser, loading, error] = useDeleteUser(auth);
 ```
 
-Delete current user. Wraps the underlying `auth.currrentUser.signOut` method and provides additional `loading` and `error` information.
+Delete current user. Wraps the underlying `auth.currrentUser.delete` method and provides additional `loading` and `error` information.
 
 The `useDeleteUser` hook takes the following parameters:
 
@@ -812,8 +812,8 @@ The `useDeleteUser` hook takes the following parameters:
 
 Returns:
 
-- `deleteUser()`: A `() => Promise<void>` function you can call to sign out current user
-- `loading`: A `boolean` to indicate whether operation is loading
+- `deleteUser()`: A `() => Promise<void>` function you can call to delete the current user
+- `loading`: A `boolean` to indicate whether the deletion is processing
 - `error`: Any `Error` returned by Firebase when trying to delete user, or `undefined` if there is no error
 
 #### Full Example
