@@ -7,6 +7,7 @@ import {
   getDocFromCache,
   getDocFromServer,
   onSnapshot,
+  SnapshotOptions,
 } from 'firebase/firestore';
 import { useEffect, useMemo } from 'react';
 import { useLoadingValue } from '../util';
@@ -120,13 +121,12 @@ export const useDocumentData = <T = DocumentData>(
   docRef?: DocumentReference<T> | null,
   options?: DataOptions<T> & InitialValueOptions<T>
 ): DocumentDataHook<T> => {
-  const snapshotOptions = options?.snapshotOptions;
   const [snapshot, loading, error] = useDocument<T>(docRef, options);
 
-  const initialValue = options?.initialValue;
-  const value = useMemo(
-    () => (snapshot?.data(snapshotOptions) ?? initialValue) as T | undefined,
-    [snapshot, snapshotOptions, initialValue]
+  const value = getValueFromSnapshot(
+    snapshot,
+    options?.snapshotOptions,
+    options?.initialValue
   );
 
   const resArray: DocumentDataHook<T> = [value, loading, error, snapshot];
@@ -137,16 +137,15 @@ export const useDocumentDataOnce = <T = DocumentData>(
   docRef?: DocumentReference<T> | null,
   options?: OnceDataOptions<T> & InitialValueOptions<T>
 ): DocumentDataOnceHook<T> => {
-  const snapshotOptions = options?.snapshotOptions;
   const [snapshot, loading, error, loadData] = useDocumentOnce<T>(
     docRef,
     options
   );
 
-  const initialValue = options?.initialValue;
-  const value = useMemo(
-    () => (snapshot?.data(snapshotOptions) ?? initialValue) as T | undefined,
-    [snapshot, snapshotOptions, initialValue]
+  const value = getValueFromSnapshot(
+    snapshot,
+    options?.snapshotOptions,
+    options?.initialValue
   );
 
   const resArray: DocumentDataOnceHook<T> = [
@@ -171,4 +170,15 @@ const getDocFnFromGetOptions = (
     case 'server':
       return getDocFromServer;
   }
+};
+
+const getValueFromSnapshot = <T>(
+  snapshot: DocumentSnapshot<T> | undefined,
+  options?: SnapshotOptions,
+  initialValue?: T
+): T | undefined => {
+  return useMemo(
+    () => (snapshot?.data(options) ?? initialValue) as T | undefined,
+    [snapshot, options, initialValue]
+  );
 };
