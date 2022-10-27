@@ -15,11 +15,7 @@ export default (auth: Auth): SignOutHook => {
     setLoading(true);
     setError(undefined);
     try {
-      if (auth.currentUser) {
-        await auth.signOut();
-      } else {
-        setError(new Error('No user is logged in') as AuthError);
-      }
+      await auth.signOut();
     } catch (err) {
       setError(err as AuthError);
     } finally {
