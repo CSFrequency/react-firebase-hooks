@@ -16,3 +16,5 @@ coverage
 
 #test files
 /example
+fire*.log
+/.idea/
