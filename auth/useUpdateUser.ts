@@ -1,9 +1,11 @@
 import {
+  ActionCodeSettings,
   Auth,
   AuthError,
   updateEmail as fbUpdateEmail,
   updatePassword as fbUpdatePassword,
   updateProfile as fbUpdateProfile,
+  verifyBeforeUpdateEmail as fbVerifyBeforeUpdateEmail,
 } from 'firebase/auth';
 import { useMemo, useState } from 'react';
 
@@ -20,6 +22,12 @@ export type UpdatePasswordHook = UpdateUserHook<
 >;
 export type UpdateProfileHook = UpdateUserHook<
   (profile: Profile) => Promise<void>
+>;
+export type VerifyBeforeUpdateEmailHook = UpdateUserHook<
+  (
+    email: string,
+    actionCodeSettings: ActionCodeSettings | null
+  ) => Promise<void>
 >;
 
 export const useUpdateEmail = (auth: Auth): UpdateEmailHook => {
@@ -92,4 +100,37 @@ export const useUpdateProfile = (auth: Auth): UpdateProfileHook => {
 
   const resArray: UpdateProfileHook = [updateProfile, loading, error];
   return useMemo<UpdateProfileHook>(() => resArray, resArray);
+};
+
+export const useVerifyBeforeUpdateEmail = (
+  auth: Auth
+): VerifyBeforeUpdateEmailHook => {
+  const [error, setError] = useState<AuthError>();
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const verifyBeforeUpdateEmail = async (
+    email: string,
+    actionCodeSettings: ActionCodeSettings | null
+  ) => {
+    setLoading(true);
+    setError(undefined);
+    try {
+      if (auth.currentUser) {
+        await fbVerifyBeforeUpdateEmail(auth.currentUser, email, actionCodeSettings);
+      } else {
+        setError(new Error('No user is logged in') as AuthError);
+      }
+    } catch (err) {
+      setError(err as AuthError);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const resArray: VerifyBeforeUpdateEmailHook = [
+    verifyBeforeUpdateEmail,
+    loading,
+    error,
+  ];
+  return useMemo<VerifyBeforeUpdateEmailHook>(() => resArray, resArray);
 };

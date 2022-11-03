@@ -23,6 +23,7 @@ List of Auth hooks:
 - [useUpdateEmail](#useupdateemail)
 - [useUpdatePassword](#useupdatepassword)
 - [useUpdateProfile](#useupdateprofile)
+- [useVerifyBeforeUpdateEmail](#useverifybeforeupdateemail)
 - [useSendPasswordResetEmail](#usesendpasswordresetemail)
 - [useSendEmailVerification](#usesendemailverification)
 - [useSignOut](#usesignout)
@@ -469,7 +470,7 @@ The `useUpdateEmail` hook takes the following parameters:
 
 Returns:
 
-- `updateEmail(email: string)`: a function you can call to update the current user's email addres
+- `updateEmail(email: string)`: a function you can call to update the current user's email address
 - `updating`: A `boolean` to indicate whether the user update is processing
 - `error`: Any `Error` returned by Firebase when trying to update the user, or `undefined` if there is no error
 
@@ -626,6 +627,63 @@ const UpdateProfile = () => {
         }}
       >
         Update profile
+      </button>
+    </div>
+  );
+};
+```
+
+### useVerifyBeforeUpdateEmail
+
+```js
+const [verifyBeforeUpdateEmail, updating, error] = useVerifyBeforeUpdateEmail(auth);
+```
+
+Verify and update the current user's email address. Wraps the underlying `auth.verifyBeforeUpdateEmail` method and provides additional `updating` and `error` information.
+
+The `useVerifyBeforeUpdateEmail` hook takes the following parameters:
+
+- `auth`: `Auth` instance for the app you would like to monitor
+
+Returns:
+
+- `verifyBeforeUpdateEmail(email: string, actionCodeSettings: ActionCodeSettings | null)`: a function you can call to verify and update the current user's email address
+- `updating`: A `boolean` to indicate whether the user update is processing
+- `error`: Any `Error` returned by Firebase when trying to update the user, or `undefined` if there is no error
+
+#### Full Example
+
+```jsx
+import { useVerifyBeforeUpdateEmail } from 'react-firebase-hooks/auth';
+
+const UpdateEmail = () => {
+  const [email, setEmail] = useState('');
+  const [verifyBeforeUpdateEmail, updating, error] = useVerifyBeforeUpdateEmail(auth);
+
+  if (error) {
+    return (
+      <div>
+        <p>Error: {error.message}</p>
+      </div>
+    );
+  }
+  if (updating) {
+    return <p>Updating...</p>;
+  }
+  return (
+    <div className="App">
+      <input
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <button
+        onClick={async () => {
+          await verifyBeforeUpdateEmail(email);
+          alert('Please check your email to verify your updated email address');
+        }}
+      >
+        Update email
       </button>
     </div>
   );

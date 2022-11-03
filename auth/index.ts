@@ -24,9 +24,11 @@ export {
   useUpdateEmail,
   useUpdatePassword,
   useUpdateProfile,
+  useVerifyBeforeUpdateEmail,
   UpdateEmailHook,
   UpdatePasswordHook,
   UpdateProfileHook,
+  VerifyBeforeUpdateEmailHook,
 } from './useUpdateUser';
 
 export { EmailAndPasswordActionHook, SignInWithPopupHook } from './types';
