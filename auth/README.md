@@ -45,7 +45,7 @@ The `useAuthState` hook takes the following parameters:
 
 Returns:
 
-- `user`: The `auth.User` if logged in, or `null` if not
+- `user`: The `auth.UserCredential` if logged in, or `null` if not
 - `loading`: A `boolean` to indicate whether the authentication state is still being loaded
 - `error`: Any `AuthError` returned by Firebase when trying to load the user, or `undefined` if there is no error
 
@@ -86,7 +86,7 @@ const CurrentUser = () => {
   if (user) {
     return (
       <div>
-        <p>Current User: {user.email}</p>
+        <p>Current User: {user.user.email}</p>
         <button onClick={logout}>Log out</button>
       </div>
     );
@@ -118,7 +118,7 @@ The `useCreateUserWithEmailAndPassword` hook takes the following parameters:
 Returns:
 
 - `createUserWithEmailAndPassword(email: string, password: string)`: a function you can call to start the registration
-- `user`: The `User` if the user was created or `undefined` if not
+- `user`: The `auth.UserCredential` if the user was created or `undefined` if not
 - `loading`: A `boolean` to indicate whether the the user creation is processing
 - `error`: Any `Error` returned by Firebase when trying to create the user, or `undefined` if there is no error
 
@@ -150,7 +150,7 @@ const SignIn = () => {
   if (user) {
     return (
       <div>
-        <p>Registered User: {user.email}</p>
+        <p>Registered User: {user.user.email}</p>
       </div>
     );
   }
@@ -636,7 +636,9 @@ const UpdateProfile = () => {
 ### useVerifyBeforeUpdateEmail
 
 ```js
-const [verifyBeforeUpdateEmail, updating, error] = useVerifyBeforeUpdateEmail(auth);
+const [verifyBeforeUpdateEmail, updating, error] = useVerifyBeforeUpdateEmail(
+  auth
+);
 ```
 
 Verify and update the current user's email address. Wraps the underlying `auth.verifyBeforeUpdateEmail` method and provides additional `updating` and `error` information.
@@ -658,7 +660,9 @@ import { useVerifyBeforeUpdateEmail } from 'react-firebase-hooks/auth';
 
 const UpdateEmail = () => {
   const [email, setEmail] = useState('');
-  const [verifyBeforeUpdateEmail, updating, error] = useVerifyBeforeUpdateEmail(auth);
+  const [verifyBeforeUpdateEmail, updating, error] = useVerifyBeforeUpdateEmail(
+    auth
+  );
 
   if (error) {
     return (
