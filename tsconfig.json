@@ -11,8 +11,7 @@
     "outDir": "dist",
     "sourceMap": true,
     "strict": true,
-    "target": "es5",
-    "typeRoots": ["../node_modules/@types"]
+    "target": "es5"
   },
   "exclude": ["dist/**/*"]
 }
