@@ -11,7 +11,7 @@ import {
   TwitterAuthProvider,
   UserCredential,
 } from 'firebase/auth';
-import { useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { SignInWithPopupHook } from './types';
 
 export const useSignInWithApple = (auth: Auth): SignInWithPopupHook => {
@@ -19,53 +19,53 @@ export const useSignInWithApple = (auth: Auth): SignInWithPopupHook => {
 };
 
 export const useSignInWithFacebook = (auth: Auth): SignInWithPopupHook => {
-  const createFacebookAuthProvider = (
-    scopes?: string[],
-    customOAuthParameters?: CustomParameters
-  ) => {
-    const provider = new FacebookAuthProvider();
-    if (scopes) {
-      scopes.forEach((scope) => provider.addScope(scope));
-    }
-    if (customOAuthParameters) {
-      provider.setCustomParameters(customOAuthParameters);
-    }
-    return provider;
-  };
+  const createFacebookAuthProvider = useCallback(
+    (scopes?: string[], customOAuthParameters?: CustomParameters) => {
+      const provider = new FacebookAuthProvider();
+      if (scopes) {
+        scopes.forEach((scope) => provider.addScope(scope));
+      }
+      if (customOAuthParameters) {
+        provider.setCustomParameters(customOAuthParameters);
+      }
+      return provider;
+    },
+    []
+  );
   return useSignInWithPopup(auth, createFacebookAuthProvider);
 };
 
 export const useSignInWithGithub = (auth: Auth): SignInWithPopupHook => {
-  const createGithubAuthProvider = (
-    scopes?: string[],
-    customOAuthParameters?: CustomParameters
-  ) => {
-    const provider = new GithubAuthProvider();
-    if (scopes) {
-      scopes.forEach((scope) => provider.addScope(scope));
-    }
-    if (customOAuthParameters) {
-      provider.setCustomParameters(customOAuthParameters);
-    }
-    return provider;
-  };
+  const createGithubAuthProvider = useCallback(
+    (scopes?: string[], customOAuthParameters?: CustomParameters) => {
+      const provider = new GithubAuthProvider();
+      if (scopes) {
+        scopes.forEach((scope) => provider.addScope(scope));
+      }
+      if (customOAuthParameters) {
+        provider.setCustomParameters(customOAuthParameters);
+      }
+      return provider;
+    },
+    []
+  );
   return useSignInWithPopup(auth, createGithubAuthProvider);
 };
 
 export const useSignInWithGoogle = (auth: Auth): SignInWithPopupHook => {
-  const createGoogleAuthProvider = (
-    scopes?: string[],
-    customOAuthParameters?: CustomParameters
-  ) => {
-    const provider = new GoogleAuthProvider();
-    if (scopes) {
-      scopes.forEach((scope) => provider.addScope(scope));
-    }
-    if (customOAuthParameters) {
-      provider.setCustomParameters(customOAuthParameters);
-    }
-    return provider;
-  };
+  const createGoogleAuthProvider = useCallback(
+    (scopes?: string[], customOAuthParameters?: CustomParameters) => {
+      const provider = new GoogleAuthProvider();
+      if (scopes) {
+        scopes.forEach((scope) => provider.addScope(scope));
+      }
+      if (customOAuthParameters) {
+        provider.setCustomParameters(customOAuthParameters);
+      }
+      return provider;
+    },
+    []
+  );
   return useSignInWithPopup(auth, createGoogleAuthProvider);
 };
 
@@ -74,19 +74,19 @@ export const useSignInWithMicrosoft = (auth: Auth): SignInWithPopupHook => {
 };
 
 export const useSignInWithTwitter = (auth: Auth): SignInWithPopupHook => {
-  const createTwitterAuthProvider = (
-    scopes?: string[],
-    customOAuthParameters?: CustomParameters
-  ) => {
-    const provider = new TwitterAuthProvider();
-    if (scopes) {
-      scopes.forEach((scope) => provider.addScope(scope));
-    }
-    if (customOAuthParameters) {
-      provider.setCustomParameters(customOAuthParameters);
-    }
-    return provider;
-  };
+  const createTwitterAuthProvider = useCallback(
+    (scopes?: string[], customOAuthParameters?: CustomParameters) => {
+      const provider = new TwitterAuthProvider();
+      if (scopes) {
+        scopes.forEach((scope) => provider.addScope(scope));
+      }
+      if (customOAuthParameters) {
+        provider.setCustomParameters(customOAuthParameters);
+      }
+      return provider;
+    },
+    []
+  );
   return useSignInWithPopup(auth, createTwitterAuthProvider);
 };
 
@@ -98,19 +98,19 @@ const useSignInWithOAuth = (
   auth: Auth,
   providerId: string
 ): SignInWithPopupHook => {
-  const createOAuthProvider = (
-    scopes?: string[],
-    customOAuthParameters?: CustomParameters
-  ) => {
-    const provider = new OAuthProvider(providerId);
-    if (scopes) {
-      scopes.forEach((scope) => provider.addScope(scope));
-    }
-    if (customOAuthParameters) {
-      provider.setCustomParameters(customOAuthParameters);
-    }
-    return provider;
-  };
+  const createOAuthProvider = useCallback(
+    (scopes?: string[], customOAuthParameters?: CustomParameters) => {
+      const provider = new OAuthProvider(providerId);
+      if (scopes) {
+        scopes.forEach((scope) => provider.addScope(scope));
+      }
+      if (customOAuthParameters) {
+        provider.setCustomParameters(customOAuthParameters);
+      }
+      return provider;
+    },
+    [providerId]
+  );
   return useSignInWithPopup(auth, createOAuthProvider);
 };
 
@@ -125,28 +125,22 @@ const useSignInWithPopup = (
   const [loggedInUser, setLoggedInUser] = useState<UserCredential>();
   const [loading, setLoading] = useState<boolean>(false);
 
-  const signInWithGoogle = async (
-    scopes?: string[],
-    customOAuthParameters?: CustomParameters
-  ) => {
-    setLoading(true);
-    setError(undefined);
-    try {
-      const provider = createProvider(scopes, customOAuthParameters);
-      const user = await signInWithPopup(auth, provider);
-      setLoggedInUser(user);
-    } catch (err) {
-      setError(err as AuthError);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const doSignInWithPopup = useCallback(
+    async (scopes?: string[], customOAuthParameters?: CustomParameters) => {
+      setLoading(true);
+      setError(undefined);
+      try {
+        const provider = createProvider(scopes, customOAuthParameters);
+        const user = await signInWithPopup(auth, provider);
+        setLoggedInUser(user);
+      } catch (err) {
+        setError(err as AuthError);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [auth, createProvider]
+  );
 
-  const resArray: SignInWithPopupHook = [
-    signInWithGoogle,
-    loggedInUser,
-    loading,
-    error,
-  ];
-  return useMemo<SignInWithPopupHook>(() => resArray, resArray);
+  return [doSignInWithPopup, loggedInUser, loading, error];
 };

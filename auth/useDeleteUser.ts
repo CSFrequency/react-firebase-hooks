@@ -1,5 +1,5 @@
 import { Auth, AuthError } from 'firebase/auth';
-import { useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 export type DeleteUserHook = [
   () => Promise<void>,
@@ -11,7 +11,7 @@ export default (auth: Auth): DeleteUserHook => {
   const [error, setError] = useState<AuthError>();
   const [loading, setLoading] = useState<boolean>(false);
 
-  const deleteUser = async () => {
+  const deleteUser = useCallback(async () => {
     setLoading(true);
     setError(undefined);
     try {
@@ -25,8 +25,7 @@ export default (auth: Auth): DeleteUserHook => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [auth]);
 
-  const resArray: DeleteUserHook = [deleteUser, loading, error];
-  return useMemo<DeleteUserHook>(() => resArray, resArray);
+  return [deleteUser, loading, error];
 };

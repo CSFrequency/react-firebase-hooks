@@ -1,5 +1,5 @@
 import { Auth, AuthError } from 'firebase/auth';
-import { useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 export type SignOutHook = [
   () => Promise<void>,
@@ -11,7 +11,7 @@ export default (auth: Auth): SignOutHook => {
   const [error, setError] = useState<AuthError>();
   const [loading, setLoading] = useState<boolean>(false);
 
-  const signOut = async () => {
+  const signOut = useCallback(async () => {
     setLoading(true);
     setError(undefined);
     try {
@@ -21,8 +21,7 @@ export default (auth: Auth): SignOutHook => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [auth]);
 
-  const resArray: SignOutHook = [signOut, loading, error];
-  return useMemo<SignOutHook>(() => resArray, resArray);
+  return [signOut, loading, error];
 };

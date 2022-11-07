@@ -3,7 +3,7 @@ import {
   AuthError,
   sendEmailVerification as fbSendEmailVerification,
 } from 'firebase/auth';
-import { useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 export type SendEmailVerificationHook = [
   () => Promise<void>,
@@ -15,7 +15,7 @@ export default (auth: Auth): SendEmailVerificationHook => {
   const [error, setError] = useState<AuthError>();
   const [loading, setLoading] = useState<boolean>(false);
 
-  const sendEmailVerification = async () => {
+  const sendEmailVerification = useCallback(async () => {
     setLoading(true);
     setError(undefined);
     try {
@@ -29,12 +29,7 @@ export default (auth: Auth): SendEmailVerificationHook => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [auth]);
 
-  const resArray: SendEmailVerificationHook = [
-    sendEmailVerification,
-    loading,
-    error,
-  ];
-  return useMemo<SendEmailVerificationHook>(() => resArray, resArray);
+  return [sendEmailVerification, loading, error];
 };

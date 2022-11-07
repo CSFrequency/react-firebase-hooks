@@ -7,7 +7,7 @@ import {
   updateProfile as fbUpdateProfile,
   verifyBeforeUpdateEmail as fbVerifyBeforeUpdateEmail,
 } from 'firebase/auth';
-import { useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 type Profile = {
   displayName?: string | null;
@@ -34,72 +34,78 @@ export const useUpdateEmail = (auth: Auth): UpdateEmailHook => {
   const [error, setError] = useState<AuthError>();
   const [loading, setLoading] = useState<boolean>(false);
 
-  const updateEmail = async (email: string) => {
-    setLoading(true);
-    setError(undefined);
-    try {
-      if (auth.currentUser) {
-        await fbUpdateEmail(auth.currentUser, email);
-      } else {
-        setError(new Error('No user is logged in') as AuthError);
+  const updateEmail = useCallback(
+    async (email: string) => {
+      setLoading(true);
+      setError(undefined);
+      try {
+        if (auth.currentUser) {
+          await fbUpdateEmail(auth.currentUser, email);
+        } else {
+          setError(new Error('No user is logged in') as AuthError);
+        }
+      } catch (err) {
+        setError(err as AuthError);
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      setError(err as AuthError);
-    } finally {
-      setLoading(false);
-    }
-  };
+    },
+    [auth]
+  );
 
-  const resArray: UpdateEmailHook = [updateEmail, loading, error];
-  return useMemo<UpdateEmailHook>(() => resArray, resArray);
+  return [updateEmail, loading, error];
 };
 
 export const useUpdatePassword = (auth: Auth): UpdatePasswordHook => {
   const [error, setError] = useState<AuthError>();
   const [loading, setLoading] = useState<boolean>(false);
 
-  const updatePassword = async (password: string) => {
-    setLoading(true);
-    setError(undefined);
-    try {
-      if (auth.currentUser) {
-        await fbUpdatePassword(auth.currentUser, password);
-      } else {
-        setError(new Error('No user is logged in') as AuthError);
+  const updatePassword = useCallback(
+    async (password: string) => {
+      setLoading(true);
+      setError(undefined);
+      try {
+        if (auth.currentUser) {
+          await fbUpdatePassword(auth.currentUser, password);
+        } else {
+          setError(new Error('No user is logged in') as AuthError);
+        }
+      } catch (err) {
+        setError(err as AuthError);
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      setError(err as AuthError);
-    } finally {
-      setLoading(false);
-    }
-  };
+    },
+    [auth]
+  );
 
-  const resArray: UpdatePasswordHook = [updatePassword, loading, error];
-  return useMemo<UpdatePasswordHook>(() => resArray, resArray);
+  return [updatePassword, loading, error];
 };
 
 export const useUpdateProfile = (auth: Auth): UpdateProfileHook => {
   const [error, setError] = useState<AuthError>();
   const [loading, setLoading] = useState<boolean>(false);
 
-  const updateProfile = async (profile: Profile) => {
-    setLoading(true);
-    setError(undefined);
-    try {
-      if (auth.currentUser) {
-        await fbUpdateProfile(auth.currentUser, profile);
-      } else {
-        setError(new Error('No user is logged in') as AuthError);
+  const updateProfile = useCallback(
+    async (profile: Profile) => {
+      setLoading(true);
+      setError(undefined);
+      try {
+        if (auth.currentUser) {
+          await fbUpdateProfile(auth.currentUser, profile);
+        } else {
+          setError(new Error('No user is logged in') as AuthError);
+        }
+      } catch (err) {
+        setError(err as AuthError);
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      setError(err as AuthError);
-    } finally {
-      setLoading(false);
-    }
-  };
+    },
+    [auth]
+  );
 
-  const resArray: UpdateProfileHook = [updateProfile, loading, error];
-  return useMemo<UpdateProfileHook>(() => resArray, resArray);
+  return [updateProfile, loading, error];
 };
 
 export const useVerifyBeforeUpdateEmail = (
@@ -108,29 +114,28 @@ export const useVerifyBeforeUpdateEmail = (
   const [error, setError] = useState<AuthError>();
   const [loading, setLoading] = useState<boolean>(false);
 
-  const verifyBeforeUpdateEmail = async (
-    email: string,
-    actionCodeSettings: ActionCodeSettings | null
-  ) => {
-    setLoading(true);
-    setError(undefined);
-    try {
-      if (auth.currentUser) {
-        await fbVerifyBeforeUpdateEmail(auth.currentUser, email, actionCodeSettings);
-      } else {
-        setError(new Error('No user is logged in') as AuthError);
+  const verifyBeforeUpdateEmail = useCallback(
+    async (email: string, actionCodeSettings: ActionCodeSettings | null) => {
+      setLoading(true);
+      setError(undefined);
+      try {
+        if (auth.currentUser) {
+          await fbVerifyBeforeUpdateEmail(
+            auth.currentUser,
+            email,
+            actionCodeSettings
+          );
+        } else {
+          setError(new Error('No user is logged in') as AuthError);
+        }
+      } catch (err) {
+        setError(err as AuthError);
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      setError(err as AuthError);
-    } finally {
-      setLoading(false);
-    }
-  };
+    },
+    [auth]
+  );
 
-  const resArray: VerifyBeforeUpdateEmailHook = [
-    verifyBeforeUpdateEmail,
-    loading,
-    error,
-  ];
-  return useMemo<VerifyBeforeUpdateEmailHook>(() => resArray, resArray);
+  return [verifyBeforeUpdateEmail, loading, error];
 };
