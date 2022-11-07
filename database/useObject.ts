@@ -41,9 +41,7 @@ export const useObjectVal = <
   // that `options` is memoized. If `options` was passed directly then it
   // would cause the values to be recalculated every time the whole
   // `options object changed
-  const keyField = options?.keyField || undefined;
-  const refField = options?.refField || undefined;
-  const transform = options?.transform || undefined;
+  const { keyField, refField, transform } = options ?? {};
 
   const [snapshot, loading, error] = useObject(query);
   const value = useMemo(
