@@ -21,6 +21,7 @@ List of Auth hooks:
 - [useSignInWithMicrosoft](#usesigninwithmicrosoft)
 - [useSignInWithTwitter](#usesigninwithtwitter)
 - [useSignInWithYahoo](#usesigninwithyahoo)
+- [useSendSignInLinkToEmail](#usesendsigninlinktoemail)
 - [useUpdateEmail](#useupdateemail)
 - [useUpdatePassword](#useupdatepassword)
 - [useUpdateProfile](#useupdateprofile)
@@ -518,6 +519,157 @@ const SignIn = () => {
         onChange={(e) => setPassword(e.target.value)}
       />
       <button onClick={() => signInWithXXX()}>Sign In</button>
+    </div>
+  );
+};
+```
+
+### useSendSignInLinkToEmail
+
+```js
+const [sendSignInLinkToEmail, sending, error] = useSendSignInLinkToEmail(auth);
+```
+
+Sends a sign-in email link to the user with the specified email. Wraps the underlying `auth.sendSignInLinkToEmail` method and provides additional `sending` and `error` information.
+
+To complete sign in with the email link use the [useSignInWithEmailLink](#usesigninwithemaillink) hook.
+
+The `useSendSignInLinkToEmail` hook takes the following parameters:
+
+- `auth`: `Auth` instance for the app you would like to monitor
+
+Returns:
+
+- `sendSignInLinkToEmail(email: string, actionCodeSettings: ActionCodeSettings)`: a function you can call to send a sign-in email link to an email. Requires an [actionCodeSettings](https://firebase.google.com/docs/reference/js/auth.actioncodesettings.md#actioncodesettings_interface) object.
+- `sending`: A `boolean` to indicate whether the email is being sent
+- `error`: Any `Error` returned by Firebase when trying to send the email, or `undefined` if there is no error
+
+#### Full Example
+
+```jsx
+import { useSendSignInLinkToEmail } from 'react-firebase-hooks/auth';
+
+const SendSignInLinkToEmail = () => {
+  const [email, setEmail] = useState('');
+  const [sendSignInLinkToEmail, sending, error] = useSendSignInLinkToEmail(
+    auth
+  );
+
+  const actionCodeSettings = {
+    // The URL to redirect to for sign-in completion. This is also the deep
+    // link for mobile redirects. The domain (www.example.com) for this URL
+    // must be whitelisted in the Firebase Console.
+    url: 'https://www.example.com/finishSignUp?cartId=1234',
+    iOS: {
+      bundleId: 'com.example.ios',
+    },
+    android: {
+      packageName: 'com.example.android',
+      installApp: true,
+      minimumVersion: '12',
+    },
+    // This must be true.
+    handleCodeInApp: true,
+  };
+
+  if (error) {
+    return (
+      <div>
+        <p>Error: {error.message}</p>
+      </div>
+    );
+  }
+  if (sending) {
+    return <p>Sending...</p>;
+  }
+  return (
+    <div className="App">
+      <input
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <button
+        onClick={async () => {
+          await sendSignInLinkToEmail(email, actionCodeSettings);
+          alert('Sent email');
+        }}
+      >
+        Reset password
+      </button>
+    </div>
+  );
+};
+```
+
+### useSignInWithEmailLink
+
+```js
+const [signInWithEmailLink, user, loading, error] = useSignInWithEmailLink(
+  auth
+);
+```
+
+Login a user using an email and sign-in email link. Wraps the underlying `auth.signInWithEmailLink` method and provides additional `loading` and `error` information.
+
+The `useSignInWithEmailAndPassword` hook takes the following parameters:
+
+- `auth`: `Auth` instance for the app you would like to monitor
+
+Returns:
+
+- `signInWithEmailLink(email: string, emailLink?: string)`: a function you can call to start the login. If no `emailLink` is supplied, the link is inferred from the current URL.
+- `user`: The `auth.User` if the user was logged in or `undefined` if not
+- `loading`: A `boolean` to indicate whether the the user login is processing
+- `error`: Any `Error` returned by Firebase when trying to login the user, or `undefined` if there is no error
+
+#### Full Example
+
+```jsx
+import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
+
+const SignIn = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [
+    signInWithEmailAndPassword,
+    user,
+    loading,
+    error,
+  ] = useSignInWithEmailAndPassword(auth);
+
+  if (error) {
+    return (
+      <div>
+        <p>Error: {error.message}</p>
+      </div>
+    );
+  }
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+  if (user) {
+    return (
+      <div>
+        <p>Signed In User: {user.email}</p>
+      </div>
+    );
+  }
+  return (
+    <div className="App">
+      <input
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <input
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
+      <button onClick={() => signInWithEmailAndPassword(email, password)}>
+        Sign In
+      </button>
     </div>
   );
 };

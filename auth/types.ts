@@ -19,6 +19,10 @@ export type EmailAndPasswordActionHook = AuthActionHook<
   (email: string, password: string) => Promise<UserCredential | undefined>
 >;
 
+export type SignInWithEmailLinkHook = AuthActionHook<
+  (email: string, emailLink?: string) => Promise<UserCredential | undefined>
+>;
+
 export type SignInWithPopupHook = AuthActionHook<
   (
     scopes?: string[],
