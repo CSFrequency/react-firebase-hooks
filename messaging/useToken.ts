@@ -1,5 +1,5 @@
-import { Messaging, getToken } from 'firebase/messaging';
-import { useEffect, useMemo } from 'react';
+import { getToken, Messaging } from 'firebase/messaging';
+import { useEffect } from 'react';
 import { LoadingHook, useLoadingValue } from '../util';
 
 export type TokenHook = LoadingHook<string | null, Error>;
@@ -14,6 +14,5 @@ export default (messaging: Messaging, vapidKey?: string): TokenHook => {
     getToken(messaging, { vapidKey }).then(setValue).catch(setError);
   }, [messaging]);
 
-  const resArray: TokenHook = [value, loading, error];
-  return useMemo<TokenHook>(() => resArray, resArray);
+  return [value, loading, error];
 };
