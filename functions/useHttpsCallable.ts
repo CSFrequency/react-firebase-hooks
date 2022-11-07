@@ -3,7 +3,7 @@ import {
   httpsCallable,
   HttpsCallableResult,
 } from 'firebase/functions';
-import { useState, useCallback } from 'react';
+import { useCallback, useState } from 'react';
 
 export type HttpsCallableHook<
   RequestData = unknown,
