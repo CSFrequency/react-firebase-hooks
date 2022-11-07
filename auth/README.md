@@ -11,6 +11,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 List of Auth hooks:
 
 - [useAuthState](#useauthstate)
+- [useIdToken](#useidtoken)
 - [useCreateUserWithEmailAndPassword](#usecreateuserwithemailandpassword)
 - [useSignInWithEmailAndPassword](#usesigninwithemailandpassword)
 - [useSignInWithApple](#usesigninwithapple)
@@ -35,7 +36,7 @@ List of Auth hooks:
 const [user, loading, error] = useAuthState(auth, options);
 ```
 
-Retrieve and monitor the authentication state from Firebase.
+Retrieve and monitor the authentication state from Firebase. Uses `auth.onAuthStateChanged` so is only triggered when a user signs in or signs out. See [useIdToken](#useidtoken) if you need to monitor token changes too.
 
 The `useAuthState` hook takes the following parameters:
 
@@ -68,6 +69,72 @@ const logout = () => {
 
 const CurrentUser = () => {
   const [user, loading, error] = useAuthState(auth);
+
+  if (loading) {
+    return (
+      <div>
+        <p>Initialising User...</p>
+      </div>
+    );
+  }
+  if (error) {
+    return (
+      <div>
+        <p>Error: {error}</p>
+      </div>
+    );
+  }
+  if (user) {
+    return (
+      <div>
+        <p>Current User: {user.user.email}</p>
+        <button onClick={logout}>Log out</button>
+      </div>
+    );
+  }
+  return <button onClick={login}>Log in</button>;
+};
+```
+
+### useIdToken
+
+```js
+const [user, loading, error] = useIdToken(auth, options);
+```
+
+Retrieve and monitor changes to the ID token from Firebase. Uses `auth.onIdTokenChanged` so includes when a user signs in, signs out or token refresh events.
+
+The `useIdToken` hook takes the following parameters:
+
+- `auth`: `auth.Auth` instance for the app you would like to monitor
+- `options`: (optional) `Object with the following parameters:
+  - `onUserChanged`: (optional) function to be called with `auth.User` each time the user changes. This allows you to do things like load custom claims.
+
+Returns:
+
+- `user`: The `auth.UserCredential` if logged in, or `null` if not
+- `loading`: A `boolean` to indicate whether the authentication state is still being loaded
+- `error`: Any `AuthError` returned by Firebase when trying to load the user, or `undefined` if there is no error
+
+#### If you are registering or signing in the user for the first time consider using [useCreateUserWithEmailAndPassword](#usecreateuserwithemailandpassword), [useSignInWithEmailAndPassword](#usesigninwithemailandpassword)
+
+#### Full Example
+
+```js
+import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { useIdToken } from 'react-firebase-hooks/auth';
+
+const auth = getAuth(firebaseApp);
+
+const login = () => {
+  signInWithEmailAndPassword(auth, 'test@test.com', 'password');
+};
+const logout = () => {
+  signOut(auth);
+};
+
+const CurrentUser = () => {
+  const [user, loading, error] = useIdToken(auth);
 
   if (loading) {
     return (
