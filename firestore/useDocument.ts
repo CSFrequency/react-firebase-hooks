@@ -9,7 +9,7 @@ import {
   onSnapshot,
   SnapshotOptions,
 } from 'firebase/firestore';
-import { useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useLoadingValue } from '../util';
 import { useIsFirestoreRefEqual } from './helpers';
 import {
@@ -54,12 +54,7 @@ export const useDocument = <T = DocumentData>(
     };
   }, [ref.current]);
 
-  const resArray: DocumentHook<T> = [
-    value as DocumentSnapshot<T>,
-    loading,
-    error,
-  ];
-  return useMemo(() => resArray, resArray);
+  return [value as DocumentSnapshot<T>, loading, error];
 };
 
 export const useDocumentOnce = <T = DocumentData>(
@@ -73,27 +68,32 @@ export const useDocumentOnce = <T = DocumentData>(
   let effectActive = true;
   const ref = useIsFirestoreRefEqual<DocumentReference<T>>(docRef, reset);
 
-  const loadData = async (
-    reference?: DocumentReference<T> | null,
-    options?: OnceOptions
-  ) => {
-    if (!reference) {
-      setValue(undefined);
-      return;
-    }
-    const get = getDocFnFromGetOptions(options?.getOptions);
+  const loadData = useCallback(
+    async (reference?: DocumentReference<T> | null, options?: OnceOptions) => {
+      if (!reference) {
+        setValue(undefined);
+        return;
+      }
+      const get = getDocFnFromGetOptions(options?.getOptions);
 
-    try {
-      const result = await get(reference);
-      if (effectActive) {
-        setValue(result);
+      try {
+        const result = await get(reference);
+        if (effectActive) {
+          setValue(result);
+        }
+      } catch (error) {
+        if (effectActive) {
+          setError(error as FirestoreError);
+        }
       }
-    } catch (error) {
-      if (effectActive) {
-        setError(error as FirestoreError);
-      }
-    }
-  };
+    },
+    []
+  );
+
+  const reloadData = useCallback(() => loadData(ref.current, options), [
+    loadData,
+    ref.current,
+  ]);
 
   useEffect(() => {
     if (!ref.current) {
@@ -108,13 +108,7 @@ export const useDocumentOnce = <T = DocumentData>(
     };
   }, [ref.current]);
 
-  const resArray: DocumentOnceHook<T> = [
-    value as DocumentSnapshot<T>,
-    loading,
-    error,
-    () => loadData(ref.current, options),
-  ];
-  return useMemo(() => resArray, resArray);
+  return [value as DocumentSnapshot<T>, loading, error, reloadData];
 };
 
 export const useDocumentData = <T = DocumentData>(
@@ -129,15 +123,14 @@ export const useDocumentData = <T = DocumentData>(
     options?.initialValue
   );
 
-  const resArray: DocumentDataHook<T> = [value, loading, error, snapshot];
-  return useMemo(() => resArray, resArray);
+  return [value, loading, error, snapshot];
 };
 
 export const useDocumentDataOnce = <T = DocumentData>(
   docRef?: DocumentReference<T> | null,
   options?: OnceDataOptions<T> & InitialValueOptions<T>
 ): DocumentDataOnceHook<T> => {
-  const [snapshot, loading, error, loadData] = useDocumentOnce<T>(
+  const [snapshot, loading, error, reloadData] = useDocumentOnce<T>(
     docRef,
     options
   );
@@ -148,14 +141,7 @@ export const useDocumentDataOnce = <T = DocumentData>(
     options?.initialValue
   );
 
-  const resArray: DocumentDataOnceHook<T> = [
-    value,
-    loading,
-    error,
-    snapshot,
-    loadData,
-  ];
-  return useMemo(() => resArray, resArray);
+  return [value, loading, error, snapshot, reloadData];
 };
 
 const getDocFnFromGetOptions = (
