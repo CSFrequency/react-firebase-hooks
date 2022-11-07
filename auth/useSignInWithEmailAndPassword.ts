@@ -23,6 +23,8 @@ export default (auth: Auth): EmailAndPasswordActionHook => {
           password
         );
         setLoggedInUser(user);
+
+        return user;
       } catch (err) {
         setError(err as AuthError);
       } finally {

@@ -33,6 +33,8 @@ export default (
           );
         }
         setRegisteredUser(user);
+
+        return user;
       } catch (error) {
         setError(error as AuthError);
       } finally {

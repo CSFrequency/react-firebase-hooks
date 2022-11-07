@@ -133,6 +133,8 @@ const useSignInWithPopup = (
         const provider = createProvider(scopes, customOAuthParameters);
         const user = await signInWithPopup(auth, provider);
         setLoggedInUser(user);
+
+        return user;
       } catch (err) {
         setError(err as AuthError);
       } finally {

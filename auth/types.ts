@@ -16,9 +16,12 @@ export type CreateUserOptions = {
   sendEmailVerification?: boolean;
 };
 export type EmailAndPasswordActionHook = AuthActionHook<
-  (email: string, password: string) => Promise<void>
+  (email: string, password: string) => Promise<UserCredential | undefined>
 >;
 
 export type SignInWithPopupHook = AuthActionHook<
-  (scopes?: string[], customOAuthParameters?: CustomParameters) => Promise<void>
+  (
+    scopes?: string[],
+    customOAuthParameters?: CustomParameters
+  ) => Promise<UserCredential | undefined>
 >;
