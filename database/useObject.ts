@@ -1,8 +1,8 @@
+import { DataSnapshot, off, onValue, Query } from 'firebase/database';
 import { useEffect, useMemo } from 'react';
+import { useIsEqualRef, useLoadingValue } from '../util';
 import { snapshotToData, ValOptions } from './helpers';
 import { ObjectHook, ObjectValHook, Val } from './types';
-import { useIsEqualRef, useLoadingValue } from '../util';
-import { DataSnapshot, off, onValue, Query } from 'firebase/database';
 
 export const useObject = (query?: Query | null): ObjectHook => {
   const { error, loading, reset, setError, setValue, value } = useLoadingValue<
@@ -25,8 +25,7 @@ export const useObject = (query?: Query | null): ObjectHook => {
     };
   }, [ref.current]);
 
-  const resArray: ObjectHook = [value, loading, error];
-  return useMemo(() => resArray, resArray);
+  return [value, loading, error];
 };
 
 export const useObjectVal = <
@@ -37,9 +36,15 @@ export const useObjectVal = <
   query?: Query | null,
   options?: ValOptions<T>
 ): ObjectValHook<T, KeyField, RefField> => {
-  const keyField = options ? options.keyField : undefined;
-  const refField = options ? options.refField : undefined;
-  const transform = options ? options.transform : undefined;
+  // Breaking this out in both `useList` and `useObject` rather than
+  // within the `snapshotToData` prevents the developer needing to ensure
+  // that `options` is memoized. If `options` was passed directly then it
+  // would cause the values to be recalculated every time the whole
+  // `options object changed
+  const keyField = options?.keyField || undefined;
+  const refField = options?.refField || undefined;
+  const transform = options?.transform || undefined;
+
   const [snapshot, loading, error] = useObject(query);
   const value = useMemo(
     () =>
@@ -49,10 +54,5 @@ export const useObjectVal = <
     [snapshot, keyField, refField, transform]
   );
 
-  const resArray: ObjectValHook<T, KeyField, RefField> = [
-    value,
-    loading,
-    error,
-  ];
-  return useMemo(() => resArray, resArray);
+  return [value, loading, error];
 };

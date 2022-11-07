@@ -1,18 +1,18 @@
-import { useEffect, useMemo } from 'react';
-import { snapshotToData, ValOptions } from './helpers';
-import useListReducer from './helpers/useListReducer';
-import { ListHook, ListKeysHook, ListValsHook, Val } from './types';
-import { useIsEqualRef } from '../util';
 import {
   DataSnapshot,
-  Query,
+  off,
   onChildAdded as firebaseOnChildAdded,
   onChildChanged as firebaseOnChildChanged,
   onChildMoved as firebaseOnChildMoved,
   onChildRemoved as firebaseOnChildRemoved,
   onValue as firebaseOnValue,
-  off,
+  Query,
 } from 'firebase/database';
+import { useEffect, useMemo } from 'react';
+import { useIsEqualRef } from '../util';
+import { snapshotToData, ValOptions } from './helpers';
+import useListReducer from './helpers/useListReducer';
+import { ListHook, ListKeysHook, ListValsHook, Val } from './types';
 
 export const useList = (query?: Query | null): ListHook => {
   const [state, dispatch] = useListReducer();
@@ -118,8 +118,7 @@ export const useList = (query?: Query | null): ListHook => {
     };
   }, [dispatch, ref]);
 
-  const resArray: ListHook = [state.value.values, state.loading, state.error];
-  return useMemo(() => resArray, resArray);
+  return [state.value.values, state.loading, state.error];
 };
 
 export const useListKeys = (query?: Query | null): ListKeysHook => {
@@ -131,9 +130,8 @@ export const useListKeys = (query?: Query | null): ListKeysHook => {
         : undefined,
     [snapshots]
   );
-  const resArray: ListKeysHook = [values, loading, error];
 
-  return useMemo(() => resArray, resArray);
+  return [values, loading, error];
 };
 
 export const useListVals = <
@@ -144,9 +142,15 @@ export const useListVals = <
   query?: Query | null,
   options?: ValOptions<T>
 ): ListValsHook<T, KeyField, RefField> => {
-  const keyField = options ? options.keyField : undefined;
-  const refField = options ? options.refField : undefined;
-  const transform = options ? options.transform : undefined;
+  // Breaking this out in both `useList` and `useObject` rather than
+  // within the `snapshotToData` prevents the developer needing to ensure
+  // that `options` is memoized. If `options` was passed directly then it
+  // would cause the values to be recalculated every time the whole
+  // `options object changed
+  const keyField = options?.keyField || undefined;
+  const refField = options?.refField || undefined;
+  const transform = options?.transform || undefined;
+
   const [snapshots, loading, error] = useList(query);
   const values = useMemo(
     () =>
@@ -158,10 +162,5 @@ export const useListVals = <
     [snapshots, keyField, refField, transform]
   );
 
-  const resArray: ListValsHook<T, KeyField, RefField> = [
-    values,
-    loading,
-    error,
-  ];
-  return useMemo(() => resArray, resArray);
+  return [values, loading, error];
 };
