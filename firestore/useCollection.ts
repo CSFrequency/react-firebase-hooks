@@ -11,6 +11,7 @@ import {
 } from 'firebase/firestore';
 import { useCallback, useEffect, useMemo } from 'react';
 import { useLoadingValue } from '../util';
+import useIsMounted from '../util/useIsMounted';
 import { useIsFirestoreQueryEqual } from './helpers';
 import {
   CollectionDataHook,
@@ -65,7 +66,7 @@ export const useCollectionOnce = <T = DocumentData>(
     QuerySnapshot<T>,
     FirestoreError
   >();
-  let effectActive = true;
+  const isMounted = useIsMounted();
   const ref = useIsFirestoreQueryEqual<Query<T>>(query, reset);
 
   const loadData = useCallback(
@@ -78,11 +79,11 @@ export const useCollectionOnce = <T = DocumentData>(
 
       try {
         const result = await get(query);
-        if (effectActive) {
+        if (isMounted) {
           setValue(result);
         }
       } catch (error) {
-        if (effectActive) {
+        if (isMounted) {
           setError(error as FirestoreError);
         }
       }
@@ -97,10 +98,6 @@ export const useCollectionOnce = <T = DocumentData>(
 
   useEffect(() => {
     loadData(ref.current, options);
-
-    return () => {
-      effectActive = false;
-    };
   }, [ref.current]);
 
   return [value as QuerySnapshot<T>, loading, error, reloadData];
