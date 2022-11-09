@@ -2,7 +2,7 @@ import { Auth, AuthError } from 'firebase/auth';
 import { useCallback, useState } from 'react';
 
 export type SignOutHook = [
-  () => Promise<void>,
+  () => Promise<boolean>,
   boolean,
   AuthError | Error | undefined
 ];
@@ -16,8 +16,10 @@ export default (auth: Auth): SignOutHook => {
     setError(undefined);
     try {
       await auth.signOut();
+      return true;
     } catch (err) {
       setError(err as AuthError);
+      return false;
     } finally {
       setLoading(false);
     }

@@ -7,7 +7,7 @@ import {
 import { useCallback, useState } from 'react';
 
 export type SendPasswordResetEmailHook = [
-  (email: string, actionCodeSettings?: ActionCodeSettings) => Promise<void>,
+  (email: string, actionCodeSettings?: ActionCodeSettings) => Promise<boolean>,
   boolean,
   AuthError | Error | undefined
 ];
@@ -22,8 +22,10 @@ export default (auth: Auth): SendPasswordResetEmailHook => {
       setError(undefined);
       try {
         await fbSendPasswordResetEmail(auth, email, actionCodeSettings);
+        return true;
       } catch (err) {
         setError(err as AuthError);
+        return false;
       } finally {
         setLoading(false);
       }

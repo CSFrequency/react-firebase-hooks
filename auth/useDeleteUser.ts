@@ -2,7 +2,7 @@ import { Auth, AuthError } from 'firebase/auth';
 import { useCallback, useState } from 'react';
 
 export type DeleteUserHook = [
-  () => Promise<void>,
+  () => Promise<boolean>,
   boolean,
   AuthError | Error | undefined
 ];
@@ -17,11 +17,13 @@ export default (auth: Auth): DeleteUserHook => {
     try {
       if (auth.currentUser) {
         await auth.currentUser.delete();
+        return true;
       } else {
-        setError(new Error('No user is logged in') as AuthError);
+        throw new Error('No user is logged in');
       }
     } catch (err) {
       setError(err as AuthError);
+      return false;
     } finally {
       setLoading(false);
     }

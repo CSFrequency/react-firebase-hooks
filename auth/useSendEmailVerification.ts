@@ -6,7 +6,7 @@ import {
 import { useCallback, useState } from 'react';
 
 export type SendEmailVerificationHook = [
-  () => Promise<void>,
+  () => Promise<boolean>,
   boolean,
   AuthError | Error | undefined
 ];
@@ -21,11 +21,13 @@ export default (auth: Auth): SendEmailVerificationHook => {
     try {
       if (auth.currentUser) {
         await fbSendEmailVerification(auth.currentUser);
+        return true;
       } else {
-        setError(new Error('No user is logged in') as AuthError);
+        throw new Error('No user is logged in');
       }
     } catch (err) {
       setError(err as AuthError);
+      return false;
     } finally {
       setLoading(false);
     }

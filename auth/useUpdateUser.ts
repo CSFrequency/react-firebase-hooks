@@ -16,18 +16,20 @@ type Profile = {
 
 export type UpdateUserHook<M> = [M, boolean, AuthError | Error | undefined];
 
-export type UpdateEmailHook = UpdateUserHook<(email: string) => Promise<void>>;
+export type UpdateEmailHook = UpdateUserHook<
+  (email: string) => Promise<boolean>
+>;
 export type UpdatePasswordHook = UpdateUserHook<
-  (password: string) => Promise<void>
+  (password: string) => Promise<boolean>
 >;
 export type UpdateProfileHook = UpdateUserHook<
-  (profile: Profile) => Promise<void>
+  (profile: Profile) => Promise<boolean>
 >;
 export type VerifyBeforeUpdateEmailHook = UpdateUserHook<
   (
     email: string,
     actionCodeSettings: ActionCodeSettings | null
-  ) => Promise<void>
+  ) => Promise<boolean>
 >;
 
 export const useUpdateEmail = (auth: Auth): UpdateEmailHook => {
@@ -41,11 +43,13 @@ export const useUpdateEmail = (auth: Auth): UpdateEmailHook => {
       try {
         if (auth.currentUser) {
           await fbUpdateEmail(auth.currentUser, email);
+          return true;
         } else {
-          setError(new Error('No user is logged in') as AuthError);
+          throw new Error('No user is logged in');
         }
       } catch (err) {
         setError(err as AuthError);
+        return false;
       } finally {
         setLoading(false);
       }
@@ -67,11 +71,13 @@ export const useUpdatePassword = (auth: Auth): UpdatePasswordHook => {
       try {
         if (auth.currentUser) {
           await fbUpdatePassword(auth.currentUser, password);
+          return true;
         } else {
-          setError(new Error('No user is logged in') as AuthError);
+          throw new Error('No user is logged in');
         }
       } catch (err) {
         setError(err as AuthError);
+        return false;
       } finally {
         setLoading(false);
       }
@@ -93,11 +99,13 @@ export const useUpdateProfile = (auth: Auth): UpdateProfileHook => {
       try {
         if (auth.currentUser) {
           await fbUpdateProfile(auth.currentUser, profile);
+          return true;
         } else {
-          setError(new Error('No user is logged in') as AuthError);
+          throw new Error('No user is logged in');
         }
       } catch (err) {
         setError(err as AuthError);
+        return false;
       } finally {
         setLoading(false);
       }
@@ -125,11 +133,13 @@ export const useVerifyBeforeUpdateEmail = (
             email,
             actionCodeSettings
           );
+          return true;
         } else {
-          setError(new Error('No user is logged in') as AuthError);
+          throw new Error('No user is logged in');
         }
       } catch (err) {
         setError(err as AuthError);
+        return false;
       } finally {
         setLoading(false);
       }

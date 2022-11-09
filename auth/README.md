@@ -185,7 +185,7 @@ The `useCreateUserWithEmailAndPassword` hook takes the following parameters:
 
 Returns:
 
-- `createUserWithEmailAndPassword(email: string, password: string)`: a function you can call to start the registration
+- `createUserWithEmailAndPassword(email: string, password: string) => Promise<auth.UserCredential>`: A function you can call to start the registration. Returns the `auth.UserCredential` if the user was created successfully, or `undefined` if there was an error.
 - `user`: The `auth.UserCredential` if the user was created or `undefined` if not
 - `loading`: A `boolean` to indicate whether the the user creation is processing
 - `error`: Any `Error` returned by Firebase when trying to create the user, or `undefined` if there is no error
@@ -261,8 +261,8 @@ The `useSignInWithEmailAndPassword` hook takes the following parameters:
 
 Returns:
 
-- `signInWithEmailAndPassword(email: string, password: string)`: a function you can call to start the login
-- `user`: The `auth.User` if the user was logged in or `undefined` if not
+- `signInWithEmailAndPassword(email: string, password: string) => Promise<auth.UserCredential>`: A function you can call to start the login. Returns the `auth.UserCredential` if the user was signed in successfully, or `undefined` if there was an error.
+- `user`: The `auth.UserCredential` if the user was logged in or `undefined` if not
 - `loading`: A `boolean` to indicate whether the the user login is processing
 - `error`: Any `Error` returned by Firebase when trying to login the user, or `undefined` if there is no error
 
@@ -332,8 +332,8 @@ The `useSignInWithApple` hook takes the following parameters:
 
 Returns:
 
-- `signInWithApple(scopes: string[], customOAuthParameters: auth.CustomParameters)`: a function you can call to start the login
-- `user`: The `auth.User` if the user was logged in or `undefined` if not
+- `signInWithApple(scopes: string[], customOAuthParameters: auth.CustomParameters) => Promise<auth.UserCredential>`: A function you can call to start the login. Returns the `auth.UserCredential` if the user was signed in successfully, or `undefined` if there was an error.
+- `user`: The `auth.UserCredential` if the user was logged in or `undefined` if not
 - `loading`: A `boolean` to indicate whether the the user login is processing
 - `error`: Any `Error` returned by Firebase when trying to login the user, or `undefined` if there is no error
 
@@ -355,8 +355,8 @@ The `useSignInWithFacebook` hook takes the following parameters:
 
 Returns:
 
-- `signInWithFacebook(scopes: string[], customOAuthParameters: auth.CustomParameters)`: a function you can call to start the login
-- `user`: The `auth.User` if the user was logged in or `undefined` if not
+- `signInWithFacebook(scopes: string[], customOAuthParameters: auth.CustomParameters) => Promise<auth.UserCredential>`: A function you can call to start the login. Returns the `auth.UserCredential` if the user was signed in successfully, or `undefined` if there was an error.
+- `user`: The `auth.UserCredential` if the user was logged in or `undefined` if not
 - `loading`: A `boolean` to indicate whether the the user login is processing
 - `error`: Any `Error` returned by Firebase when trying to login the user, or `undefined` if there is no error
 
@@ -378,8 +378,8 @@ The `useSignInWithGithub` hook takes the following parameters:
 
 Returns:
 
-- `signInWithGithub(scopes: string[], customOAuthParameters: auth.CustomParameters)`: a function you can call to start the login
-- `user`: The `auth.User` if the user was logged in or `undefined` if not
+- `signInWithGithub(scopes: string[], customOAuthParameters: auth.CustomParameters) => Promise<auth.UserCredential>`: A function you can call to start the login. Returns the `auth.UserCredential` if the user was signed in successfully, or `undefined` if there was an error.
+- `user`: The `auth.UserCredential` if the user was logged in or `undefined` if not
 - `loading`: A `boolean` to indicate whether the the user login is processing
 - `error`: Any `Error` returned by Firebase when trying to login the user, or `undefined` if there is no error
 
@@ -401,8 +401,8 @@ The `useSignInWithGoogle` hook takes the following parameters:
 
 Returns:
 
-- `signInWithGoogle(scopes: string[], customOAuthParameters: auth.CustomParameters)`: a function you can call to start the login
-- `user`: The `auth.User` if the user was logged in or `undefined` if not
+- `signInWithGoogle(scopes: string[], customOAuthParameters: auth.CustomParameters) => Promise<auth.UserCredential>`: A function you can call to start the login. Returns the `auth.UserCredential` if the user was signed in successfully, or `undefined` if there was an error.
+- `user`: The `auth.UserCredential` if the user was logged in or `undefined` if not
 - `loading`: A `boolean` to indicate whether the the user login is processing
 - `error`: Any `Error` returned by Firebase when trying to login the user, or `undefined` if there is no error
 
@@ -426,8 +426,8 @@ The `useSignInWithMicrosoft` hook takes the following parameters:
 
 Returns:
 
-- `signInWithMicrosoft(scopes: string[], customOAuthParameters: auth.CustomParameters)`: a function you can call to start the login
-- `user`: The `auth.User` if the user was logged in or `undefined` if not
+- `signInWithMicrosoft(scopes: string[], customOAuthParameters: auth.CustomParameters) => Promise<auth.UserCredential>`: A function you can call to start the login. Returns the `auth.UserCredential` if the user was signed in successfully, or `undefined` if there was an error.
+- `user`: The `auth.UserCredential` if the user was logged in or `undefined` if not
 - `loading`: A `boolean` to indicate whether the the user login is processing
 - `error`: Any `Error` returned by Firebase when trying to login the user, or `undefined` if there is no error
 
@@ -449,8 +449,8 @@ The `useSignInWithTwitter` hook takes the following parameters:
 
 Returns:
 
-- `signInWithTwitter(scopes: string[], customOAuthParameters: auth.CustomParameters)`: a function you can call to start the login
-- `user`: The `auth.User` if the user was logged in or `undefined` if not
+- `signInWithTwitter(scopes: string[], customOAuthParameters: auth.CustomParameters) => Promise<auth.UserCredential>`: A function you can call to start the login. Returns the `auth.UserCredential` if the user was signed in successfully, or `undefined` if there was an error.
+- `user`: The `auth.UserCredential` if the user was logged in or `undefined` if not
 - `loading`: A `boolean` to indicate whether the the user login is processing
 - `error`: Any `Error` returned by Firebase when trying to login the user, or `undefined` if there is no error
 
@@ -472,8 +472,8 @@ The `useSignInWithYahoo` hook takes the following parameters:
 
 Returns:
 
-- `signInWithYahoo(scopes: string[], customOAuthParameters: auth.CustomParameters)`: a function you can call to start the login
-- `user`: The `auth.User` if the user was logged in or `undefined` if not
+- `signInWithYahoo(scopes: string[], customOAuthParameters: auth.CustomParameters) => Promise<auth.UserCredential>`: A function you can call to start the login. Returns the `auth.UserCredential` if the user was signed in successfully, or `undefined` if there was an error.
+- `user`: The `auth.UserCredential` if the user was logged in or `undefined` if not
 - `loading`: A `boolean` to indicate whether the the user login is processing
 - `error`: Any `Error` returned by Firebase when trying to login the user, or `undefined` if there is no error
 
@@ -540,7 +540,7 @@ The `useSendSignInLinkToEmail` hook takes the following parameters:
 
 Returns:
 
-- `sendSignInLinkToEmail(email: string, actionCodeSettings: ActionCodeSettings)`: a function you can call to send a sign-in email link to an email. Requires an [actionCodeSettings](https://firebase.google.com/docs/reference/js/auth.actioncodesettings.md#actioncodesettings_interface) object.
+- `sendSignInLinkToEmail(email: string, actionCodeSettings: ActionCodeSettings) => Promise<boolean>`: A function you can call to send a sign-in email link to an email. Requires an [actionCodeSettings](https://firebase.google.com/docs/reference/js/auth.actioncodesettings.md#actioncodesettings_interface) object. Returns `true` if the function was successful, or `false` if there was an error.
 - `sending`: A `boolean` to indicate whether the email is being sent
 - `error`: Any `Error` returned by Firebase when trying to send the email, or `undefined` if there is no error
 
@@ -591,8 +591,13 @@ const SendSignInLinkToEmail = () => {
       />
       <button
         onClick={async () => {
-          await sendSignInLinkToEmail(email, actionCodeSettings);
-          alert('Sent email');
+          const success = await sendSignInLinkToEmail(
+            email,
+            actionCodeSettings
+          );
+          if (success) {
+            alert('Sent email');
+          }
         }}
       >
         Reset password
@@ -612,31 +617,31 @@ const [signInWithEmailLink, user, loading, error] = useSignInWithEmailLink(
 
 Login a user using an email and sign-in email link. Wraps the underlying `auth.signInWithEmailLink` method and provides additional `loading` and `error` information.
 
-The `useSignInWithEmailAndPassword` hook takes the following parameters:
+The `useSignInWithEmailLink` hook takes the following parameters:
 
 - `auth`: `Auth` instance for the app you would like to monitor
 
 Returns:
 
-- `signInWithEmailLink(email: string, emailLink?: string)`: a function you can call to start the login. If no `emailLink` is supplied, the link is inferred from the current URL.
-- `user`: The `auth.User` if the user was logged in or `undefined` if not
+- `signInWithEmailLink(email: string, emailLink?: string) => Promise<auth.UserCredential>`: A function you can call to start the login. If no `emailLink` is supplied, the link is inferred from the current URL. Returns the `auth.UserCredential` if the user was signed in successfully, or `undefined` if there was an error.
+- `user`: The `auth.UserCredential` if the user was logged in or `undefined` if not
 - `loading`: A `boolean` to indicate whether the the user login is processing
 - `error`: Any `Error` returned by Firebase when trying to login the user, or `undefined` if there is no error
 
 #### Full Example
 
 ```jsx
-import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
+import { useSignInWithEmailLink } from 'react-firebase-hooks/auth';
 
 const SignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [
-    signInWithEmailAndPassword,
+    signInWithEmailLink
     user,
     loading,
     error,
-  ] = useSignInWithEmailAndPassword(auth);
+  ] = useSignInWithEmailLink(auth);
 
   if (error) {
     return (
@@ -667,7 +672,7 @@ const SignIn = () => {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
-      <button onClick={() => signInWithEmailAndPassword(email, password)}>
+      <button onClick={() => signInWithEmailLink(email, emailLink)}>
         Sign In
       </button>
     </div>
@@ -689,7 +694,7 @@ The `useUpdateEmail` hook takes the following parameters:
 
 Returns:
 
-- `updateEmail(email: string)`: a function you can call to update the current user's email address
+- `updateEmail(email: string) => Promise<boolean>`: A function you can call to update the current user's email address. Returns `true` if the function was successful, or `false` if there was an error.
 - `updating`: A `boolean` to indicate whether the user update is processing
 - `error`: Any `Error` returned by Firebase when trying to update the user, or `undefined` if there is no error
 
@@ -721,8 +726,10 @@ const UpdateEmail = () => {
       />
       <button
         onClick={async () => {
-          await updateEmail(email);
-          alert('Updated email address');
+          const success = await updateEmail(email);
+          if (success) {
+            alert('Updated email address');
+          }
         }}
       >
         Update email
@@ -746,7 +753,7 @@ The `useUpdatePassword` hook takes the following parameters:
 
 Returns:
 
-- `updatePassword(password: string)`: a function you can call to update the current user's password
+- `updatePassword(password: string) => Promise<boolean>`: A function you can call to update the current user's password. Returns `true` if the function was successful, or `false` if there was an error.
 - `updating`: A `boolean` to indicate whether the user update is processing
 - `error`: Any `Error` returned by Firebase when trying to update the user, or `undefined` if there is no error
 
@@ -778,8 +785,10 @@ const UpdatePassword = () => {
       />
       <button
         onClick={async () => {
-          await updatePassword(password);
-          alert('Updated password');
+          const success = await updatePassword(password);
+          if (success) {
+            alert('Updated password');
+          }
         }}
       >
         Update password
@@ -803,7 +812,7 @@ The `useUpdateProfile` hook takes the following parameters:
 
 Returns:
 
-- `updateProfile({ displayName: string, photoURL: string })`: a function you can call to update the current user's profile
+- `updateProfile({ displayName: string, photoURL: string }) => Promise<boolean>`: A function you can call to update the current user's profile. Returns `true` if the function was successful, or `false` if there was an error.
 - `updating`: A `boolean` to indicate whether the user update is processing
 - `error`: Any `Error` returned by Firebase when trying to update the user, or `undefined` if there is no error
 
@@ -841,8 +850,10 @@ const UpdateProfile = () => {
       />
       <button
         onClick={async () => {
-          await updateProfile({ displayName, photoURL });
-          alert('Updated profile');
+          const success = await updateProfile({ displayName, photoURL });
+          if (success) {
+            alert('Updated profile');
+          }
         }}
       >
         Update profile
@@ -868,7 +879,7 @@ The `useVerifyBeforeUpdateEmail` hook takes the following parameters:
 
 Returns:
 
-- `verifyBeforeUpdateEmail(email: string, actionCodeSettings: ActionCodeSettings | null)`: a function you can call to verify and update the current user's email address
+- `verifyBeforeUpdateEmail(email: string, actionCodeSettings: ActionCodeSettings | null) => Promise<boolean>`: A function you can call to verify and update the current user's email address. Returns `true` if the function was successful, or `false` if there was an error.
 - `updating`: A `boolean` to indicate whether the user update is processing
 - `error`: Any `Error` returned by Firebase when trying to update the user, or `undefined` if there is no error
 
@@ -877,7 +888,7 @@ Returns:
 ```jsx
 import { useVerifyBeforeUpdateEmail } from 'react-firebase-hooks/auth';
 
-const UpdateEmail = () => {
+const VerifyBeforeUpdateEmail = () => {
   const [email, setEmail] = useState('');
   const [verifyBeforeUpdateEmail, updating, error] = useVerifyBeforeUpdateEmail(
     auth
@@ -902,8 +913,12 @@ const UpdateEmail = () => {
       />
       <button
         onClick={async () => {
-          await verifyBeforeUpdateEmail(email);
-          alert('Please check your email to verify your updated email address');
+          const success = await verifyBeforeUpdateEmail(email);
+          if (success) {
+            alert(
+              'Please check your email to verify your updated email address'
+            );
+          }
         }}
       >
         Update email
@@ -929,7 +944,7 @@ The `useSendPasswordResetEmail` hook takes the following parameters:
 
 Returns:
 
-- `sendPasswordResetEmail(email: string, actionCodeSettings?: ActionCodeSettings)`: a function you can call to send a password reset email. Optionally accepts an [actionCodeSettings](https://firebase.google.com/docs/reference/js/auth.actioncodesettings.md#actioncodesettings_interface) object.
+- `sendPasswordResetEmail(email: string, actionCodeSettings?: ActionCodeSettings) => Promise<boolean>`: A function you can call to send a password reset email. Optionally accepts an [actionCodeSettings](https://firebase.google.com/docs/reference/js/auth.actioncodesettings.md#actioncodesettings_interface) object. Returns `true` if the function was successful, or `false` if there was an error.
 - `sending`: A `boolean` to indicate whether the email is being sent
 - `error`: Any `Error` returned by Firebase when trying to send the email, or `undefined` if there is no error
 
@@ -967,8 +982,13 @@ const SendPasswordReset = () => {
       />
       <button
         onClick={async () => {
-          await sendPasswordResetEmail(email, actionCodeSettings);
-          alert('Sent email');
+          const success = await sendPasswordResetEmail(
+            email,
+            actionCodeSettings
+          );
+          if (success) {
+            alert('Sent email');
+          }
         }}
       >
         Reset password
@@ -992,7 +1012,7 @@ The `useSendEmailVerification` hook takes the following parameters:
 
 Returns:
 
-- `sendEmailVerification()`: a function you can call to send a password reset emaail
+- `sendEmailVerification() => Promise<boolean>`: A function you can call to send a password reset email. Returns `true` if the function was successful, or `false` if there was an error.
 - `sending`: A `boolean` to indicate whether the email is being sent
 - `error`: Any `Error` returned by Firebase when trying to send the email, or `undefined` if there is no error
 
@@ -1021,8 +1041,10 @@ const SendEmailVerification = () => {
     <div className="App">
       <button
         onClick={async () => {
-          await sendEmailVerification();
-          alert('Sent email');
+          const success = await sendEmailVerification();
+          if (success) {
+            alert('Sent email');
+          }
         }}
       >
         Verify email
@@ -1046,7 +1068,7 @@ The `useSignOut` hook takes the following parameters:
 
 Returns:
 
-- `signOut()`: A `() => Promise<void>` function you can call to sign out current user
+- `signOut() => Promise<boolean>`: A function you can call to sign out current user. Returns `true` if the function was successful, or `false` if there was an error.
 - `loading`: A `boolean` to indicate whether the user is being signed out
 - `error`: Any `Error` returned by Firebase when trying to sign out user, or `undefined` if there is no error
 
@@ -1072,8 +1094,10 @@ const SignOut = () => {
     <div className="App">
       <button
         onClick={async () => {
-          await signOut();
-          alert('You are sign out');
+          const success = await signOut();
+          if (success) {
+            alert('You are sign out');
+          }
         }}
       >
         Sign out
@@ -1097,7 +1121,7 @@ The `useDeleteUser` hook takes the following parameters:
 
 Returns:
 
-- `deleteUser()`: A `() => Promise<void>` function you can call to delete the current user
+- `deleteUser() => Promise<boolean>`: A function you can call to delete the current user. Returns `true` if the function was successful, or `false` if there was an error.
 - `loading`: A `boolean` to indicate whether the deletion is processing
 - `error`: Any `Error` returned by Firebase when trying to delete user, or `undefined` if there is no error
 
@@ -1123,8 +1147,10 @@ const DeleteUser = () => {
     <div className="App">
       <button
         onClick={async () => {
-          await deleteUser();
-          alert('You have been deleted');
+          const success = await deleteUser();
+          if (success) {
+            alert('You have been deleted');
+          }
         }}
       >
         Delete current user
