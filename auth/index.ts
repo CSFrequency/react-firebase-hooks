@@ -40,3 +40,4 @@ export {
   useVerifyBeforeUpdateEmail,
   VerifyBeforeUpdateEmailHook,
 } from './useUpdateUser';
+export { default as useIdToken, IdTokenHook } from './useIdToken';

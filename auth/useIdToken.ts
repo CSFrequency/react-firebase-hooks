@@ -1,6 +1,6 @@
 import { Auth, onIdTokenChanged, User } from 'firebase/auth';
 import { useEffect } from 'react';
-import { LoadingHook, useLoadingValue } from '../util/dist/util';
+import { LoadingHook, useLoadingValue } from '../util';
 
 export type IdTokenHook = LoadingHook<User | null, Error>;
 
