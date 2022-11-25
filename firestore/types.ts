@@ -34,6 +34,16 @@ export type CollectionOnceHook<T = DocumentData> = [
   ...CollectionHook<T>,
   () => Promise<void>
 ];
+
+export type CollectionCountHook<T = DocumentData> = LoadingHook<
+  number,
+  FirestoreError
+>;
+
+export type CollectionCountOnceHook<T = DocumentData> = [
+  ...CollectionCountHook<T>,
+  () => Promise<void>
+];
 export type CollectionDataHook<T = DocumentData> = [
   ...LoadingHook<T[], FirestoreError>,
   QuerySnapshot<T> | undefined

@@ -1,6 +1,7 @@
 import {
   DocumentData,
   FirestoreError,
+  getCountFromServer,
   getDocs,
   getDocsFromCache,
   getDocsFromServer,
@@ -14,6 +15,7 @@ import { useLoadingValue } from '../util';
 import useIsMounted from '../util/useIsMounted';
 import { useIsFirestoreQueryEqual } from './helpers';
 import {
+  CollectionCountOnceHook,
   CollectionDataHook,
   CollectionDataOnceHook,
   CollectionHook,
@@ -134,6 +136,49 @@ export const useCollectionDataOnce = <T = DocumentData>(
   );
 
   return [values, loading, error, snapshots, reloadData];
+};
+
+export const useCollectioCountOnce = <T = DocumentData>(
+  query?: Query<T> | null
+): CollectionCountOnceHook<T> => {
+  const { error, loading, reset, setError, setValue, value } = useLoadingValue<
+    number,
+    FirestoreError
+  >();
+  const isMounted = useIsMounted();
+  const ref = useIsFirestoreQueryEqual<Query<T>>(query, reset);
+
+  const loadData = useCallback(
+    async (query?: Query<T> | null) => {
+      if (!query) {
+        setValue(undefined);
+        return;
+      }
+
+      try {
+        const result = await getCountFromServer(query);
+        if (isMounted) {
+          setValue(result?.data()?.count);
+        }
+      } catch (error) {
+        if (isMounted) {
+          setError(error as FirestoreError);
+        }
+      }
+    },
+    []
+  );
+
+  const reloadData = useCallback(() => loadData(ref.current), [
+    loadData,
+    ref.current,
+  ]);
+
+  useEffect(() => {
+    loadData(ref.current);
+  }, [ref.current]);
+
+  return [value, loading, error, reloadData];
 };
 
 const getValuesFromSnapshots = <T>(
