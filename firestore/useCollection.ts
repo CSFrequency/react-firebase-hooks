@@ -138,7 +138,7 @@ export const useCollectionDataOnce = <T = DocumentData>(
   return [values, loading, error, snapshots, reloadData];
 };
 
-export const useCollectioCountOnce = <T = DocumentData>(
+export const useCollectionCountOnce = <T = DocumentData>(
   query?: Query<T> | null
 ): CollectionCountOnceHook<T> => {
   const { error, loading, reset, setError, setValue, value } = useLoadingValue<
