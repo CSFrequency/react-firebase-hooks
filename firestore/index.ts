@@ -3,6 +3,7 @@ export {
   useCollectionOnce,
   useCollectionData,
   useCollectionDataOnce,
+  useCollectionCountOnce
 } from './useCollection';
 export {
   useDocument,
