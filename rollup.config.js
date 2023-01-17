@@ -34,23 +34,23 @@ const plugins = [
 
 const external = [
   ...Object.keys(pkg.peerDependencies),
+  'firebase/util',
   'firebase/auth',
   'firebase/database',
   'firebase/firestore',
   'firebase/functions',
   'firebase/messaging',
   'firebase/storage',
-  'firebase/util',
 ];
 
 const components = [
+  'util',
   'auth',
   'database',
   'firestore',
   'functions',
   'messaging',
   'storage',
-  'util',
 ];
 
 export default components
