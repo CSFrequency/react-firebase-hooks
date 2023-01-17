@@ -1,9 +1,9 @@
-import { useCallback, useMemo, useReducer } from 'react';
+import { useCallback, useEffect, useMemo, useReducer } from 'react';
+import { usePrevious } from './usePrevious';
 
 export type LoadingValue<T, E> = {
   error?: E;
   loading: boolean;
-  reset: () => void;
   setError: (error: E) => void;
   setValue: (value?: T) => void;
   value?: T;
@@ -53,9 +53,12 @@ const reducer = <E>() => (
   }
 };
 
-export default <T, E>(getDefaultValue?: () => T): LoadingValue<T, E> => {
+export default <T, E>(
+  getDefaultValue?: () => T,
+  deps?: unknown[]
+): LoadingValue<T, E> => {
   const defaultValue = getDefaultValue ? getDefaultValue() : undefined;
-  const [state, dispatch] = useReducer(
+  const [stateInternal, dispatch] = useReducer(
     reducer<E>(),
     defaultState(defaultValue)
   );
@@ -73,15 +76,30 @@ export default <T, E>(getDefaultValue?: () => T): LoadingValue<T, E> => {
     dispatch({ type: 'value', value });
   }, []);
 
+  useEffect(() => {
+    reset();
+  }, deps);
+
+  // Reflect the value immediately when deps changed
+  const previousDeps = usePrevious(deps);
+  const isDepsChanged =
+    (previousDeps == null && deps != null) ||
+    (previousDeps != null && deps == null) ||
+    (previousDeps != null &&
+      deps != null &&
+      deps.some((dep, i) => dep !== previousDeps[i]));
+  const state = isDepsChanged
+    ? { value: undefined, loading: true, error: undefined }
+    : stateInternal;
+
   return useMemo(
     () => ({
       error: state.error,
       loading: state.loading,
-      reset,
       setError,
       setValue,
       value: state.value,
     }),
-    [state.error, state.loading, reset, setError, setValue, state.value]
+    [state.error, state.loading, setError, setValue, state.value]
   );
 };

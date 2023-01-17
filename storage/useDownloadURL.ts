@@ -9,19 +9,19 @@ import { LoadingHook, useComparatorRef, useLoadingValue } from '../util';
 export type DownloadURLHook = LoadingHook<string, StorageError>;
 
 export default (storageRef?: StorageReference | null): DownloadURLHook => {
-  const { error, loading, reset, setError, setValue, value } = useLoadingValue<
+  const ref = useComparatorRef(storageRef, isEqual);
+  const { error, loading, setError, setValue, value } = useLoadingValue<
     string,
     StorageError
-  >();
-  const ref = useComparatorRef(storageRef, isEqual, reset);
+  >(undefined, [ref]);
 
   useEffect(() => {
-    if (!ref.current) {
+    if (!ref) {
       setValue(undefined);
       return;
     }
-    getDownloadURL(ref.current).then(setValue).catch(setError);
-  }, [ref.current]);
+    getDownloadURL(ref).then(setValue).catch(setError);
+  }, [ref]);
 
   return [value, loading, error];
 };

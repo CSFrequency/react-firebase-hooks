@@ -30,30 +30,25 @@ export const useDocument = <T = DocumentData>(
   docRef?: DocumentReference<T> | null,
   options?: Options
 ): DocumentHook<T> => {
-  const { error, loading, reset, setError, setValue, value } = useLoadingValue<
+  const ref = useIsFirestoreRefEqual<DocumentReference<T>>(docRef);
+  const { error, loading, setError, setValue, value } = useLoadingValue<
     DocumentSnapshot<T>,
     FirestoreError
-  >();
-  const ref = useIsFirestoreRefEqual<DocumentReference<T>>(docRef, reset);
+  >(undefined, [ref]);
 
   useEffect(() => {
-    if (!ref.current) {
+    if (!ref) {
       setValue(undefined);
       return;
     }
     const unsubscribe = options?.snapshotListenOptions
-      ? onSnapshot(
-          ref.current,
-          options.snapshotListenOptions,
-          setValue,
-          setError
-        )
-      : onSnapshot(ref.current, setValue, setError);
+      ? onSnapshot(ref, options.snapshotListenOptions, setValue, setError)
+      : onSnapshot(ref, setValue, setError);
 
     return () => {
       unsubscribe();
     };
-  }, [ref.current]);
+  }, [ref]);
 
   return [value as DocumentSnapshot<T>, loading, error];
 };
@@ -62,12 +57,12 @@ export const useDocumentOnce = <T = DocumentData>(
   docRef?: DocumentReference<T> | null,
   options?: OnceOptions
 ): DocumentOnceHook<T> => {
-  const { error, loading, reset, setError, setValue, value } = useLoadingValue<
+  const ref = useIsFirestoreRefEqual<DocumentReference<T>>(docRef);
+  const { error, loading, setError, setValue, value } = useLoadingValue<
     DocumentSnapshot<T>,
     FirestoreError
-  >();
+  >(undefined, [ref]);
   const isMounted = useIsMounted();
-  const ref = useIsFirestoreRefEqual<DocumentReference<T>>(docRef, reset);
 
   const loadData = useCallback(
     async (reference?: DocumentReference<T> | null, options?: OnceOptions) => {
@@ -91,19 +86,16 @@ export const useDocumentOnce = <T = DocumentData>(
     []
   );
 
-  const reloadData = useCallback(() => loadData(ref.current, options), [
-    loadData,
-    ref.current,
-  ]);
+  const reloadData = useCallback(() => loadData(ref, options), [loadData, ref]);
 
   useEffect(() => {
-    if (!ref.current) {
+    if (!ref) {
       setValue(undefined);
       return;
     }
 
-    loadData(ref.current, options);
-  }, [ref.current]);
+    loadData(ref, options);
+  }, [ref]);
 
   return [value as DocumentSnapshot<T>, loading, error, reloadData];
 };

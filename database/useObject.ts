@@ -5,14 +5,14 @@ import { snapshotToData, ValOptions } from './helpers';
 import { ObjectHook, ObjectValHook, Val } from './types';
 
 export const useObject = (query?: Query | null): ObjectHook => {
-  const { error, loading, reset, setError, setValue, value } = useLoadingValue<
+  const ref = useIsEqualRef(query);
+  const { error, loading, setError, setValue, value } = useLoadingValue<
     DataSnapshot,
     Error
-  >();
-  const ref = useIsEqualRef(query, reset);
+  >(undefined, [ref]);
 
   useEffect(() => {
-    const query = ref.current;
+    const query = ref;
     if (!query) {
       setValue(undefined);
       return;
@@ -23,7 +23,7 @@ export const useObject = (query?: Query | null): ObjectHook => {
     return () => {
       off(query, 'value', setValue);
     };
-  }, [ref.current]);
+  }, [ref]);
 
   return [value, loading, error];
 };

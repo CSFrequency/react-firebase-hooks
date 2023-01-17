@@ -17,8 +17,7 @@ import { ListHook, ListKeysHook, ListValsHook, Val } from './types';
 export const useList = (query?: Query | null): ListHook => {
   const [state, dispatch] = useListReducer();
 
-  const queryRef = useIsEqualRef(query, () => dispatch({ type: 'reset' }));
-  const ref: Query | null | undefined = queryRef.current;
+  const ref = useIsEqualRef(query, () => dispatch({ type: 'reset' }));
 
   useEffect(() => {
     if (!ref) {
