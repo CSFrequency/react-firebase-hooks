@@ -5,7 +5,7 @@ export type LoadingValue<T, E> = {
   error?: E;
   loading: boolean;
   setError: (error: E) => void;
-  setValue: (value?: T) => void;
+  setValue: (value?: T | ((previousValue?: T) => T)) => void;
   value?: T;
 };
 
@@ -46,7 +46,10 @@ const reducer = <E>() => (
         ...state,
         error: undefined,
         loading: false,
-        value: action.value,
+        value:
+          typeof action.value === 'function'
+            ? action.value(state.value)
+            : action.value,
       };
     default:
       return state;
@@ -72,7 +75,7 @@ export default <T, E>(
     dispatch({ type: 'error', error });
   }, []);
 
-  const setValue = useCallback((value?: T) => {
+  const setValue = useCallback((value?: T | ((previousValue?: T) => T)) => {
     dispatch({ type: 'value', value });
   }, []);
 

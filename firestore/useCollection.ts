@@ -99,15 +99,69 @@ export const useCollectionData = <T = DocumentData>(
   query?: Query<T> | null,
   options?: DataOptions<T> & InitialValueOptions<T[]>
 ): CollectionDataHook<T> => {
-  const [snapshots, loading, error] = useCollection<T>(query, options);
+  const ref = useIsFirestoreQueryEqual<Query<T>>(query);
+  const { error, loading, setError, setValue, value } = useLoadingValue<
+    {
+      collectionData: T[];
+      snapshot: QuerySnapshot<T>;
+    },
+    FirestoreError
+  >(undefined, [ref]);
 
-  const values = getValuesFromSnapshots<T>(
-    snapshots,
-    options?.snapshotOptions,
-    options?.initialValue
-  );
+  useEffect(() => {
+    if (!ref) {
+      setValue(undefined);
+      return;
+    }
+    const handleChangeSnapshot = (snapshot: QuerySnapshot<T>) => {
+      setValue((previousValue) => {
+        const collectionData = previousValue?.collectionData ?? [];
+        snapshot
+          .docChanges(options?.snapshotListenOptions)
+          .forEach((docChange) => {
+            switch (docChange.type) {
+              case 'added': {
+                collectionData.push(
+                  docChange.doc.data(options?.snapshotOptions)
+                );
+                break;
+              }
+              case 'removed': {
+                collectionData.splice(docChange.oldIndex, 1);
+                break;
+              }
+              case 'modified': {
+                collectionData.splice(docChange.oldIndex, 1);
+                collectionData.splice(
+                  docChange.newIndex,
+                  0,
+                  docChange.doc.data(options?.snapshotOptions)
+                );
+                break;
+              }
+            }
+          });
+        return {
+          collectionData,
+          snapshot: snapshot,
+        };
+      });
+    };
+    const unsubscribe = options?.snapshotListenOptions
+      ? onSnapshot(
+          ref,
+          options.snapshotListenOptions,
+          handleChangeSnapshot,
+          setError
+        )
+      : onSnapshot(ref, handleChangeSnapshot, setError);
 
-  return [values, loading, error, snapshots];
+    return () => {
+      unsubscribe();
+    };
+  }, [ref]);
+
+  return [value?.collectionData, loading, error, value?.snapshot];
 };
 
 export const useCollectionDataOnce = <T = DocumentData>(
