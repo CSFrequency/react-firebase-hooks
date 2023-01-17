@@ -30,30 +30,25 @@ export const useCollection = <T = DocumentData>(
   query?: Query<T> | null,
   options?: Options
 ): CollectionHook<T> => {
-  const { error, loading, reset, setError, setValue, value } = useLoadingValue<
+  const ref = useIsFirestoreQueryEqual<Query<T>>(query);
+  const { error, loading, setError, setValue, value } = useLoadingValue<
     QuerySnapshot<T>,
     FirestoreError
-  >();
-  const ref = useIsFirestoreQueryEqual<Query<T>>(query, reset);
+  >(undefined, [ref]);
 
   useEffect(() => {
-    if (!ref.current) {
+    if (!ref) {
       setValue(undefined);
       return;
     }
     const unsubscribe = options?.snapshotListenOptions
-      ? onSnapshot(
-          ref.current,
-          options.snapshotListenOptions,
-          setValue,
-          setError
-        )
-      : onSnapshot(ref.current, setValue, setError);
+      ? onSnapshot(ref, options.snapshotListenOptions, setValue, setError)
+      : onSnapshot(ref, setValue, setError);
 
     return () => {
       unsubscribe();
     };
-  }, [ref.current]);
+  }, [ref]);
 
   return [value as QuerySnapshot<T>, loading, error];
 };
@@ -62,12 +57,12 @@ export const useCollectionOnce = <T = DocumentData>(
   query?: Query<T> | null,
   options?: OnceOptions
 ): CollectionOnceHook<T> => {
-  const { error, loading, reset, setError, setValue, value } = useLoadingValue<
+  const ref = useIsFirestoreQueryEqual<Query<T>>(query);
+  const { error, loading, setError, setValue, value } = useLoadingValue<
     QuerySnapshot<T>,
     FirestoreError
-  >();
+  >(undefined, [ref]);
   const isMounted = useIsMounted();
-  const ref = useIsFirestoreQueryEqual<Query<T>>(query, reset);
 
   const loadData = useCallback(
     async (query?: Query<T> | null, options?: Options & OnceOptions) => {
@@ -91,14 +86,11 @@ export const useCollectionOnce = <T = DocumentData>(
     []
   );
 
-  const reloadData = useCallback(() => loadData(ref.current, options), [
-    loadData,
-    ref.current,
-  ]);
+  const reloadData = useCallback(() => loadData(ref, options), [loadData, ref]);
 
   useEffect(() => {
-    loadData(ref.current, options);
-  }, [ref.current]);
+    loadData(ref, options);
+  }, [ref]);
 
   return [value as QuerySnapshot<T>, loading, error, reloadData];
 };

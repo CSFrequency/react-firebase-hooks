@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 
 export type RefHook<T> = {
   current: T;
@@ -8,16 +8,21 @@ export const useComparatorRef = <T>(
   value: T | null | undefined,
   isEqual: (v1: T | null | undefined, v2: T | null | undefined) => boolean,
   onChange?: () => void
-): RefHook<T | null | undefined> => {
-  const ref = useRef(value);
-  useEffect(() => {
-    if (!isEqual(value, ref.current)) {
-      ref.current = value;
-      if (onChange) {
-        onChange();
-      }
+): T | null | undefined => {
+  const refRef = useRef(value);
+  const ref = useMemo(() => {
+    if (!isEqual(value, refRef.current)) {
+      refRef.current = value;
     }
-  });
+    return refRef.current;
+  }, [value]);
+
+  useEffect(() => {
+    if (onChange) {
+      onChange();
+    }
+  }, [ref]);
+
   return ref;
 };
 
@@ -37,6 +42,6 @@ const isEqual = <T extends HasIsEqual<T>>(
 export const useIsEqualRef = <T extends HasIsEqual<T>>(
   value: T | null | undefined,
   onChange?: () => void
-): RefHook<T | null | undefined> => {
+): T | null | undefined => {
   return useComparatorRef(value, isEqual, onChange);
 };
