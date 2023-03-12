@@ -2,6 +2,7 @@ import {
   Functions,
   httpsCallable,
   HttpsCallableResult,
+  HttpsCallableOptions
 } from 'firebase/functions';
 import { useCallback, useState } from 'react';
 
@@ -27,11 +28,13 @@ export default <RequestData = unknown, ResponseData = unknown>(
 
   const callCallable = useCallback(
     async (
-      data?: RequestData
+      data?: RequestData,
+      options?: HttpsCallableOptions
     ): Promise<HttpsCallableResult<ResponseData> | undefined> => {
       const callable = httpsCallable<RequestData, ResponseData>(
         functions,
-        name
+        name,
+        options
       );
       setLoading(true);
       setError(undefined);
