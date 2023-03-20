@@ -27,6 +27,8 @@ The `useHttpsCallable` hook takes the following parameters:
 
 - `functions`: `functions.Functions` instance for your Firebase app
 - `name`: A `string` representing the name of the function to call
+- `options`: An optional `object` with the following properties:
+  - `timeout`: A `number` representing the timeout in milliseconds for the function call. Default is 70000 ms.
 
 Returns:
 
