@@ -1,6 +1,5 @@
 import {
   DataSnapshot,
-  off,
   onChildAdded as firebaseOnChildAdded,
   onChildChanged as firebaseOnChildChanged,
   onChildMoved as firebaseOnChildMoved,
@@ -97,7 +96,7 @@ export const useList = (query?: Query | null): ListHook => {
       }
     };
 
-    firebaseOnValue(ref, onInitialLoad, onError, { onlyOnce: true });
+    const valueHandler = firebaseOnValue(ref, onInitialLoad, onError, { onlyOnce: true });
     const childChangedHandler = firebaseOnChildChanged(
       ref,
       onChildChanged,
@@ -111,10 +110,11 @@ export const useList = (query?: Query | null): ListHook => {
     );
 
     return () => {
-      off(ref, 'child_added', childAddedHandler);
-      off(ref, 'child_changed', childChangedHandler);
-      off(ref, 'child_moved', childMovedHandler);
-      off(ref, 'child_removed', childRemovedHandler);
+      childAddedHandler?.();
+      childChangedHandler();
+      childMovedHandler();
+       childRemovedHandler();
+      valueHandler();
     };
   }, [dispatch, ref]);
 
