@@ -23,6 +23,10 @@ export type SignInWithEmailLinkHook = AuthActionHook<
   (email: string, emailLink?: string) => Promise<UserCredential | undefined>
 >;
 
+export type SignInWithCustomTokenHook = AuthActionHook<
+  (token: string) => Promise<UserCredential | undefined>
+>;
+
 export type SignInWithPopupHook = AuthActionHook<
   (
     scopes?: string[],
