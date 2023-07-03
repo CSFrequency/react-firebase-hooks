@@ -22,6 +22,7 @@ List of Auth hooks:
 - [useSignInWithTwitter](#usesigninwithtwitter)
 - [useSignInWithYahoo](#usesigninwithyahoo)
 - [useSendSignInLinkToEmail](#usesendsigninlinktoemail)
+- [useSignInWithEmailLink](#usesigninwithemaillink)
 - [useUpdateEmail](#useupdateemail)
 - [useUpdatePassword](#useupdatepassword)
 - [useUpdateProfile](#useupdateprofile)
