@@ -1,6 +1,7 @@
 import {
   Functions,
   httpsCallable,
+  HttpsCallableOptions,
   HttpsCallableResult,
 } from 'firebase/functions';
 import { useCallback, useState } from 'react';
@@ -20,7 +21,8 @@ export type HttpsCallableHook<
 
 export default <RequestData = unknown, ResponseData = unknown>(
   functions: Functions,
-  name: string
+  name: string,
+  options?: HttpsCallableOptions,
 ): HttpsCallableHook<RequestData, ResponseData> => {
   const [error, setError] = useState<Error>();
   const [loading, setLoading] = useState<boolean>(false);
@@ -31,7 +33,8 @@ export default <RequestData = unknown, ResponseData = unknown>(
     ): Promise<HttpsCallableResult<ResponseData> | undefined> => {
       const callable = httpsCallable<RequestData, ResponseData>(
         functions,
-        name
+        name,
+        options,
       );
       setLoading(true);
       setError(undefined);
@@ -43,7 +46,7 @@ export default <RequestData = unknown, ResponseData = unknown>(
         setLoading(false);
       }
     },
-    [functions, name]
+    [functions, name, options]
   );
 
   return [callCallable, loading, error] as const;

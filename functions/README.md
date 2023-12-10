@@ -27,6 +27,9 @@ The `useHttpsCallable` hook takes the following parameters:
 
 - `functions`: `functions.Functions` instance for your Firebase app
 - `name`: A `string` representing the name of the function to call
+- `options`: (optional) `Object` with the following parameters:
+  - `timeout`: (optional) `number` Time in milliseconds after which to cancel if there is no response
+  - `limitedUseAppCheckTokens`: (optional) `boolean` If set to true, uses limited-use App Check token for callable function requests from this instance of `Functions`
 
 Returns:
 
